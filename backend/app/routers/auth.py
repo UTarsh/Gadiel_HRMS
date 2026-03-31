@@ -42,8 +42,8 @@ def _set_auth_cookies(request: Request, response: Response, access_token: str, r
     response.set_cookie(
         key="access_token",
         value=access_token,
-        httponly=True,
-        secure=_IS_PROD and request.url.scheme == "https",          # HTTPS-only in production
+        httponly=False,
+        secure=False,          # Temporarily False for IP troubleshooting
         samesite="lax",
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
