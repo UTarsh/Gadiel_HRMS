@@ -63,14 +63,28 @@ async def custom_rate_limit_exceeded_handler(request: Request, exc: RateLimitExc
 
 app.add_exception_handler(RateLimitExceeded, custom_rate_limit_exceeded_handler)
 
+# Debug middleware to log origins
+@app.middleware("http")
+async def log_origin(request: Request, call_next):
+    origin = request.headers.get("origin")
+    host = request.headers.get("host")
+    logger.info(f"Incoming request: host={host}, origin={origin}, path={request.url.path}")
+    response = await call_next(request)
+    return response
+
 # In development, allow any localhost port so Vite/RN metro port changes never
 # cause CORS failures (3000, 3001, 5173, 19000, 19006, …).
 # In production, only the explicit origins from CORS_ORIGINS are accepted.
-# In production, ensure the current server IP is permitted (standard for first-time deployments)
+# In production, ensure the current server IP and host are permitted
+# Some browsers send the IP, some send nothing for same-origin
 _PROD_ORIGINS = settings.cors_origins_list
 if _IS_PROD:
     # Explicitly permit the server's public IP
-    _PROD_ORIGINS.extend(["http://144.24.97.120", "http://144.24.97.120:80"])
+    _PROD_ORIGINS.extend([
+        "http://144.24.97.120", 
+        "http://144.24.97.120:80",
+        "144.24.97.120"
+    ])
 
 app.add_middleware(
     CORSMiddleware,
@@ -78,7 +92,7 @@ app.add_middleware(
     allow_origin_regex=None if _IS_PROD else r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "Accept"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "X-Requested-With"],
 )
 
 # ── Static file mounts (non-sensitive public assets only) ─────────────────────
