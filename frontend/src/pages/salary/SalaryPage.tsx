@@ -11,9 +11,9 @@ import type { Payslip as PayslipDoc } from '@/types'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/v1'
+const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1'
 // PDF links usually point to the file directly on the backend
-const FILE_BASE_URL = BASE_URL.replace('/api/v1', '')
+const FILE_BASE_URL = (BASE_URL as string).replace('/api/v1', '')
 
 function formatCurrency(v: number) {
   return new Intl.NumberFormat('en-IN', { 

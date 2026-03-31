@@ -88,7 +88,8 @@ export const profileApi = {
 export function resolveAvatarUrl(avatarUrl: string | null | undefined, ts?: number): string | null {
   if (!avatarUrl) return null
   if (avatarUrl.startsWith('http')) return avatarUrl
-  const base = (import.meta.env.VITE_API_URL as string).replace('/api/v1', '')
+  const apiUrl = import.meta.env.VITE_API_URL || '/api/v1'
+  const base = (apiUrl as string).replace('/api/v1', '')
   const url = `${base}${avatarUrl}`
   return ts ? `${url}?t=${ts}` : url
 }

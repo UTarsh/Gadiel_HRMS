@@ -23,15 +23,15 @@ function formatCurrency(v: number) {
 function StatusBadge({ status }: { status: string }) {
   const normalized = status.toLowerCase()
   if (normalized.includes('approved') || normalized.includes('completed') || normalized.includes('present')) {
-    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100">{status.replace('_', ' ')}</span>
+    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100">{(status || '').replace('_', ' ')}</span>
   }
   if (normalized.includes('pending') || normalized.includes('in_progress')) {
-    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-100">{status.replace('_', ' ')}</span>
+    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-100">{(status || '').replace('_', ' ')}</span>
   }
   if (normalized.includes('rejected') || normalized.includes('overdue') || normalized.includes('absent')) {
-    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700 border border-red-100">{status.replace('_', ' ')}</span>
+    return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700 border border-red-100">{(status || '').replace('_', ' ')}</span>
   }
-  return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-50 text-slate-700 border border-slate-100">{status.replace('_', ' ')}</span>
+  return <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-50 text-slate-700 border border-slate-100">{(status || '').replace('_', ' ')}</span>
 }
 
 export function MonthlyReportPage() {
@@ -277,7 +277,7 @@ export function MonthlyReportPage() {
                         <div key={k} className="group">
                           <div className="flex justify-between items-center mb-2.5">
                             <span className="text-[11px] font-bold uppercase tracking-wider opacity-70" style={{ color: 'var(--c-t1)' }}>
-                              {k.replace('_', ' ')}
+                              {(k || '').replace('_', ' ')}
                             </span>
                             <span className="text-xs font-black" style={{ color: 'var(--c-t1)' }}>{String(v)}</span>
                           </div>
