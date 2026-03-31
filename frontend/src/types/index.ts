@@ -39,7 +39,7 @@ export type EmploymentType = 'full_time' | 'part_time' | 'contract' | 'intern'
 export type EmploymentStatus = 'active' | 'inactive' | 'on_leave' | 'terminated' | 'resigned'
 export type LeaveStatus = 'pending' | 'approved' | 'rejected' | 'cancelled' | 'auto_approved'
 export type AttendanceStatus = 'present' | 'absent' | 'late' | 'half_day' | 'wfh' | 'on_leave' | 'holiday' | 'week_off'
-export type NotificationType = 'leave_applied' | 'leave_approved' | 'leave_rejected' | 'attendance_marked' | 'attendance_missing' | 'announcement' | 'system'
+export type NotificationType = 'leave_applied' | 'leave_approved' | 'leave_rejected' | 'attendance_marked' | 'attendance_missing' | 'announcement' | 'system' | 'birthday' | 'work_anniversary'
 
 // ─── Employee ────────────────────────────────────────────────────────────────
 
@@ -298,6 +298,11 @@ export interface MonthlyReport {
     total_deductions: number
     total_net: number
   }
+  tasks: {
+    total: number
+    overdue: number
+    by_status: Record<string, number>
+  }
   employee_snapshot: Array<{
     employee_id: string
     employee_name: string
@@ -306,5 +311,7 @@ export interface MonthlyReport {
     approved_leave_days: number
     net_salary: number
     today_status: string
+    open_tasks: number
+    completed_tasks: number
   }>
 }

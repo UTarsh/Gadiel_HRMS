@@ -142,7 +142,7 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
   )
 }
 
-function OrgChartSection({ employees }: { employees: Employee[] }) {
+function OrgChartSection({ employees, currentEmployeeId }: { employees: Employee[]; currentEmployeeId?: string }) {
   const navigate = useNavigate()
   const { isDark } = useTheme()
   const [collapsed, setCollapsed] = useState(false)
@@ -189,7 +189,7 @@ function OrgChartSection({ employees }: { employees: Employee[] }) {
                 allEmployees={employees}
                 depth={0}
                 isDark={isDark}
-                onClickEmp={(id) => navigate(id === employee?.id ? '/profile' : `/employees/${id}`)}
+                onClickEmp={(id) => navigate(id === currentEmployeeId ? '/profile' : `/employees/${id}`)}
               />
             ))}
           </div>
@@ -522,7 +522,7 @@ export function DashboardPage() {
       </div>
 
       {/* ══ ROW 3: Full Org Chart ══ */}
-      {orgEmployees.length > 0 && <OrgChartSection employees={orgEmployees} />}
+      {orgEmployees.length > 0 && <OrgChartSection employees={orgEmployees} currentEmployeeId={employee?.id} />}
 
     </div>
   )
