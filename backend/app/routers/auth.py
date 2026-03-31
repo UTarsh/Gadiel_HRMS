@@ -37,13 +37,13 @@ _IS_PROD = settings.APP_ENV == "production"
 
 # ─── Cookie helpers ───────────────────────────────────────────────────────────
 
-def _set_auth_cookies(response: Response, access_token: str, refresh_token: str) -> None:
+def _set_auth_cookies(request: Request, response: Response, access_token: str, refresh_token: str) -> None:
     """Write httpOnly auth cookies (web clients). Mobile clients use the JSON body tokens."""
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=_IS_PROD,          # HTTPS-only in production
+        secure=_IS_PROD and request.url.scheme == "https",          # HTTPS-only in production
         samesite="strict",
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
@@ -52,7 +52,7 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=_IS_PROD,
+        secure=_IS_PROD and request.url.scheme == "https",
         samesite="strict",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
         path="/api/v1/auth/refresh",  # scope the refresh cookie to this endpoint only
@@ -92,7 +92,7 @@ async def login(
     refresh_token = create_refresh_token(employee.id)
 
     # Set httpOnly cookies for web browsers
-    _set_auth_cookies(response, access_token, refresh_token)
+    _set_auth_cookies(request, response, access_token, refresh_token)
 
     # Audit trail
     await write_audit_log(
@@ -162,7 +162,7 @@ async def refresh_token(
         ttl = exp - int(datetime.now(timezone.utc).timestamp())
         await blacklist_token(jti, max(ttl, 0))
 
-    _set_auth_cookies(response, new_access, new_refresh)
+    _set_auth_cookies(request, response, new_access, new_refresh)
 
     return ok(
         data=TokenResponse(
@@ -341,7 +341,7 @@ async def setup_password(
     access_token = create_access_token(employee.id, employee.email, employee.role.value)
     refresh_token_str = create_refresh_token(employee.id)
 
-    _set_auth_cookies(response, access_token, refresh_token_str)
+    _set_auth_cookies(request, response, access_token, refresh_token_str)
 
     await write_audit_log(
         db=db,
