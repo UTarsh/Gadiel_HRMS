@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from sqlalchemy import select, update
+from sqlalchemy import select
 from app.database import AsyncSessionLocal
 from app.models.employee import Employee, Designation
 

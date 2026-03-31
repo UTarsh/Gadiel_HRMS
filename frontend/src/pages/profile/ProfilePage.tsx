@@ -69,6 +69,17 @@ function getRoleBadge(role: string | null | undefined) {
   }
 }
 
+function ensureArray(val: unknown): any[] {
+  if (Array.isArray(val)) return val
+  if (typeof val === 'string') {
+    try {
+      const parsed = JSON.parse(val)
+      return Array.isArray(parsed) ? parsed : []
+    } catch { return [] }
+  }
+  return []
+}
+
 // ─── Reusable primitives ──────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -257,11 +268,11 @@ export function ProfilePage() {
   if (!emp) return null
 
   const avatarUrl = resolveAvatarUrl(p.avatar_url, avatarTs || undefined)
-  const rawBadges: BadgeItem[] = (p.badges ?? []) as BadgeItem[]
-  const rawCerts: CertItem[] = ((p.certifications ?? []) as unknown as Record<string, unknown>[]).map(normalizeCert)
-  const rawAssets: AssetItem[] = ((p.assets ?? []) as unknown as Record<string, unknown>[]).map(normalizeAsset)
-  const skills: string[] = p.skills ?? []
-  const interests: string[] = p.interests ?? []
+  const rawBadges: BadgeItem[] = ensureArray(p.badges) as BadgeItem[]
+  const rawCerts: CertItem[] = ensureArray(p.certifications).map(normalizeCert)
+  const rawAssets: AssetItem[] = ensureArray(p.assets).map(normalizeAsset)
+  const skills: string[] = ensureArray(p.skills)
+  const interests: string[] = ensureArray(p.interests)
 
   const doj = emp.date_of_joining ?? null
   const gadielDays = doj ? daysSince(doj) : null
