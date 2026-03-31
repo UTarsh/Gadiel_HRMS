@@ -216,10 +216,18 @@ UPDATES = {
         "manager_new_code": "GTPPT-26003",  # Ashish
     },
     # GTPL013 = Kumar Kandroo → DEACTIVATE (handled separately)
-    "GTPL014": {  # Utkarsh Jha
-        "new_emp_code":    "GTPL-25002",
-        "last_name_fix":   None,
-        "email_fix":       None,
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# New employees to add (not yet in DB)
+NEW_EMPLOYEES = [
+    {
+        "emp_code":        "GTPL-25002",
+        "first_name":      "Utkarsh",
+        "last_name":       "Jha",
+        "email":           "utkarshj@gadieltechnologies.com",
+        "gender":          "male",
         "department":      "IT & Consultancy",
         "designation":     "Lead Data & AI Engineer",
         "doj":             date(2025, 1, 6),
@@ -228,12 +236,14 @@ UPDATES = {
         "salary_level":    1,
         "annual_ctc":      240000,
         "skip_loc":        False,
-        "manager_new_code": "GTPLT-25005",  # Karthik
+        "manager_new_code": "GTPLT-25005",
     },
-    "GTPL015": {  # Namrata Dudha
-        "new_emp_code":    "GTPL-25003",
-        "last_name_fix":   None,
-        "email_fix":       None,
+    {
+        "emp_code":        "GTPL-25003",
+        "first_name":      "Namrata",
+        "last_name":       "Dudha",
+        "email":           "namratad@gadieltechnologies.com",
+        "gender":          "female",
         "department":      "HR and Sustainability solutions",
         "designation":     "Head HR & ESG",
         "doj":             date(2025, 11, 1),
@@ -242,15 +252,8 @@ UPDATES = {
         "salary_level":    5,
         "annual_ctc":      1020000,
         "skip_loc":        False,
-        "manager_new_code": "GTPL-001",     # Vishal
+        "manager_new_code": "GTPL-001",
     },
-}
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# New employees to add (not yet in DB)
-# ─────────────────────────────────────────────────────────────────────────────
-NEW_EMPLOYEES = [
     {
         "emp_code":        "GTPPT-26005",
         "first_name":      "Tushar",
