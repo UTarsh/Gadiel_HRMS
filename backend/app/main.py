@@ -66,9 +66,15 @@ app.add_exception_handler(RateLimitExceeded, custom_rate_limit_exceeded_handler)
 # In development, allow any localhost port so Vite/RN metro port changes never
 # cause CORS failures (3000, 3001, 5173, 19000, 19006, …).
 # In production, only the explicit origins from CORS_ORIGINS are accepted.
+# In production, ensure the current server IP is permitted (standard for first-time deployments)
+_PROD_ORIGINS = settings.cors_origins_list
+if _IS_PROD:
+    # Explicitly permit the server's public IP
+    _PROD_ORIGINS.extend(["http://144.24.97.120", "http://144.24.97.120:80"])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list if _IS_PROD else [],
+    allow_origins=_PROD_ORIGINS if _IS_PROD else [],
     allow_origin_regex=None if _IS_PROD else r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],

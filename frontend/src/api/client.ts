@@ -5,10 +5,10 @@ const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1'
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
   // Send httpOnly cookies with every request (set by the backend on login/refresh).
   // The browser manages the cookie lifecycle — no manual token handling needed here.
-  withCredentials: true,
 })
 
 // No request interceptor for token attachment — the browser sends the
