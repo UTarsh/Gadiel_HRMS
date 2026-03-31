@@ -111,7 +111,7 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
             </p>
             <p className={`break-words ${isDeep ? 'text-[9px]' : 'text-[10px]'} mt-0.5`}
               style={{ color: depth === 0 ? 'rgba(255,255,255,0.75)' : (isDark ? '#64748B' : '#64748B') }}>
-              {emp.designation?.name || emp.role.replace(/_/g, ' ')}
+              {emp.designation?.name || (emp.role || 'Employee').replace(/_/g, ' ')}
             </p>
           </div>
         </div>
