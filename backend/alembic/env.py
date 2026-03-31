@@ -1,4 +1,5 @@
 import asyncio
+import ssl
 from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -15,8 +16,11 @@ from app.database import Base
 # Import all models so Alembic can detect them
 import app.models  # noqa: F401
 
+# Strip ?ssl=true — aiomysql requires a real SSLContext, not a string flag
+_db_url = settings.DATABASE_URL.replace("?ssl=true", "").replace("&ssl=true", "")
+
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+config.set_main_option("sqlalchemy.url", _db_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -43,10 +47,18 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations() -> None:
+    _connect_args = {}
+    if "ssl=true" in settings.DATABASE_URL.lower():
+        _ssl_ctx = ssl.create_default_context()
+        _ssl_ctx.check_hostname = False
+        _ssl_ctx.verify_mode = ssl.CERT_NONE
+        _connect_args = {"ssl": _ssl_ctx}
+
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args=_connect_args,
     )
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
