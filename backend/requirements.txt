@@ -37,6 +37,7 @@ python-dotenv==1.0.1
 Pillow==11.0.0
 groq==0.11.0
 pytz==2024.2
+holidays==0.46
 
 # Production Security & Logging
 slowapi
