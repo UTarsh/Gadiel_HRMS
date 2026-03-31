@@ -521,6 +521,7 @@ async def run():
         leave_types = result.scalars().all()
 
         new_emp_objects = []
+        # Stage 1: Add or Update basic employee data (no manager link yet)
         for nd in NEW_EMPLOYEES:
             existing = emp_by_new_code.get(nd["emp_code"])
             if existing:
@@ -539,12 +540,9 @@ async def run():
                 db.add(desig)
                 await db.flush()
                 desig_map[desig.name] = desig
-
+            
             dept = dept_map.get(nd["department"])
             sl   = level_map.get(nd["salary_level"])
-
-            # Find manager
-            mgr = emp_by_new_code.get(nd.get("manager_new_code"))
 
             emp.first_name          = nd["first_name"]
             emp.middle_name         = nd.get("middle_name")
@@ -559,14 +557,31 @@ async def run():
             emp.department_id       = dept.id if dept else None
             emp.designation_id      = desig.id
             emp.salary_level_id     = sl.id if sl else None
-            emp.reporting_manager_id= mgr.id if mgr else None
             emp.skip_location_check = nd.get("skip_loc", False)
             if not emp.geofence_zone_id and geofence_zone and not nd.get("skip_loc"):
                 emp.geofence_zone_id = geofence_zone.id
 
             new_emp_objects.append(emp)
-            print(f"  + {nd['emp_code']} {nd['first_name']} {nd['last_name']} "
-                  f"| {nd['role']} | DOJ {nd['doj']}")
+
+        await db.commit()
+
+        # Stage 2: Link managers (now everyone is in the DB)
+        print("\n     Linking managers for new employees...")
+        result = await db.execute(select(Employee))
+        full_emp_map = {e.emp_code: e for e in result.scalars().all()}
+        
+        for nd in NEW_EMPLOYEES:
+            emp = full_emp_map.get(nd["emp_code"])
+            mgr_code = nd.get("manager_new_code")
+            if emp and mgr_code:
+                mgr = full_emp_map.get(mgr_code)
+                if mgr:
+                    emp.reporting_manager_id = mgr.id
+                    print(f"     {emp.emp_code} -> reports to {mgr_code}")
+                else:
+                    print(f"     [WARN] Manager {mgr_code} not found for {emp.emp_code}")
+        
+        await db.commit()
 
         await db.commit()
 
