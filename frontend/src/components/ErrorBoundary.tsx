@@ -1,52 +1,42 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react'
 
-interface Props {
-  children?: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error: Error | null;
-  errorInfo: ErrorInfo | null;
-}
+interface Props { children: ReactNode }
+interface State { error: Error | null; info: ErrorInfo | null }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  public state: State = {
-    hasError: false,
-    error: null,
-    errorInfo: null
-  };
+  state: State = { error: null, info: null }
 
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error, errorInfo: null };
+  static getDerivedStateFromError(error: Error) {
+    return { error }
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
-    this.setState({ error, errorInfo });
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    this.setState({ info })
+    console.error('[ErrorBoundary]', error, info)
   }
 
-  public render() {
-    if (this.state.hasError) {
+  render() {
+    if (this.state.error) {
       return (
-        <div style={{ padding: '2rem', fontFamily: 'monospace', color: 'red', background: '#fee' }}>
-          <h1>React Crashed</h1>
-          <p>The application encountered an uncaught exception.</p>
-          <pre style={{ whiteSpace: 'pre-wrap', background: '#f8d7da', padding: '1rem' }}>
-            {this.state.error && this.state.error.toString()}
+        <div style={{ padding: 40, fontFamily: 'monospace', background: '#1a0000', color: '#ff6b6b', minHeight: '100vh' }}>
+          <h1 style={{ fontSize: 28, marginBottom: 16, color: '#ff4444' }}>⚠️ React Crashed</h1>
+          <p style={{ marginBottom: 24, color: '#ccc' }}>The application encountered an uncaught exception.</p>
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#111', padding: 20, borderRadius: 8, fontSize: 13, lineHeight: 1.6 }}>
+            <strong style={{ color: '#ff8888' }}>{this.state.error.name}: {this.state.error.message}</strong>
+            {'\n\nStack trace:\n\n'}
+            {this.state.error.stack}
+            {'\n\nComponent Stack:\n'}
+            {this.state.info?.componentStack}
           </pre>
-          <p><strong>Stack trace:</strong></p>
-          <pre style={{ whiteSpace: 'pre-wrap', background: '#ffebee', padding: '1rem', overflowX: 'auto' }}>
-            {this.state.error?.stack}
-          </pre>
-          <p><strong>Component Stack:</strong></p>
-          <pre style={{ whiteSpace: 'pre-wrap', background: '#ffebee', padding: '1rem', overflowX: 'auto' }}>
-            {this.state.errorInfo?.componentStack}
-          </pre>
+          <button
+            onClick={() => { this.setState({ error: null, info: null }); window.location.href = '/login' }}
+            style={{ marginTop: 20, padding: '12px 24px', background: '#ff4444', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 14 }}
+          >
+            ↻ Reload App
+          </button>
         </div>
-      );
+      )
     }
-
-    return this.props.children;
+    return this.props.children
   }
 }

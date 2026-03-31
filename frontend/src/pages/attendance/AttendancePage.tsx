@@ -382,7 +382,7 @@ export function AttendancePage() {
                       </div>
                       <div className="block sm:hidden flex-1">
                         <span className={cn("inline-block text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest", config.bg, config.color)}>
-                          {log.status.replace('_', ' ')}
+                          {(log.status || '').replace('_', ' ')}
                         </span>
                       </div>
                     </div>
@@ -390,7 +390,7 @@ export function AttendancePage() {
                     <div className="flex-1 w-full sm:w-auto">
                       <div className="hidden sm:inline-block mb-1.5">
                         <span className={cn("text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest", config.bg, config.color)}>
-                          {log.status.replace('_', ' ')}
+                          {(log.status || '').replace('_', ' ')}
                         </span>
                       </div>
                       <div className="flex items-center gap-4 text-xs font-bold opacity-60" style={{ color: 'var(--c-t1)' }}>

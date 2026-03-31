@@ -262,7 +262,7 @@ NEW_EMPLOYEES = [
         "email": "tushark@gadieltechnologies.com",
         "gender": "male",
         "department": "IT & Consultancy",
-        "designation": "Intern Developer (Data & AI)",
+        "designation": "Intern Dev AI",
         "doj": date(2026, 4, 1),
         "role": "employee",
         "employment_type": "intern",
@@ -279,7 +279,7 @@ NEW_EMPLOYEES = [
         "email": "sahilr@gadieltechnologies.com",
         "gender": "male",
         "department": "IT & Consultancy",
-        "designation": "Intern Developer (Data & AI)",
+        "designation": "Intern Dev AI",
         "doj": date(2026, 4, 1),
         "role": "employee",
         "employment_type": "intern",
@@ -296,7 +296,7 @@ NEW_EMPLOYEES = [
         "email": "ridhi@gadieltechnologies.com",
         "gender": "female",
         "department": "IT & Consultancy",
-        "designation": "Intern Developer (Data & AI)",
+        "designation": "Intern Dev AI",
         "doj": date(2026, 4, 1),
         "role": "employee",
         "employment_type": "intern",
@@ -521,17 +521,12 @@ async def run():
         leave_types = result.scalars().all()
 
         new_emp_objects = []
-        # Stage 1: Add or Update basic employee data (no manager link yet)
         for nd in NEW_EMPLOYEES:
             existing = emp_by_new_code.get(nd["emp_code"])
             if existing:
-                print(f"  ~ Updating {nd['emp_code']} {nd['first_name']} (already exists)")
-                emp = existing
-            else:
-                emp = Employee(emp_code=nd["emp_code"], is_active=True)
-                db.add(emp)
-                await db.flush()
-                print(f"  + Adding {nd['emp_code']} {nd['first_name']} {nd['last_name']}")
+                print(f"  = {nd['emp_code']} {nd['first_name']} already exists (skipped)")
+                new_emp_objects.append(existing)
+                continue
 
             # Designation
             desig = desig_map.get(nd["designation"])
@@ -540,48 +535,41 @@ async def run():
                 db.add(desig)
                 await db.flush()
                 desig_map[desig.name] = desig
-            
+
             dept = dept_map.get(nd["department"])
             sl   = level_map.get(nd["salary_level"])
 
-            emp.first_name          = nd["first_name"]
-            emp.middle_name         = nd.get("middle_name")
-            emp.last_name           = nd["last_name"]
-            emp.email               = nd["email"]
-            emp.gender              = Gender(nd["gender"]) if nd.get("gender") else None
-            emp.role                = UserRole(nd["role"])
-            emp.employment_type     = EmploymentType(nd["employment_type"])
-            emp.employment_status   = EmploymentStatus.active
-            emp.date_of_joining     = nd["doj"]
-            emp.probation_end_date  = add_months(nd["doj"], 6)
-            emp.department_id       = dept.id if dept else None
-            emp.designation_id      = desig.id
-            emp.salary_level_id     = sl.id if sl else None
-            emp.skip_location_check = nd.get("skip_loc", False)
-            if not emp.geofence_zone_id and geofence_zone and not nd.get("skip_loc"):
-                emp.geofence_zone_id = geofence_zone.id
+            # Find manager
+            mgr = emp_by_new_code.get(nd.get("manager_new_code"))
 
+            emp = Employee(
+                emp_code            = nd["emp_code"],
+                first_name          = nd["first_name"],
+                middle_name         = nd.get("middle_name"),
+                last_name           = nd["last_name"],
+                email               = nd["email"],
+                gender              = Gender(nd["gender"]) if nd.get("gender") else None,
+                role                = UserRole(nd["role"]),
+                employment_type     = EmploymentType(nd["employment_type"]),
+                employment_status   = EmploymentStatus.active,
+                date_of_joining     = nd["doj"],
+                probation_end_date  = add_months(nd["doj"], 6),
+                department_id       = dept.id if dept else None,
+                designation_id      = desig.id,
+                salary_level_id     = sl.id if sl else None,
+                reporting_manager_id= mgr.id if mgr else None,
+                skip_location_check = nd.get("skip_loc", False),
+                geofence_zone_id    = (geofence_zone.id
+                                       if geofence_zone and not nd.get("skip_loc")
+                                       else None),
+                is_active           = True,
+                password_hash       = None,  # will set password on first login
+            )
+            db.add(emp)
+            await db.flush()
             new_emp_objects.append(emp)
-
-        await db.commit()
-
-        # Stage 2: Link managers (now everyone is in the DB)
-        print("\n     Linking managers for new employees...")
-        result = await db.execute(select(Employee))
-        full_emp_map = {e.emp_code: e for e in result.scalars().all()}
-        
-        for nd in NEW_EMPLOYEES:
-            emp = full_emp_map.get(nd["emp_code"])
-            mgr_code = nd.get("manager_new_code")
-            if emp and mgr_code:
-                mgr = full_emp_map.get(mgr_code)
-                if mgr:
-                    emp.reporting_manager_id = mgr.id
-                    print(f"     {emp.emp_code} -> reports to {mgr_code}")
-                else:
-                    print(f"     [WARN] Manager {mgr_code} not found for {emp.emp_code}")
-        
-        await db.commit()
+            print(f"  + {nd['emp_code']} {nd['first_name']} {nd['last_name']} "
+                  f"| {nd['role']} | DOJ {nd['doj']}")
 
         await db.commit()
 
@@ -710,6 +698,21 @@ async def run():
         for e in active_emps:
             print(f"    {e.emp_code:15} {e.first_name:12} {e.last_name:12} "
                   f"{e.role.value:12} {e.email}")
+
+        result = await db.execute(
+            select(Employee).where(Employee.is_active == False)
+        )
+        inactive = result.scalars().all()
+        if inactive:
+            print(f"\n  Inactive employees: {len(inactive)}")
+            for e in inactive:
+                print(f"    {e.emp_code:15} {e.first_name} {e.last_name} (deactivated)")
+
+    print("\n=== Done! All Gadiel data applied. ===\n")
+
+
+if __name__ == "__main__":
+    asyncio.run(run())
 
         result = await db.execute(
             select(Employee).where(Employee.is_active == False)

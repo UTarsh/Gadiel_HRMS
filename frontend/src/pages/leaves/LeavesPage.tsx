@@ -196,7 +196,7 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
                     <div className="flex items-center gap-2 shrink-0">
                       <span className="text-xs font-bold" style={{ color: 'var(--c-t2)' }}>{lr.days}d</span>
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap" style={{ backgroundColor: badge.bg, color: badge.color }}>
-                        {capitalize(lr.status.replace('_', ' '))}
+                        {capitalize((lr.status || '').replace('_', ' '))}
                       </span>
                     </div>
                   </div>

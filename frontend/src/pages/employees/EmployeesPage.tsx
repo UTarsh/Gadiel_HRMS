@@ -145,7 +145,7 @@ export function EmployeesPage() {
                     className="text-[10px] px-3 py-1 rounded-full font-extrabold uppercase tracking-wider"
                     style={{ backgroundColor: badge.bg, color: badge.color }}
                   >
-                    {emp.employment_status.replace('_', ' ')}
+                    {(emp.employment_status || 'active').replace('_', ' ')}
                   </span>
                 </div>
                 

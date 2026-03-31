@@ -159,7 +159,7 @@ export function EmployeeDetailPage() {
               className="text-[10px] px-2.5 py-0.5 rounded-full font-bold"
               style={{ backgroundColor: role.bg, color: role.color }}
             >
-              {capitalize(emp.role.replace('_', ' '))}
+              {capitalize((emp.role || 'employee').replace('_', ' '))}
             </span>
             {emp.department && (
               <span
@@ -184,7 +184,7 @@ export function EmployeeDetailPage() {
                 : { backgroundColor: '#EFF6FF', color: '#94A3B8' }
               }
             >
-              {capitalize(emp.employment_status.replace('_', ' '))}
+              {capitalize((emp.employment_status || 'active').replace('_', ' '))}
             </span>
           </div>
 
