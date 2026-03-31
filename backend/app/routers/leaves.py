@@ -35,8 +35,10 @@ async def my_leave_balance(
 ):
     from datetime import date
     y = year or date.today().year
+    from sqlalchemy.orm import selectinload
     result = await db.execute(
         select(LeaveBalance)
+        .options(selectinload(LeaveBalance.leave_type))
         .where(LeaveBalance.employee_id == current_employee.id, LeaveBalance.year == y)
     )
     balances = result.scalars().all()
@@ -55,8 +57,10 @@ async def employee_leave_balance(
 
     from datetime import date
     y = year or date.today().year
+    from sqlalchemy.orm import selectinload
     result = await db.execute(
         select(LeaveBalance)
+        .options(selectinload(LeaveBalance.leave_type))
         .where(LeaveBalance.employee_id == employee_id, LeaveBalance.year == y)
     )
     return ok(data=[LeaveBalanceOut.model_validate(b) for b in result.scalars().all()])
