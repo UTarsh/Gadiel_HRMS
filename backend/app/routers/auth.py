@@ -44,7 +44,7 @@ def _set_auth_cookies(request: Request, response: Response, access_token: str, r
         value=access_token,
         httponly=True,
         secure=_IS_PROD and request.url.scheme == "https",          # HTTPS-only in production
-        samesite="strict",
+        samesite="lax",
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
@@ -53,7 +53,7 @@ def _set_auth_cookies(request: Request, response: Response, access_token: str, r
         value=refresh_token,
         httponly=True,
         secure=_IS_PROD and request.url.scheme == "https",
-        samesite="strict",
+        samesite="lax",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
         path="/api/v1/auth/refresh",  # scope the refresh cookie to this endpoint only
     )
