@@ -1,0 +1,21 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Firebase service account key
+firebase-credentials.json
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+venv/
+.venv/
+
+# User-generated uploads
+uploads/
+
+# Alembic cache
+alembic/versions/__pycache__/

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Kinetic Playground - Attendance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#f74b6d",
+                        "inverse-primary": "#b56eff",
+                        "surface-bright": "#fffbff",
+                        "inverse-surface": "#0f0f00",
+                        "outline-variant": "#bcbb97",
+                        "on-background": "#39391f",
+                        "surface-container": "#f8f6c9",
+                        "primary-fixed-dim": "#b772ff",
+                        "surface": "#fffbff",
+                        "tertiary": "#ac4218",
+                        "secondary-fixed": "#8dedec",
+                        "surface-container-low": "#fdfcd1",
+                        "on-tertiary-fixed": "#320a00",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#e6e5b1",
+                        "tertiary-fixed-dim": "#fe7e4f",
+                        "surface-variant": "#ecebb9",
+                        "primary": "#8b2ce3",
+                        "on-surface-variant": "#666648",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#6b1f00",
+                        "inverse-on-surface": "#a09f7d",
+                        "tertiary-dim": "#9c370b",
+                        "on-secondary-container": "#005858",
+                        "outline": "#838262",
+                        "secondary": "#007070",
+                        "secondary-dim": "#006363",
+                        "secondary-container": "#8dedec",
+                        "secondary-fixed-dim": "#7fdede",
+                        "on-primary-container": "#350062",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#8b2ce3",
+                        "primary-dim": "#7e15d6",
+                        "on-tertiary-container": "#5c1a00",
+                        "primary-container": "#c185ff",
+                        "background": "#fffbff",
+                        "on-error-container": "#510017",
+                        "on-primary-fixed": "#000000",
+                        "tertiary-container": "#ff946e",
+                        "on-secondary-fixed-variant": "#006262",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ff946e",
+                        "primary-fixed": "#c185ff",
+                        "on-secondary-fixed": "#004343",
+                        "error-dim": "#a70138",
+                        "surface-container-highest": "#ecebb9",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#39391f",
+                        "surface-container-high": "#f2f0c1",
+                        "on-primary-fixed-variant": "#420078",
+                        "error": "#c12048"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 251, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface overflow-x-hidden min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 backdrop-blur-xl bg-opacity-80 bg-[#fffbff] dark:bg-slate-950">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Employee Profile Photo" class="w-full h-full object-cover" data-alt="Close up portrait of a smiling young professional woman with curly hair against a soft pastel background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwPZtDM96Is_J3Btysh_FYop5vV1x9hw4qJr5SPQ9QG0IGxET7fDE85mgmtRqvIJdl5UvfC_nKJNzbg9bMzbV-u6xx6Zbyq9PelNL1uLgsCzvBonndoaLczWP4UZASuYZUVqnKCcW-Pvqa702LR-DfQP1Q8eTHrk7YaYKLzZJheLmfNP2YHiEAccD3ib1kvrb9Cbehcu1n60Y-qTJe2v5iPRuNXKFFUH8SHQKD4D_7ad2__cdHKMIAfRBG6lDBTOeqA06B7HYycBU"/>
+</div>
+<h1 class="font-headline font-bold tracking-tight text-3xl text-[#8b2ce3] dark:text-[#c185ff]">
+                The Kinetic Playground
+            </h1>
+</div>
+<div class="w-12 h-12 flex items-center justify-center hover:bg-[#8b2ce3]/10 dark:hover:bg-[#c185ff]/10 rounded-full transition-all active:scale-95 duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="celebration">celebration</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto space-y-8">
+<!-- Hero: Clock In/Out Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<div class="md:col-span-7 bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary opacity-10 rounded-full blur-3xl"></div>
+<div class="relative z-10 space-y-6">
+<p class="font-headline font-extrabold text-primary text-sm uppercase tracking-widest">Today's Pulse</p>
+<h2 class="font-headline text-5xl font-bold tracking-tighter -mt-2">Good morning, Alex!</h2>
+<p class="text-on-surface-variant text-lg max-w-md">Ready to dive into the playground? Punch in to start your journey today.</p>
+<div class="flex flex-wrap gap-4 pt-4">
+<!-- THE QUIRKY BUTTON -->
+<button class="group relative px-12 py-8 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-headline font-extrabold text-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-90 transition-all duration-300">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl" data-icon="rocket_launch">rocket_launch</span>
+                                Clock In
+                            </span>
+<div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-full transition-opacity"></div>
+</button>
+<div class="flex items-center gap-2 px-6 py-4 bg-surface-container-highest rounded-full border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<span class="font-bold text-xl">09:12 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mood Blob -->
+<div class="md:col-span-5 bg-tertiary-container p-8 rounded-xl h-full flex flex-col justify-center relative overflow-hidden">
+<div class="absolute bottom-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
+<div class="relative z-10 space-y-4">
+<span class="material-symbols-outlined text-5xl text-on-tertiary-container" data-icon="mood">mood</span>
+<h3 class="font-headline text-3xl font-bold leading-tight">How's the energy today?</h3>
+<div class="flex gap-2">
+<button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm">🔥</button>
+<button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm">✨</button>
+<button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm">🌊</button>
+<button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm">🌱</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Progress & Maps Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Progress Card -->
+<div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(57,57,31,0.06)] space-y-8">
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-headline text-2xl font-bold">Your Flow</h4>
+<p class="text-on-surface-variant">4.5 / 8 hours logged</p>
+</div>
+<span class="text-primary font-bold text-lg">56% Complete</span>
+</div>
+<!-- Chunky Progress Bar -->
+<div class="w-full bg-surface-dim h-16 rounded-full overflow-hidden p-2">
+<div class="h-full bg-secondary rounded-full flex items-center justify-end px-4 min-w-[10%]" style="width: 56%">
+<span class="text-white material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 pt-4">
+<div class="p-4 bg-surface-container rounded-lg text-center">
+<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Breaks</p>
+<p class="font-headline font-bold text-xl">45m</p>
+</div>
+<div class="p-4 bg-secondary-container rounded-lg text-center">
+<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Overtime</p>
+<p class="font-headline font-bold text-xl">0h</p>
+</div>
+<div class="p-4 bg-surface-container-high rounded-lg text-center">
+<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Remaining</p>
+<p class="font-headline font-bold text-xl">3.5h</p>
+</div>
+</div>
+</div>
+<!-- Map / Location Card -->
+<div class="relative rounded-xl overflow-hidden shadow-[0px_20px_40px_rgba(57,57,31,0.06)] group h-[400px]">
+<img alt="Map view" class="w-full h-full object-cover grayscale brightness-110 group-hover:grayscale-0 transition-all duration-700" data-alt="Minimalist artistic stylized map of an urban neighborhood with colorful blocks and clean aesthetic lines" data-location="Austin, Texas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxPAmFEGs10iK8bQmVZ1389JRxfD67WaPCyr9UdhjRsDjjknVYGP-8-k5CuefQBRd0mEFHBu4rbT3n9GAbq8plu_Brynj1p24lKJJhz4ZYfbu0Mo80Z5kAWUwd79cMHrPLvm1fQagYQIu3xWXpwtt8dadPicN6ExvSrAEYh6yPH0mslKhXzvm25sf6M_7ehkAqxoIqzDwYmUGhI3WdTX8vLlE6jnQQgUUlbO-ruKVjqldBI9f0hgVSK0soq0vfFaP8YrH5uBxnFFo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+<div class="absolute top-6 left-6 glass-card px-6 py-3 rounded-full flex items-center gap-2 border border-white/20">
+<span class="w-3 h-3 bg-secondary rounded-full animate-pulse"></span>
+<span class="font-headline font-bold text-on-surface">Central Hub, Austin</span>
+</div>
+<div class="absolute bottom-8 left-8 right-8 flex justify-between items-center">
+<div class="glass-card p-6 rounded-xl flex-1 mr-4">
+<h4 class="font-headline font-extrabold text-xl text-primary">Where you at?</h4>
+<p class="text-on-surface-variant text-sm">Detected: Kinetic HQ Office</p>
+</div>
+<button class="w-16 h-16 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="location_on">location_on</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Attendance History List (Asymmetric) -->
+<section class="space-y-6">
+<h3 class="font-headline text-3xl font-bold px-2">Recent Shifts</h3>
+<div class="space-y-4">
+<div class="flex flex-col md:flex-row gap-4">
+<div class="flex-grow-[2] bg-surface-container-low p-6 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<div>
+<p class="font-headline font-bold">Yesterday</p>
+<p class="text-sm text-on-surface-variant">Oct 24, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-xl">8h 12m</p>
+<span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-tighter">Full Shift</span>
+</div>
+</div>
+<div class="flex-grow-[1] bg-surface-container-highest p-6 rounded-xl flex items-center justify-between border-2 border-dashed border-outline-variant/30">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="coffee">coffee</span>
+<p class="font-headline font-bold">Pending Approval</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-4">
+<div class="flex-grow-[1] bg-surface-container-low p-6 rounded-xl flex items-center gap-4">
+<div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="bolt">bolt</span>
+</div>
+<p class="font-headline font-bold">High Productivity Day</p>
+</div>
+<div class="flex-grow-[2] bg-surface-container-low p-6 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+</div>
+<div>
+<p class="font-headline font-bold">Wednesday</p>
+<p class="text-sm text-on-surface-variant">Oct 23, 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-xl">7h 45m</p>
+<span class="inline-block px-3 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-bold rounded-full uppercase tracking-tighter">Short Shift</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 backdrop-blur-2xl bg-[#fffbff]/80 dark:bg-slate-900/80 shadow-[0px_-10px_40px_rgba(57,57,31,0.06)] rounded-t-[3rem] border-none">
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform group" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform group" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="insert_emoticon">insert_emoticon</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest">Work</span>
+</a>
+<!-- ACTIVE: TIME (Attendance Screen) -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8b2ce3] to-[#c185ff] text-white rounded-full p-3 mb-2 scale-110 shadow-lg active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="event_available">event_available</span>
+<span class="font-['Be_Vietnam_Pro'] text-[8px] font-bold uppercase tracking-widest mt-1">Time</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform group" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform group" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="face_6">face_6</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest">Me</span>
+</a>
+</nav>
+</body></html>

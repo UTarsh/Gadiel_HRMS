@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-container": "#f74b6d",
+              "inverse-primary": "#b56eff",
+              "surface-bright": "#fffbff",
+              "inverse-surface": "#0f0f00",
+              "outline-variant": "#bcbb97",
+              "on-background": "#39391f",
+              "surface-container": "#f8f6c9",
+              "primary-fixed-dim": "#b772ff",
+              "surface": "#fffbff",
+              "tertiary": "#ac4218",
+              "secondary-fixed": "#8dedec",
+              "surface-container-low": "#fdfcd1",
+              "on-tertiary-fixed": "#320a00",
+              "on-primary": "#ffffff",
+              "surface-dim": "#e6e5b1",
+              "tertiary-fixed-dim": "#fe7e4f",
+              "surface-variant": "#ecebb9",
+              "primary": "#8b2ce3",
+              "on-surface-variant": "#666648",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#6b1f00",
+              "inverse-on-surface": "#a09f7d",
+              "tertiary-dim": "#9c370b",
+              "on-secondary-container": "#005858",
+              "outline": "#838262",
+              "secondary": "#007070",
+              "secondary-dim": "#006363",
+              "secondary-container": "#8dedec",
+              "secondary-fixed-dim": "#7fdede",
+              "on-primary-container": "#350062",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#8b2ce3",
+              "primary-dim": "#7e15d6",
+              "on-tertiary-container": "#5c1a00",
+              "primary-container": "#c185ff",
+              "background": "#fffbff",
+              "on-error-container": "#510017",
+              "on-primary-fixed": "#000000",
+              "tertiary-container": "#ff946e",
+              "on-secondary-fixed-variant": "#006262",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ff946e",
+              "primary-fixed": "#c185ff",
+              "on-secondary-fixed": "#004343",
+              "error-dim": "#a70138",
+              "surface-container-highest": "#ecebb9",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#39391f",
+              "surface-container-high": "#f2f0c1",
+              "on-primary-fixed-variant": "#420078",
+              "error": "#c12048"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .organic-blob {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #8b2ce3 0%, #c185ff 100%);
+        }
+        body {
+            background-color: #fffbff;
+            color: #39391f;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 backdrop-blur-xl bg-opacity-80 bg-[#fffbff] dark:bg-slate-950">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Employee Profile Photo" class="w-full h-full object-cover" data-alt="Close-up portrait of a creative professional woman with a bright smile and stylish glasses in a colorful studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuDmR9VBtBZCH_teZtVDTaIYI1PCB6aMQBsGHPfyfTllXAxS9pvBvwD6HLdL920M8-LrackmHxT3T6UCdqqyrK3rXxg1BRMbykzWp7q41N77es82xJA07js4K7zadrchAiagOgWPq1YEHn8zXF7oPLlrnbnhLVLx_OVyNXy3JCY-kUJ4NghFuQkMDLhDUpvLX9RYKzuaK6TXjifI1R7NF0Iax-ZmTKEHRVrtKIuGyz7iIMNxCD6MY8d867iTYNF0-mJFPNvWJRxKA"/>
+</div>
+<h1 class="font-headline font-bold tracking-tight text-3xl text-[#8b2ce3] dark:text-[#c185ff]">The Kinetic Playground</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#8b2ce3]/10 dark:hover:bg-[#c185ff]/10 rounded-full transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#8b2ce3] dark:text-[#c185ff]">celebration</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto">
+<!-- Hero Profile Section -->
+<section class="relative mb-16">
+<div class="flex flex-col md:flex-row items-center md:items-end gap-8">
+<!-- Large Quirky Avatar -->
+<div class="relative">
+<div class="w-48 h-48 md:w-64 md:h-64 organic-blob editorial-gradient p-1 shadow-xl">
+<div class="w-full h-full organic-blob overflow-hidden bg-surface">
+<img alt="Profile Large" class="w-full h-full object-cover" data-alt="Vibrant editorial portrait of a smiling woman with stylish confident expression against a soft lavender background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ1ABbKsvlcumWAuOq7fmupctzhiNS4XROR6BS_GVQlu-ypPT6r1amm2yYYnWwlGuM8XQdrrqHC-ejdlWsckAyolAZMLCWh1SvXAN8hsHsdphpj-eGERjPDmLhooRggvoWcw-asnPkVNjR_DcirLkfOn8-Ws-nN2XP7p5VU1Us40cA7Sje9VnXgZngoE9nIhXCpwjF6bVMCcA2kqCrTBj03ZUREfaX4JvfV_LAYQOtHYah60F0JZ2pJaZTXtygMhCe-iofEG8ZHgM"/>
+</div>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-tertiary text-on-tertiary p-4 rounded-full shadow-lg rotate-12">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<!-- Identity -->
+<div class="flex-1 text-center md:text-left">
+<div class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container font-bold text-xs uppercase tracking-tighter mb-4">
+                        Creative Strategist
+                    </div>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter mb-2 leading-none">
+                        Alex <span class="text-primary">Rivera</span>
+</h2>
+<p class="text-lg text-on-surface-variant font-medium mb-6">Manifesting digital magic since 2021.</p>
+<button class="editorial-gradient text-on-primary px-8 py-4 rounded-full font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-transform active:scale-90 duration-300">
+<span class="material-symbols-outlined">edit_square</span>
+                        Let's Update!
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-12">
+<!-- Skills & Spells -->
+<div class="md:col-span-7 bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-headline text-3xl font-extrabold mb-6 flex items-center gap-2">
+                        Skills &amp; Spells <span class="material-symbols-outlined text-primary">magic_button</span>
+</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-5 py-2 bg-surface-container-lowest rounded-full font-bold text-primary shadow-sm">Product Alchemy</span>
+<span class="px-5 py-2 bg-surface-container-lowest rounded-full font-bold text-secondary shadow-sm">Visual Sorcery</span>
+<span class="px-5 py-2 bg-surface-container-lowest rounded-full font-bold text-tertiary shadow-sm">Team Telepathy</span>
+<span class="px-5 py-2 bg-surface-container-lowest rounded-full font-bold text-primary shadow-sm">UX Enchantment</span>
+<span class="px-5 py-2 bg-surface-container-lowest rounded-full font-bold text-secondary shadow-sm">Data Divination</span>
+</div>
+</div>
+<!-- Abstract shape background -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+</div>
+<!-- Mood Blob -->
+<div class="md:col-span-5 bg-tertiary-container p-8 rounded-xl flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-6xl text-on-tertiary-container mb-4" style="font-variation-settings: 'FILL' 1;">mood</span>
+<h4 class="font-headline text-2xl font-bold text-on-tertiary-container">Current Vibe: Electric</h4>
+<p class="text-on-tertiary-container/80 mt-2">Ready to conquer the sprint with 110% energy.</p>
+</div>
+<!-- Work Life Section -->
+<div class="md:col-span-4 bg-secondary-container p-8 rounded-xl">
+<h3 class="font-headline text-2xl font-extrabold mb-6 flex items-center gap-2">
+                    Work Life <span class="material-symbols-outlined text-on-secondary-container">rocket_launch</span>
+</h3>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">verified</span>
+</div>
+<div>
+<p class="font-bold text-on-secondary-container">3 Year Anniversary</p>
+<p class="text-sm opacity-70">Coming up in 12 days!</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">groups</span>
+</div>
+<div>
+<p class="font-bold text-on-secondary-container">Product Squad</p>
+<p class="text-sm opacity-70">The Design Avengers</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Interests (Asymmetric Card) -->
+<div class="md:col-span-8 bg-surface-container-high p-8 rounded-xl overflow-hidden relative">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1">
+<h3 class="font-headline text-3xl font-extrabold mb-4">Interests</h3>
+<p class="text-on-surface-variant font-medium leading-relaxed mb-6">
+                            When not pushing pixels, I'm usually hunting for the world's best sourdough or teaching my golden retriever how to high-five. I'm a firm believer that coffee is a food group and mountains are better than beaches.
+                        </p>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">bakery_dining</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container">landscape</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">pets</span>
+</div>
+</div>
+</div>
+<div class="w-48 h-48 organic-blob overflow-hidden shrink-0 border-4 border-surface shadow-inner">
+<img alt="Hobby" class="w-full h-full object-cover" data-alt="A cute golden retriever puppy looking up at the camera with a playful and energetic expression in a bright green field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhv5HSkF86TvJVXazl074rSj8ZPzi7Oc-EeZ-A3Bl12Z8WTgYzD4PMIAWFLSfbi9H7uvCEN8setV4xejc_iWdzO4byMYGFao2Xczo89T-XM8ZvVaQAum-C0yb2Kc30X4NDh7ItiewI1YtNvHOLPLzACXGODMm1IIjsG8hDqLmiVEWZ5g1Y9UHNoqhd-hT2R9HdMO0TyOZJBM0jS5N4pOc3S2i392ih00YXiDDy6ndKiVdBrmhFfJpbpeKj1ZpD1MdAR37NXVAjADE"/>
+</div>
+</div>
+</div>
+<!-- Whimsical Progress -->
+<div class="md:col-span-12 bg-surface-dim p-8 rounded-xl">
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-headline text-2xl font-extrabold">Learning Journey: UI Motion</h3>
+<span class="font-bold text-primary">85% Mastery</span>
+</div>
+<div class="w-full h-16 bg-surface-container-low rounded-full overflow-hidden p-2">
+<div class="h-full bg-secondary rounded-full flex items-center justify-end px-6 shadow-lg" style="width: 85%;">
+<span class="text-white font-black italic tracking-widest text-xs uppercase">Leveling Up!</span>
+</div>
+</div>
+</div>
+</div>
+</section></main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 backdrop-blur-2xl bg-[#fffbff]/80 dark:bg-slate-900/80 shadow-[0px_-10px_40px_rgba(57,57,31,0.06)] rounded-t-[3rem]">
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="insert_emoticon">insert_emoticon</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Work</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Time</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8b2ce3] to-[#c185ff] text-white rounded-full p-3 mb-2 scale-110 shadow-lg active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="face_6" style="font-variation-settings: 'FILL' 1;">face_6</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Me</span>
+</a>
+</nav>
+</body></html>

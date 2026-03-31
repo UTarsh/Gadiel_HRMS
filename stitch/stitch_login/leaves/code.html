@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be_Vietnam_Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#f74b6d",
+                        "inverse-primary": "#b56eff",
+                        "surface-bright": "#fffbff",
+                        "inverse-surface": "#0f0f00",
+                        "outline-variant": "#bcbb97",
+                        "on-background": "#39391f",
+                        "surface-container": "#f8f6c9",
+                        "primary-fixed-dim": "#b772ff",
+                        "surface": "#fffbff",
+                        "tertiary": "#ac4218",
+                        "secondary-fixed": "#8dedec",
+                        "surface-container-low": "#fdfcd1",
+                        "on-tertiary-fixed": "#320a00",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#e6e5b1",
+                        "tertiary-fixed-dim": "#fe7e4f",
+                        "surface-variant": "#ecebb9",
+                        "primary": "#8b2ce3",
+                        "on-surface-variant": "#666648",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#6b1f00",
+                        "inverse-on-surface": "#a09f7d",
+                        "tertiary-dim": "#9c370b",
+                        "on-secondary-container": "#005858",
+                        "outline": "#838262",
+                        "secondary": "#007070",
+                        "secondary-dim": "#006363",
+                        "secondary-container": "#8dedec",
+                        "secondary-fixed-dim": "#7fdede",
+                        "on-primary-container": "#350062",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#8b2ce3",
+                        "primary-dim": "#7e15d6",
+                        "on-tertiary-container": "#5c1a00",
+                        "primary-container": "#c185ff",
+                        "background": "#fffbff",
+                        "on-error-container": "#510017",
+                        "on-primary-fixed": "#000000",
+                        "tertiary-container": "#ff946e",
+                        "on-secondary-fixed-variant": "#006262",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ff946e",
+                        "primary-fixed": "#c185ff",
+                        "on-secondary-fixed": "#004343",
+                        "error-dim": "#a70138",
+                        "surface-container-highest": "#ecebb9",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#39391f",
+                        "surface-container-high": "#f2f0c1",
+                        "on-primary-fixed-variant": "#420078",
+                        "error": "#c12048"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 backdrop-blur-xl bg-opacity-80 bg-[#fffbff] dark:bg-slate-950">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container border-2 border-primary ring-4 ring-primary/10">
+<img alt="Employee Profile Photo" class="w-full h-full object-cover" data-alt="close-up portrait of a smiling creative professional woman with stylish glasses in a sunlit modern studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUPkoBazt7hEpYTuwtT0c6XCA3E-9ipFcGnnshkailgsKMar8lkuAQo6HrIYSKDbhMmB6Lbjri6QzDLNPaHJbXz038ksNPCEs_qFP1LEWw8H1kP3crIn8wPq8PFeyN5pwHQEwQrhRPs80ChWLWTWmfIDe4KH4Z50fHOiPE7TbOCCHDwklF5U0pjfrBF0j4lNqD6CO9uZITVXsIvJ_GuFlku1xuCzZ2xrmAsIs9Soz2Z86p4S0HS58R7W-YzxCkARatXxQmI25RBg"/>
+</div>
+<h1 class="font-headline font-bold tracking-tight text-3xl text-[#8b2ce3] dark:text-[#c185ff]">The Kinetic Playground</h1>
+</div>
+<div class="w-12 h-12 flex items-center justify-center hover:bg-[#8b2ce3]/10 dark:hover:bg-[#c185ff]/10 rounded-full transition-all active:scale-95 duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-2xl text-[#8b2ce3]">celebration</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+<!-- Hero Section: Leave Balance Overview -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<span class="font-label text-primary font-extrabold uppercase tracking-widest text-sm mb-2 block">Your Energy Bank</span>
+<h2 class="font-headline text-5xl font-bold tracking-tighter leading-none">Time for a <span class="text-primary">Break?</span></h2>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full font-headline font-bold text-lg shadow-lg hover:shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                    Request Time Off
+                </button>
+</div>
+<!-- Playful Progress Circles Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Balance Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(57,57,31,0.06)] flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500"></div>
+<div class="relative w-32 h-32 mb-6">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary rounded-full" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-headline font-extrabold">18</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Days</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-4xl mb-2">rocket_launch</span>
+<h3 class="font-headline font-bold text-xl">Chill Time</h3>
+<p class="text-on-surface-variant text-sm mt-1">Vacation &amp; Adventures</p>
+</div>
+<!-- Balance Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(57,57,31,0.06)] flex flex-col items-center text-center relative overflow-hidden group">
+<div class="relative w-32 h-32 mb-6">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary rounded-full" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="200.9" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-headline font-extrabold">5</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Days</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-4xl mb-2">insert_emoticon</span>
+<h3 class="font-headline font-bold text-xl">Sickie</h3>
+<p class="text-on-surface-variant text-sm mt-1">Healing &amp; Recovery</p>
+</div>
+<!-- Balance Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(57,57,31,0.06)] flex flex-col items-center text-center relative overflow-hidden group">
+<div class="relative w-32 h-32 mb-6">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary rounded-full" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="188.4" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-headline font-extrabold">3</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Days</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary text-4xl mb-2">school</span>
+<h3 class="font-headline font-bold text-xl">Study Sesh</h3>
+<p class="text-on-surface-variant text-sm mt-1">Upskilling &amp; Brain Power</p>
+</div>
+<!-- Balance Card 4 (Personal/Volunteer) -->
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col items-center text-center relative overflow-hidden">
+<div class="relative w-32 h-32 mb-6">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="bg-surface/50" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-fixed-dim rounded-full" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="125.6" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-headline font-extrabold">2</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Days</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-4xl mb-2">volunteer_activism</span>
+<h3 class="font-headline font-bold text-xl">Good Deeds</h3>
+<p class="text-on-surface-variant text-sm mt-1">Giving Back</p>
+</div>
+</div>
+</section>
+<!-- Main Content Grid: Upcoming & History -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: Upcoming Adventures (Asymmetric Card) -->
+<div class="lg:col-span-8 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline text-2xl font-bold">Upcoming Adventures</h3>
+<span class="text-secondary font-bold text-sm">See All</span>
+</div>
+<!-- Bento-style Card -->
+<div class="bg-secondary-container rounded-xl p-8 flex flex-col md:flex-row gap-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+<div class="flex-1 space-y-4 relative z-10">
+<div class="inline-block bg-white/40 backdrop-blur-md px-4 py-1 rounded-full text-on-secondary-container text-xs font-bold uppercase tracking-wider">Approved</div>
+<h4 class="font-headline text-4xl font-extrabold text-on-secondary-container tracking-tight">Summer Beach Escape</h4>
+<div class="flex items-center gap-4 text-on-secondary-container/80">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-bold">Aug 12 - Aug 19</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-on-secondary-container/30"></div>
+<span class="font-bold">8 Chill Days</span>
+</div>
+<div class="pt-4">
+<div class="flex -space-x-3">
+<img alt="Flight" class="w-10 h-10 rounded-full border-4 border-secondary-container bg-white p-1" data-alt="icon of a paper airplane flying over ocean" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxZBNxQtMmi4GmmicBDgvNY1599Uc1J9eirsd0TAmgb5uziNWZGdn_-ghVjXSkQ6_lg0XqbtyhZbqsuNgv76WK_WkYRmtoWvWwTQ9Cm9R_pss47N9krKF3M-TOix9ooUCbBLLp_4m8m06cmDaIbuiFmV0b-Gb6mRZf5CYn0QcwOIEn5vvzapEoQYJrhCZh4cwI7DPzmDCqNAAknRNvYK9vXeWZ9iHIrbYjrCJMtkj4f27-5fD69MMhdPC_cCNEntflDyr8mQzF8fc"/>
+<img alt="Beach" class="w-10 h-10 rounded-full border-4 border-secondary-container bg-white p-1" data-alt="icon of a beach umbrella and coconut drink" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL1SYlvZ7pZMngdyHLyok_7Pg58tqzrgtNOA61ji2Tg0ztwx3yc3tKFwUKCRYihaw5y6Be0gBzzWPJw-51OH-SeNuyZPlFO9mXuzQBRkqtYZHUcfOE5l5TEHKYqpBRKhCfVuGdAWj2FQfPK55Pxn4s_FkGRHxuOdNHzIPf_r8FPnJSp5XoYK-krIfWJ7LS8UeoOJx1U3j-CMAL4pxfmFTNPKXuaoXr8V6lnzEl5w81Pfolp8Lmihct20zHhnAjuIB19P4riha9y0k"/>
+<div class="w-10 h-10 rounded-full border-4 border-secondary-container bg-white flex items-center justify-center font-bold text-xs text-secondary">+2</div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-64 h-48 md:h-auto rounded-lg overflow-hidden relative group-hover:scale-105 transition-transform duration-700">
+<img alt="Vacation Mood" class="w-full h-full object-cover" data-alt="stunning tropical beach with crystal clear turquoise water, white sand, and swaying palm trees under bright blue sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByFDHIqgsl6rY0t0nHJ5CiBp56-os6ttpLqpPjS5WQaf-wjB9z2WLJYFyJoUXqrPzUiP1uGGMu3CTgT9mGpVz_FKqHWBXRi8djQVJiIPtfa56h24bT-IDfcaPSI9AlU3LtE7zGMnuny2HPQAQcHAlFDhhg1uyhB26zylpiQoPbWc5Q-DCWdhIXs2pkBtMu-FqHRMnd2oevYN8hB7HgyMEkhuUsKVMEyqaFPx5ajlYTBofHShxifErYApGlGgmjTef6IQfHcjuIIY4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/40 to-transparent"></div>
+</div>
+</div>
+<!-- Secondary Item in List -->
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full bg-tertiary-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl">school</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-xl">React Conf 2024</h4>
+<p class="text-on-surface-variant">May 24 (1 Study Sesh Day)</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<span class="block text-xs font-bold uppercase text-on-surface-variant">Status</span>
+<span class="text-tertiary font-bold">Pending Approval</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Right: The "Mood Blob" Survey & Quick Actions -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Mood Blob -->
+<div class="bg-tertiary-container p-8 rounded-xl relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"></div>
+<h3 class="font-headline text-2xl font-bold text-on-tertiary-container mb-4">Burnout Check?</h3>
+<p class="text-on-tertiary-container/80 mb-6 leading-relaxed">You haven't taken a Friday off in 3 months. Your "Chill Bank" is overflowing! Want to book a long weekend?</p>
+<button class="w-full bg-on-tertiary-container text-tertiary-container py-4 rounded-full font-headline font-bold hover:bg-on-tertiary-container/90 transition-all">
+                        Yes, I need air!
+                    </button>
+</div>
+<!-- History List -->
+<div class="space-y-4">
+<h3 class="font-headline text-xl font-bold px-2">Memory Lane</h3>
+<div class="bg-surface-container-lowest rounded-xl divide-y-0 p-2">
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-low rounded-xl transition-colors">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Wisdom Tooth Sesh</p>
+<p class="text-xs text-on-surface-variant">Jan 12 • 2 Sickie Days</p>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant opacity-40">#1204</span>
+</div>
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-low rounded-xl transition-colors">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">festival</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Winter Solstice</p>
+<p class="text-xs text-on-surface-variant">Dec 21 • 1 Chill Day</p>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant opacity-40">#0988</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 backdrop-blur-2xl bg-[#fffbff]/80 dark:bg-slate-900/80 shadow-[0px_-10px_40px_rgba(57,57,31,0.06)] rounded-t-[3rem] border-none">
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300 group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">rocket_launch</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300 group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">insert_emoticon</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Work</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8b2ce3] to-[#c185ff] text-white rounded-full p-3 mb-2 scale-110 shadow-lg active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-0.5">Time</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300 group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">notifications_active</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300 group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">face_6</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Me</span>
+</a>
+</nav>
+</body></html>

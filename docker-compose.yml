@@ -1,0 +1,102 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Gadiel HRMS — production docker-compose
+#
+# Services:
+#   api      — FastAPI backend  (port 8001)
+#   frontend — React web app    (served by nginx on port 80)
+#   nginx    — Reverse proxy + TLS termination (ports 80 / 443)
+#   mysql    — MySQL 8 database (port 3306, internal only)
+#   redis    — Redis 7 cache + token blacklist (port 6379, internal only)
+#
+# Quick start (development):
+#   docker compose up --build
+#
+# Production:
+#   1. Copy backend/.env and set APP_ENV=production, DEBUG=false
+#   2. Place TLS certs in nginx/certs/ (cert.pem, key.pem)
+#   3. docker compose -f docker-compose.yml up -d
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Backend API ──────────────────────────────────────────────────────────────
+  api:
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./backend/.env.production
+    ports:
+      - "8001:8001"
+    volumes:
+      - uploads:/app/uploads
+      - ./secrets/firebase-credentials.json:/app/secrets/firebase-credentials.json:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── Frontend (React → built static files served by nginx) ───────────────────
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+
+  # ── Nginx reverse proxy ──────────────────────────────────────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - api
+      - frontend
+
+  # ── MySQL 8 ──────────────────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME:-hrms_db}
+    ports:
+      - "127.0.0.1:3306:3306"   # bind to loopback only — not exposed externally
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+
+  # ── Redis 7 ──────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"   # bind to loopback only
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+
+volumes:
+  mysql_data:
+  redis_data:
+  uploads:

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Join The Kinetic Playground</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-container": "#f74b6d",
+              "inverse-primary": "#b56eff",
+              "surface-bright": "#fffbff",
+              "inverse-surface": "#0f0f00",
+              "outline-variant": "#bcbb97",
+              "on-background": "#39391f",
+              "surface-container": "#f8f6c9",
+              "primary-fixed-dim": "#b772ff",
+              "surface": "#fffbff",
+              "tertiary": "#ac4218",
+              "secondary-fixed": "#8dedec",
+              "surface-container-low": "#fdfcd1",
+              "on-tertiary-fixed": "#320a00",
+              "on-primary": "#ffffff",
+              "surface-dim": "#e6e5b1",
+              "tertiary-fixed-dim": "#fe7e4f",
+              "surface-variant": "#ecebb9",
+              "primary": "#8b2ce3",
+              "on-surface-variant": "#666648",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#6b1f00",
+              "inverse-on-surface": "#a09f7d",
+              "tertiary-dim": "#9c370b",
+              "on-secondary-container": "#005858",
+              "outline": "#838262",
+              "secondary": "#007070",
+              "secondary-dim": "#006363",
+              "secondary-container": "#8dedec",
+              "secondary-fixed-dim": "#7fdede",
+              "on-primary-container": "#350062",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#8b2ce3",
+              "primary-dim": "#7e15d6",
+              "on-tertiary-container": "#5c1a00",
+              "primary-container": "#c185ff",
+              "background": "#fffbff",
+              "on-error-container": "#510017",
+              "on-primary-fixed": "#000000",
+              "tertiary-container": "#ff946e",
+              "on-secondary-fixed-variant": "#006262",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ff946e",
+              "primary-fixed": "#c185ff",
+              "on-secondary-fixed": "#004343",
+              "error-dim": "#a70138",
+              "surface-container-highest": "#ecebb9",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#39391f",
+              "surface-container-high": "#f2f0c1",
+              "on-primary-fixed-variant": "#420078",
+              "error": "#c12048"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-kinetic-gradient {
+            background: linear-gradient(135deg, #8b2ce3 0%, #c185ff 100%);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(139, 44, 227, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col overflow-x-hidden">
+<!-- Content Area: Focused Journey (Navigation Suppressed as per UX Goal) -->
+<main class="flex-grow flex flex-col md:flex-row min-h-screen">
+<!-- Left Side: Editorial Branding / Hero -->
+<div class="relative w-full md:w-5/12 lg:w-1/2 p-8 md:p-16 flex flex-col justify-between bg-surface-container-low overflow-hidden">
+<!-- Decorative Blobs -->
+<div class="absolute -top-20 -left-20 w-64 h-64 bg-primary-container/30 rounded-full blur-3xl"></div>
+<div class="absolute bottom-20 -right-10 w-80 h-80 bg-tertiary-container/20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-12">
+<div class="w-12 h-12 bg-kinetic-gradient rounded-xl flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<span class="font-headline font-extrabold text-2xl tracking-tighter text-primary">The Kinetic Playground</span>
+</div>
+<h1 class="font-headline font-extrabold text-6xl md:text-7xl lg:text-8xl text-on-surface leading-none tracking-tight mb-8">
+                    Come <span class="text-primary italic">join</span> the party!
+                </h1>
+<p class="text-xl md:text-2xl text-on-surface-variant max-w-md leading-relaxed">
+                    Where work feels like play and every team member is a superstar.
+                </p>
+</div>
+<div class="relative z-10 mt-12">
+<div class="flex -space-x-4 mb-4">
+<img alt="Team member" class="w-16 h-16 rounded-full border-4 border-surface-container-low object-cover" data-alt="close-up portrait of a smiling young woman with curly hair in a vibrant creative office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXtY1YhhzEeVpdgRdi_yjnxB_aas3ekYjImy69unXA7et-ymMoCpWEUo_dMoWw5wJLPmeF0ccAM7ueC9MvJYoaxIcWX9hw3AbPR3QElcraOx6ELVIMjpZbcBowb1LAw8gOvU0FyMian2Ydlhwl8dxjiRZQNfIsEUT4mJLBTLLCmoDcZGSsMjV1NzskfDBOBcg5A1stClSKpBRhHPFvnSs0LksGKZA-47phpjvoDL5Ho4lqgfDxoHKaTXMMRe4MqghljVcM1Vr8YLU"/>
+<img alt="Team member" class="w-16 h-16 rounded-full border-4 border-surface-container-low object-cover" data-alt="portrait of a confident man with a beard laughing in a sunlit modern workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx3v1tekgLU_kozSqK5-v349EtE3WodkIrLolgPwvSFY9hVX1xGgZJ5TjHuqiJPzg-E9qwQRHqtSZUr2oEpYRJqK4jAVPA-vNVQjAvXXILBauGwP0WcSzafJfR2GOOtc9e8AgjTUPag4SIxWU6Ed4R8Hcqj08GUyxkLDUMDzoTWOnljvWtjo3xMh8AgPgfbiFFQVaAFIaDnsPB6o_KDy3DiUb8bUmnUiM-QBCRW9pKfdNdbW3a0W2a163ZXWQWokhnnl4177LAxfI"/>
+<img alt="Team member" class="w-16 h-16 rounded-full border-4 border-surface-container-low object-cover" data-alt="close-up of a joyful man with glasses looking directly at the camera in a professional setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7XsYvzv8ZL4PC3qfdsxgByneLxfUbOUB62fz-M9GOQNZ28LrVHzrjrjkEmux85l4LfsIjUbf8g5ljJtS-qS0zV95QoHnVsdw6Wu8VzI7_ot0evb6y6Z1nNIhF9gDcDSL-ZFu4H5sFx7iqhnjvX0iXcPOQ9fYljt24YffMii_u7KRsDqIYA7YUVDycw8Lv71rD5as4m3ZTsjncWYOZZqPdN0jlUKB7fJHqJZ8xGXdf7fJSl1SV2O1oOa-tw0p99YFFS8cjAQi9MhQ"/>
+<div class="w-16 h-16 rounded-full border-4 border-surface-container-low bg-secondary flex items-center justify-center text-white font-bold text-lg">+42</div>
+</div>
+<p class="font-bold text-on-surface-variant uppercase tracking-widest text-xs">Join 2,400+ culture-first companies</p>
+</div>
+</div>
+<!-- Right Side: Interaction Canvas -->
+<div class="w-full md:w-7/12 lg:w-1/2 bg-surface p-8 md:p-16 flex flex-col justify-center items-center">
+<div class="w-full max-w-md space-y-10">
+<div class="space-y-2">
+<h2 class="font-headline font-bold text-3xl text-on-surface">Create your account</h2>
+<p class="text-on-surface-variant">Start your journey into the future of HR.</p>
+</div>
+<form class="space-y-6">
+<!-- Input Group: Full Name -->
+<div class="space-y-2">
+<label class="block font-headline font-bold text-sm ml-2 text-on-surface/70" for="full_name">Full Name</label>
+<div class="relative">
+<input class="w-full px-6 py-5 bg-surface-container-high border-none rounded-2xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50" id="full_name" placeholder="John Doe" type="text"/>
+<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant/40" data-icon="person">person</span>
+</div>
+</div>
+<!-- Input Group: Work Email -->
+<div class="space-y-2">
+<label class="block font-headline font-bold text-sm ml-2 text-on-surface/70" for="work_email">Work Email</label>
+<div class="relative">
+<input class="w-full px-6 py-5 bg-surface-container-high border-none rounded-2xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50" id="work_email" placeholder="john@company.com" type="email"/>
+<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant/40" data-icon="alternate_email">alternate_email</span>
+</div>
+</div>
+<!-- Input Group: Password -->
+<div class="space-y-2">
+<label class="block font-headline font-bold text-sm ml-2 text-on-surface/70" for="password">Password</label>
+<div class="relative">
+<input class="w-full px-6 py-5 bg-surface-container-high border-none rounded-2xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50" id="password" placeholder="••••••••" type="password"/>
+<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant/40" data-icon="lock">lock</span>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-kinetic-gradient text-on-primary font-headline font-extrabold py-5 rounded-full text-xl shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3" type="submit">
+                            Let's do this!
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<div class="relative py-4">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant/20"></div></div>
+<div class="relative flex justify-center text-xs uppercase tracking-widest font-bold text-on-surface-variant bg-surface px-4">Or sign up with</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-colors font-bold text-on-surface">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+                        Google
+                    </button>
+<button class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-surface-container-low hover:bg-surface-container-high transition-colors font-bold text-on-surface">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path>
+</svg>
+                        GitHub
+                    </button>
+</div>
+<p class="text-center text-on-surface-variant font-medium">
+                    Already have an account? <a class="text-primary font-bold hover:underline" href="#">Log in</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Decorative Corner Element -->
+<div class="hidden lg:block fixed -bottom-24 -left-24 w-64 h-64 bg-secondary-container rounded-full flex items-start justify-end p-12 -rotate-12">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl" data-icon="celebration">celebration</span>
+</div>
+</body></html>

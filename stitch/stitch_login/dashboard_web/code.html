@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kinetic Culture | The Playground</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#fffbff",
+                        "error-dim": "#a70138",
+                        "on-primary-container": "#350062",
+                        "tertiary": "#ac4218",
+                        "tertiary-container": "#ff946e",
+                        "on-tertiary-container": "#5c1a00",
+                        "on-primary-fixed-variant": "#420078",
+                        "error-container": "#f74b6d",
+                        "on-primary-fixed": "#000000",
+                        "surface-container-high": "#f2f0c1",
+                        "surface-bright": "#fffbff",
+                        "outline": "#838262",
+                        "inverse-primary": "#b56eff",
+                        "on-background": "#39391f",
+                        "inverse-surface": "#0f0f00",
+                        "surface-variant": "#ecebb9",
+                        "secondary-fixed": "#8dedec",
+                        "on-tertiary-fixed": "#320a00",
+                        "secondary-fixed-dim": "#7fdede",
+                        "surface": "#fffbff",
+                        "surface-container": "#f8f6c9",
+                        "inverse-on-surface": "#a09f7d",
+                        "on-error-container": "#510017",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#8b2ce3",
+                        "secondary-container": "#8dedec",
+                        "on-tertiary-fixed-variant": "#6b1f00",
+                        "tertiary-fixed-dim": "#fe7e4f",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#c185ff",
+                        "outline-variant": "#bcbb97",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ff946e",
+                        "secondary": "#007070",
+                        "error": "#c12048",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#005858",
+                        "on-surface": "#39391f",
+                        "on-secondary-fixed": "#004343",
+                        "primary-container": "#c185ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#ecebb9",
+                        "surface-container-low": "#fdfcd1",
+                        "surface-dim": "#e6e5b1",
+                        "secondary-dim": "#006363",
+                        "on-secondary-fixed-variant": "#006262",
+                        "primary-dim": "#7e15d6",
+                        "tertiary-dim": "#9c370b",
+                        "surface-tint": "#8b2ce3",
+                        "primary-fixed-dim": "#b772ff",
+                        "on-surface-variant": "#666648"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #8b2ce3 0%, #c185ff 100%);
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #fffbff;
+            color: #39391f;
+        }
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-72 sticky left-0 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 shadow-[20px_0_40px_rgba(57,57,31,0.04)] hidden md:flex flex-col z-50">
+<div class="flex flex-col gap-y-2 py-8 px-6 h-full">
+<div class="mb-10 px-4">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div>
+<h2 class="font-black text-purple-700 dark:text-purple-400 text-xl leading-none">The Playground</h2>
+<p class="text-xs text-zinc-500 font-medium">HR Reimagined</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-y-2 flex-grow">
+<!-- Dashboard is active -->
+<a class="flex items-center gap-4 py-3 text-purple-700 dark:text-white font-bold border-r-4 border-purple-600 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">People</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Culture</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="card_giftcard">card_giftcard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Benefits</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Growth</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Settings</span>
+</a>
+</nav>
+<button class="mt-auto kinetic-gradient text-white py-4 px-6 rounded-full font-bold shadow-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                Quick Pulse
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col min-w-0 bg-surface overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl flex items-center justify-between px-8 py-4 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-6">
+<span class="text-2xl font-black italic text-purple-700 dark:text-purple-400 font-['Plus_Jakarta_Sans'] tracking-tight">Kinetic Culture</span>
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" data-icon="search">search</span>
+<input class="bg-surface-container-high border-none rounded-full pl-12 pr-6 py-2 w-80 focus:ring-2 focus:ring-primary/20 placeholder-zinc-500 text-sm" placeholder="Search people or perks..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors text-zinc-600 dark:text-zinc-400 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors text-zinc-600 dark:text-zinc-400">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Employee Profile Avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a stylish young man with a friendly smile, warm lighting, professional but approachable urban aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxwn8opCh_uFjpU3rWLSZot56KTuDsNRzYcJBEGk_rBffIwz2rUjO81Ii-jWFFoXd1iBEAZt4Iq2HlC7aN9Tb6TlZ_vNVbswYIattl0eux7LMvGzfc_v7_STFrVvm_E01o62ATHg1nHggt2npimQOGQup8C8n5B2rS8_TQvPOC_ZJYgXeGqhTj_T4P7-GdFdDiFkVm43Z6sA7KByOh47tS7NrCV7N_btXTK-IfqRn8U2alC8sIHyEWCO3KWn_4KsbPyhhV2UEl4-Y"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Body -->
+<div class="px-8 py-10 max-w-[1440px] mx-auto w-full space-y-12">
+<!-- Welcome Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<h1 class="text-6xl font-extrabold text-on-background -tracking-wider">Hey, Alex!</h1>
+<p class="text-xl text-on-surface-variant font-medium">Ready to break the routine today?</p>
+</div>
+<!-- Mood Blob / Vibe Check -->
+<div class="bg-tertiary-container/30 p-6 rounded-xl flex items-center gap-6 border border-tertiary/10 backdrop-blur-sm">
+<p class="font-bold text-on-tertiary-container leading-tight">Current<br/>Vibe Check</p>
+<div class="flex gap-2">
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition-transform shadow-sm">⚡</button>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition-transform shadow-sm">🌈</button>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition-transform shadow-sm">☕</button>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition-transform shadow-sm">🧘</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Schedule & Team (Main) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Progress Section -->
+<div class="bg-surface-container-low p-8 rounded-lg relative overflow-hidden group">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="space-y-2">
+<h3 class="text-2xl font-bold">Playground Completion</h3>
+<p class="text-on-surface-variant">You're 82% through your quarterly growth sprint!</p>
+</div>
+<div class="w-full md:w-64 h-16 bg-surface-dim rounded-full overflow-hidden relative">
+<div class="h-full bg-secondary w-[82%] flex items-center justify-end px-4 transition-all duration-1000">
+<span class="text-white font-black text-xl">82%</span>
+</div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<!-- Your Day Asymmetric List -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-3xl font-extrabold">Your Day</h2>
+<button class="text-primary font-bold hover:underline">View Full Calendar</button>
+</div>
+<div class="grid gap-4">
+<!-- Meeting Card 1 -->
+<div class="flex items-center gap-6 bg-surface-container-lowest p-6 rounded-lg hover:shadow-lg transition-shadow">
+<div class="text-center min-w-[60px]">
+<p class="text-2xl font-black text-primary">09</p>
+<p class="text-xs font-bold uppercase tracking-widest text-zinc-400">AM</p>
+</div>
+<div class="h-12 w-1 bg-secondary rounded-full"></div>
+<div class="flex-grow">
+<h4 class="font-bold text-lg">Morning Sync: "The Radical Idea"</h4>
+<p class="text-sm text-on-surface-variant">Engineering Team • Room 402</p>
+</div>
+<div class="flex -space-x-3">
+<img alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="close up headshot of a smiling woman with dark hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1tw3hKAhgOgeCOeWMVs2-Bqi1MvK-ElCHhkBIaeP1ebypVUeHyOp-pNNSEBZE9zHy6a0wzMVpFAVej0cinB41OrR1FOmLbOdzHAk4fieKJZioySW7VOgDcP9PF30u7d1ULpNEBPwZqNnCkKfppqR-Jnx1xxd6sIH-Pg9AiCrnwozSxYN39dxuJoji_vy3_tPKNm6rtpwgqoIB1Ra5AsdmMA9qtZT7OR7t_bsnuGtjiWj4W1TlLhyBi7N8yJHFW6-eX-J3NGqhv28"/>
+<img alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="close up headshot of a man with a beard and glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALFZG-G7oO1AuChqw9nhtm5-Bax0aYiJKWWXRG6Y1hiSP7MoV2iYXMK4Os2z6YtCvJpoKPao6Mk0yvu1XBWgUhHxPz0uqA0ec-crFxAwL20M5XdtANmWblNbba7YrjMeazbAgesFgsgkOidMTDrfut-RkiEBmeFIzrIT4gZnJgVFemFxCyx62lCvPeAk9pXNAwN-uTB_LwG4GAcWbAf2-3RIba6MghfdKkaL4AoABGjaJTXCKv_abHrmEc-VNrtAs8MwL0FgjfcAA"/>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-[10px] font-bold border-2 border-white">+3</div>
+</div>
+</div>
+<!-- Meeting Card 2 (Highlight) -->
+<div class="flex items-center gap-6 bg-primary p-6 rounded-lg text-white shadow-xl shadow-primary/20 scale-[1.02]">
+<div class="text-center min-w-[60px]">
+<p class="text-2xl font-black">01</p>
+<p class="text-xs font-bold uppercase tracking-widest text-primary-container">PM</p>
+</div>
+<div class="h-12 w-1 bg-primary-container/40 rounded-full"></div>
+<div class="flex-grow">
+<h4 class="font-bold text-lg">Brainstorming: Q4 Vision</h4>
+<p class="text-sm text-primary-container">Creative Studio • Virtual Option</p>
+</div>
+<span class="material-symbols-outlined" data-icon="video_camera_front" style="font-variation-settings: 'FILL' 1;">video_camera_front</span>
+</div>
+<!-- Task Card -->
+<div class="flex items-center gap-6 bg-surface-container-lowest p-6 rounded-lg border border-transparent hover:border-outline-variant transition-all">
+<div class="text-center min-w-[60px]">
+<p class="text-2xl font-black text-tertiary">04</p>
+<p class="text-xs font-bold uppercase tracking-widest text-zinc-400">PM</p>
+</div>
+<div class="h-12 w-1 bg-tertiary rounded-full"></div>
+<div class="flex-grow">
+<h4 class="font-bold text-lg">Focus Time: Feature Design</h4>
+<p class="text-sm text-on-surface-variant">Don't forget to record the Loom!</p>
+</div>
+<span class="material-symbols-outlined text-zinc-300" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Who's In? & Pulse (Editorial Flair) -->
+<div class="lg:col-span-4 space-y-8">
+<section class="bg-surface-container-high p-8 rounded-xl space-y-6 min-h-[400px]">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-black">Who's In?</h2>
+<span class="bg-white/50 px-3 py-1 rounded-full text-xs font-bold">42 Active</span>
+</div>
+<div class="flex flex-wrap gap-4">
+<!-- Team Avatars with Overlapping Flair -->
+<div class="relative group">
+<div class="w-16 h-16 rounded-xl bg-secondary-fixed rotate-3 group-hover:rotate-0 transition-transform flex items-center justify-center p-1">
+<img alt="Team member" class="w-full h-full object-cover rounded-lg" data-alt="Portrait of a young man with glasses, professional lighting, corporate casual" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFackLWjIgztuEuGCa26gVtdnJXtLFo1jb5mI9-cVgR6nWA1WJ47CSCir2RCT3DOMRrV-sW-Qm5uNkU289kA5jJxEJoGrYAY5t-78UHJmRo9GwetLnjurwcMVlQOUzaJuBZ_9QGkHNm_x7XnaJ5qR-HIDsBGnhBFZxXw0bcURWO5Mi17dtiKcZzxRrlkulgUyGOVdRIO0tFOGQ7bkT6puAknZulFcOn1A38JULyqZcfMZOHWS98k1BdlLZmZFDYdlVsFlB7E_U244"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
+</div>
+<div class="relative group">
+<div class="w-16 h-16 rounded-xl bg-primary-fixed -rotate-6 group-hover:rotate-0 transition-transform flex items-center justify-center p-1">
+<img alt="Team member" class="w-full h-full object-cover rounded-lg" data-alt="Portrait of a woman with red hair looking into camera, natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSpvOmTAYqWGl9pDTFUwJ-I7svoM7in_DDSgk4WJbebWMeMrBTMy2M0gtRNl2ybQXLutEpmU2N8nXAeTaRvwHn85LoSKl1H7V8Y59Gsl51spWlWazVb5MIRsNZL8s2noDNgaOo0kU1CwQUH2Nx6yEtXkCGStg_ZxB1V7JvyX4reg78HAcLslbz7gwWkd4O7a3XrQ__A8U3C3UnP_H4RnVkqHYoasGRVud1mZuOPqQACK9FDDZenlIp5_2IfWEgkmFJAWvqrRwn2SM"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
+</div>
+<div class="relative group">
+<div class="w-16 h-16 rounded-xl bg-tertiary-fixed rotate-6 group-hover:rotate-0 transition-transform flex items-center justify-center p-1">
+<img alt="Team member" class="w-full h-full object-cover rounded-lg" data-alt="Middle-aged man smiling, clean lighting, headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdHiPmqw7C509YoOpzRjSvUvOtgs8tL0hxjiCQdvqu0pjBJYkrcxxUZ4YCizwiVBKh6syWQJ9XSciH8adGRWqj2J_jX6xxLZ0gGvU6nyE1YDLCu-w37_ovyM82fh7UTygqKXT8t0t6inf4adlTIbPU4MqLBiVAKABZsbm7CEpWze0YKRD2PyMWlgsFcrRhnecbj5IEtAm5xVZvJ-r8OluVG_LkAjjJzjG5sTbLEuWnxdS07ArOF4YfGkYb8q1faxxkOd_IZ5hF-yk"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-zinc-300 rounded-full border-2 border-white"></div>
+</div>
+<div class="relative group">
+<div class="w-16 h-16 rounded-xl bg-secondary-fixed -rotate-3 group-hover:rotate-0 transition-transform flex items-center justify-center p-1">
+<img alt="Team member" class="w-full h-full object-cover rounded-lg" data-alt="Young woman in urban setting, smiling, sunset lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlYIQYxxAFaLbeWp7Web2NMMu4v9KcEC-G8AcSoybkmpmuXLxOPCK_7uLX1rCqWN7am_EcjviclrnPnnCYVoASxzaTd8dZ7BHbKzIc5h_zkGY0n65DIDn3PWbD2LuAsiijLjKsSd8xaJHRPtscRW3Iqu9hPenBuenGU4I6riXF395vNY4zjZX_4_XkuPVW7rhgwTjw6c0JqI3vRQERtLpXZjhum2XQANHzp_v655w9Wpdd-5MnmD7aNYP6z7NKMfQLe_C9EchQkVc"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
+</div>
+<button class="w-16 h-16 rounded-xl border-2 border-dashed border-outline flex items-center justify-center hover:bg-white/50 transition-colors">
+<span class="material-symbols-outlined text-outline" data-icon="add">add</span>
+</button>
+</div>
+<div class="pt-6 border-t border-outline-variant/30">
+<p class="text-sm font-bold text-on-surface mb-3">Trending Culture Hub</p>
+<div class="bg-white/40 p-4 rounded-lg space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="local_fire_department">local_fire_department</span>
+</div>
+<p class="text-xs font-medium">Coffee Roulette is live!</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="volunteer_activism">volunteer_activism</span>
+</div>
+<p class="text-xs font-medium">3 New Recognition Badges</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Quote/Editorial Section -->
+<div class="relative overflow-hidden rounded-xl p-8 bg-zinc-900 text-white group">
+<img alt="Abstract background" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700" data-alt="Deep purple and black atmospheric abstract gradient background with soft smoky textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiqzh4MBTz5OFeTQ1PJ7XZnQHh0w2NRlrvl56vYUXmKSYXuNOIkXj2vhGb5z_eXpUENMeF03ZFpq84pU3-UmQ6G16A7W32m6JCPJ19iXFK4zFlUJSkCmyWaBqvscV6ICbCtzboKlTjUZ0rzQKtC5yBWUPqvXPTYAXHgI7Owhk_wFuwp1vgQJqAaymqn1L0nmR4T0F6YfzVtgeOz9JtpnceggW4qOq_RaLUFo6Q4mmaah7QetdgmFUmTG9w46x9zxx0cKP1GGFQm6c"/>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary-container mb-4 block" data-icon="format_quote">format_quote</span>
+<h4 class="text-xl font-headline italic leading-snug mb-6">"Innovation distinguishes between a leader and a follower."</h4>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md"></div>
+<div>
+<p class="text-xs font-bold">Weekly Inspiration</p>
+<p class="text-[10px] text-zinc-400">Curated by People Ops</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile Navigation Shell (BottomNavBar) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center text-primary font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center text-zinc-400" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-[10px]">People</span>
+</a>
+<button class="w-12 h-12 kinetic-gradient rounded-full flex items-center justify-center text-white -mt-8 shadow-lg shadow-primary/40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<a class="flex flex-col items-center text-zinc-400" href="#">
+<span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+<span class="text-[10px]">Culture</span>
+</a>
+<a class="flex flex-col items-center text-zinc-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px]">Settings</span>
+</a>
+</nav>
+</main>
+</body></html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>What's Popping? | Kinetic Culture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#fffbff",
+              "error-dim": "#a70138",
+              "on-primary-container": "#350062",
+              "tertiary": "#ac4218",
+              "tertiary-container": "#ff946e",
+              "on-tertiary-container": "#5c1a00",
+              "on-primary-fixed-variant": "#420078",
+              "error-container": "#f74b6d",
+              "on-primary-fixed": "#000000",
+              "surface-container-high": "#f2f0c1",
+              "surface-bright": "#fffbff",
+              "outline": "#838262",
+              "inverse-primary": "#b56eff",
+              "on-background": "#39391f",
+              "inverse-surface": "#0f0f00",
+              "surface-variant": "#ecebb9",
+              "secondary-fixed": "#8dedec",
+              "on-tertiary-fixed": "#320a00",
+              "secondary-fixed-dim": "#7fdede",
+              "surface": "#fffbff",
+              "surface-container": "#f8f6c9",
+              "inverse-on-surface": "#a09f7d",
+              "on-error-container": "#510017",
+              "on-tertiary": "#ffffff",
+              "primary": "#8b2ce3",
+              "secondary-container": "#8dedec",
+              "on-tertiary-fixed-variant": "#6b1f00",
+              "tertiary-fixed-dim": "#fe7e4f",
+              "on-error": "#ffffff",
+              "primary-fixed": "#c185ff",
+              "outline-variant": "#bcbb97",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ff946e",
+              "secondary": "#007070",
+              "error": "#c12048",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#005858",
+              "on-surface": "#39391f",
+              "on-secondary-fixed": "#004343",
+              "primary-container": "#c185ff",
+              "on-primary": "#ffffff",
+              "surface-container-highest": "#ecebb9",
+              "surface-container-low": "#fdfcd1",
+              "surface-dim": "#e6e5b1",
+              "secondary-dim": "#006363",
+              "on-secondary-fixed-variant": "#006262",
+              "primary-dim": "#7e15d6",
+              "tertiary-dim": "#9c370b",
+              "surface-tint": "#8b2ce3",
+              "primary-fixed-dim": "#b772ff",
+              "on-surface-variant": "#666648"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #8b2ce3 0%, #c185ff 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-72 sticky left-0 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 shadow-[20px_0_40px_rgba(57,57,31,0.04)] hidden md:flex flex-col gap-y-2 py-8 px-6">
+<div class="mb-10 px-4">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full kinetic-gradient flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+</div>
+<div>
+<h2 class="font-black text-purple-700 dark:text-purple-400 text-lg leading-none">The Playground</h2>
+<p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">HR Reimagined</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-50 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200 pl-4" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-50 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200 pl-4" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">People</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-purple-700 dark:text-white font-bold border-r-4 border-purple-600 pl-4 bg-purple-50/50" href="#">
+<span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Culture</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-50 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200 pl-4" href="#">
+<span class="material-symbols-outlined" data-icon="card_giftcard">card_giftcard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Benefits</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-50 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200 pl-4" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Growth</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 dark:text-zinc-400 hover:text-purple-50 hover:bg-purple-50 dark:hover:bg-zinc-800 rounded-full transition-all translate-x-1 duration-200 pl-4" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-sm">Settings</span>
+</a>
+</nav>
+<button class="mt-auto kinetic-gradient text-white rounded-full py-4 px-6 font-bold shadow-lg flex items-center justify-center gap-2 transform active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+            Quick Pulse
+        </button>
+</aside>
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl">
+<div class="flex items-center justify-between px-8 py-4 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black italic text-purple-700 dark:text-purple-400 font-['Plus_Jakarta_Sans'] tracking-tight">Kinetic Culture</span>
+<div class="hidden lg:flex items-center bg-zinc-100 dark:bg-zinc-900 px-4 py-2 rounded-full w-64">
+<span class="material-symbols-outlined text-zinc-400 mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Search vibes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-purple-700 dark:text-purple-300 font-bold relative p-2 rounded-full hover:bg-purple-50 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+<button class="text-zinc-600 dark:text-zinc-400 p-2 rounded-full hover:bg-purple-50 transition-colors">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+<img alt="Employee Profile Avatar" class="w-10 h-10 rounded-full border-2 border-primary shadow-sm" data-alt="professional portrait of a creative woman with colorful glasses and a friendly smile in a modern studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFzAKd-hf7Gk2C3AvStr3iZ62p0I-HeDMAWJneK-A3ayeVsq7HfuJa10QFSauzTisHEf-_uNdmjxWrGnzbSbWI0prGadaccnz_mCtMd4SHLlvYPfp4j7UglwyQt5p9go9V1zBphqrXwIP7-hvRiALBCzaGc12Ld96h18uyQHSRrp37hbG5LsMmqvZ9p_bJ-vSu1DsJIPxfcwGHHTSXrmEyIqUSeZH8F7wGZtQu815K0AvkXlCbNH_Ougl7UdK1eNBTOfonSmXGIjQ"/>
+</div>
+</div>
+</header>
+<!-- Notification Content -->
+<div class="flex-1 p-8 lg:p-12 max-w-[1440px] mx-auto w-full">
+<div class="mb-12">
+<h1 class="text-5xl lg:text-7xl font-black text-on-surface -tracking-[0.03em] mb-4">What's Popping?</h1>
+<p class="text-xl text-on-surface-variant max-w-2xl font-body">Your workspace is buzzing. Here's everything that needs your attention, filtered for focus.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Category Filters (Editorial Style) -->
+<div class="lg:col-span-3 space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6">Channels</h3>
+<div class="flex flex-col gap-2">
+<button class="flex items-center justify-between px-6 py-4 rounded-xl bg-primary text-on-primary font-bold shadow-md text-left">
+<span>All Alerts</span>
+<span class="bg-white/20 px-2 py-0.5 rounded-md text-xs">12</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl hover:bg-surface-container-low transition-colors text-left font-medium">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Payroll</span>
+</div>
+<span class="text-on-surface-variant text-sm">2</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl hover:bg-surface-container-low transition-colors text-left font-medium">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Social</span>
+</div>
+<span class="text-on-surface-variant text-sm">5</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl hover:bg-surface-container-low transition-colors text-left font-medium">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span>Work Stuff</span>
+</div>
+<span class="text-on-surface-variant text-sm">3</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl hover:bg-surface-container-low transition-colors text-left font-medium">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-surface-variant"></span>
+<span>Recognition</span>
+</div>
+<span class="text-on-surface-variant text-sm">2</span>
+</button>
+</div>
+<!-- Mood Blob Interaction -->
+<div class="mt-12 bg-tertiary-container p-8 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-on-tertiary-container font-black text-2xl mb-2">Feeling groovy?</h4>
+<p class="text-on-tertiary-container/80 text-sm mb-6">Share your pulse in 2 seconds.</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all">🔥</button>
+<button class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all">✨</button>
+<button class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all">😴</button>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl text-white/10 rotate-12" data-icon="mood">mood</span>
+</div>
+</div>
+<!-- Notifications Feed (Bento Grid) -->
+<div class="lg:col-span-9 space-y-6">
+<!-- New/Priority Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Recognition Card -->
+<div class="bg-surface-container-lowest p-8 rounded-lg shadow-[0px_20px_40px_rgba(57,57,31,0.06)] border-l-8 border-primary flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="workspace_premium">workspace_premium</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary px-3 py-1 bg-primary/10 rounded-full">New Kudos</span>
+</div>
+<h3 class="text-2xl font-black mb-2">You were praised!</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6 font-body">Sarah from Design mentioned your "incredible eye for kinetic layouts" in the Weekly Roundup.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-bold self-start hover:brightness-95 transition-all">Say Thanks</button>
+</div>
+<!-- Payroll Card -->
+<div class="bg-surface-container-lowest p-8 rounded-lg shadow-[0px_20px_40px_rgba(57,57,31,0.06)] border-l-8 border-secondary flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="payments">payments</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-secondary px-3 py-1 bg-secondary/10 rounded-full">Admin</span>
+</div>
+<h3 class="text-2xl font-black mb-2">Bonus Unlocked</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6 font-body">Your Q3 performance bonus has been processed. Check your slip for details.</p>
+</div>
+<button class="bg-secondary text-white px-6 py-3 rounded-full font-bold self-start hover:shadow-lg transition-all">View Payslip</button>
+</div>
+</div>
+<!-- Main Timeline Feed -->
+<div class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant mt-8 mb-4">Earlier Today</h3>
+<!-- Social Alert -->
+<div class="flex items-center gap-6 p-6 bg-surface-container-low rounded-lg group hover:bg-surface-container-lowest transition-all">
+<div class="relative flex-shrink-0">
+<img alt="Employee Portrait" class="w-14 h-14 rounded-xl object-cover" data-alt="portrait of a laughing young man in a denim jacket against a colorful mural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH5gwfBn5qAuaAhY5ATi3jFM5Y3yKN8pAVGjNiXhjzqry6R0YXEzHQDlBjHAT8Se8M0dkrZ0Ul3uIVmyomS1CcfgovsPe4CO30BTDPF__GLqOawiRsQxk_XYhY70_had0mwhHj1w85zCE2EVpJlHSCiuwbbRzdLFIwCb48t2tck8x7pxODvU0B7_LGdPLfxDln2nRYtXC1QYfL5ir3zXbKrbHypSg9ZmHNde2NfO1Sn--zTn7GlVAwpV0u3ulXOapOmcDyg5ZyJ2U"/>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 bg-tertiary rounded-full border-2 border-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-white" data-icon="chat_bubble" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-body text-on-surface"><span class="font-bold">Marcus Chen</span> invited you to the <span class="bg-primary/10 px-1 rounded">#late-night-tacos</span> channel.</p>
+<span class="text-xs text-on-surface-variant font-medium">2 hours ago</span>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant text-sm font-bold hover:bg-surface-container-high transition-colors">Ignore</button>
+<button class="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold shadow-sm">Join</button>
+</div>
+</div>
+<!-- Work Alert -->
+<div class="flex items-center gap-6 p-6 bg-surface-container-low rounded-lg group hover:bg-surface-container-lowest transition-all">
+<div class="w-14 h-14 rounded-xl bg-surface-container-high flex flex-shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl" data-icon="event_note">event_note</span>
+</div>
+<div class="flex-1">
+<p class="font-body text-on-surface">The <span class="font-bold font-headline">Culture Sync</span> session is starting in 15 minutes.</p>
+<span class="text-xs text-on-surface-variant font-medium">10:45 AM</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Recognition Alert -->
+<div class="flex items-center gap-6 p-6 bg-surface-container-low rounded-lg group hover:bg-surface-container-lowest transition-all">
+<div class="w-14 h-14 rounded-xl bg-secondary-container flex flex-shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="celebration">celebration</span>
+</div>
+<div class="flex-1">
+<p class="font-body text-on-surface">It's <span class="font-bold">Elena's 3rd Work Anniversary</span> today! Send some confetti.</p>
+<span class="text-xs text-on-surface-variant font-medium">9:12 AM</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant">🎉</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant">🍰</button>
+</div>
+</div>
+</div>
+<!-- Load More/Empty State Area -->
+<div class="py-12 flex flex-col items-center justify-center">
+<div class="w-24 h-1 bg-surface-container-high rounded-full mb-8"></div>
+<button class="text-on-surface-variant font-bold flex items-center gap-2 hover:text-primary transition-colors">
+                            Show Older Vibes
+                            <span class="material-symbols-outlined" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-8 right-8 flex flex-col items-end gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-2xl border border-primary/10 max-w-[200px] mb-2 hidden lg:block">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Status</p>
+<p class="text-xs text-on-surface-variant">You're catching up fast. Only 4 unread items left!</p>
+</div>
+<button class="w-16 h-16 rounded-full kinetic-gradient text-white shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-3xl" data-icon="bolt">bolt</span>
+<span class="absolute right-full mr-4 bg-on-surface text-surface text-xs font-bold px-3 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Pulse Check</span>
+</button>
+</div>
+</main>
+</body></html>

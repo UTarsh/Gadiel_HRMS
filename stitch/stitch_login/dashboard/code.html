@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Kinetic Playground - HRMS Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-container": "#f74b6d",
+              "inverse-primary": "#b56eff",
+              "surface-bright": "#fffbff",
+              "inverse-surface": "#0f0f00",
+              "outline-variant": "#bcbb97",
+              "on-background": "#39391f",
+              "surface-container": "#f8f6c9",
+              "primary-fixed-dim": "#b772ff",
+              "surface": "#fffbff",
+              "tertiary": "#ac4218",
+              "secondary-fixed": "#8dedec",
+              "surface-container-low": "#fdfcd1",
+              "on-tertiary-fixed": "#320a00",
+              "on-primary": "#ffffff",
+              "surface-dim": "#e6e5b1",
+              "tertiary-fixed-dim": "#fe7e4f",
+              "surface-variant": "#ecebb9",
+              "primary": "#8b2ce3",
+              "on-surface-variant": "#666648",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#6b1f00",
+              "inverse-on-surface": "#a09f7d",
+              "tertiary-dim": "#9c370b",
+              "on-secondary-container": "#005858",
+              "outline": "#838262",
+              "secondary": "#007070",
+              "secondary-dim": "#006363",
+              "secondary-container": "#8dedec",
+              "secondary-fixed-dim": "#7fdede",
+              "on-primary-container": "#350062",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#8b2ce3",
+              "primary-dim": "#7e15d6",
+              "on-tertiary-container": "#5c1a00",
+              "primary-container": "#c185ff",
+              "background": "#fffbff",
+              "on-error-container": "#510017",
+              "on-primary-fixed": "#000000",
+              "tertiary-container": "#ff946e",
+              "on-secondary-fixed-variant": "#006262",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ff946e",
+              "primary-fixed": "#c185ff",
+              "on-secondary-fixed": "#004343",
+              "error-dim": "#a70138",
+              "surface-container-highest": "#ecebb9",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#39391f",
+              "surface-container-high": "#f2f0c1",
+              "on-primary-fixed-variant": "#420078",
+              "error": "#c12048"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .organic-blob {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 backdrop-blur-xl bg-opacity-80 bg-[#fffbff] dark:bg-slate-950">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Employee Profile Photo" class="w-full h-full object-cover" data-alt="Close-up portrait of a smiling woman with glasses in a modern office, soft natural lighting and blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBABMjv6EYALezqBny9Iogl0Gw7W5P6xxjX76fWrPdhGqTX8JNRPspm44pETtVM58Uk2k1b-LWWQdSAJu9Jn8PyoNoiHEg68X5Mqt-k9F3VolDlbebfldhIF9-3l0Tnu8CpwXqB9bRje9LWH-OX9JtbeQFI-OOKi4EwLRzCCa3EV6X_e_RyqokgSAV08_bSqdWnogufyv-HGMGJ4EVYbKHwWKejX65YtxjPQvdM3Aa24qSUuSw6Q42VtlvVWwcjzb7xLErSx3fJa0M"/>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-3xl text-[#8b2ce3] dark:text-[#c185ff]">
+                The Kinetic Playground
+            </h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center hover:bg-[#8b2ce3]/10 rounded-full transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#8b2ce3]" data-icon="celebration">celebration</span>
+</button>
+</div>
+</header>
+<main class="pt-28 pb-32 px-6 max-w-7xl mx-auto">
+<!-- Welcome Section -->
+<section class="mb-12">
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter text-on-surface mb-2">
+                Hey, <span class="text-primary italic">Alex!</span>
+</h2>
+<p class="text-on-surface-variant font-medium text-lg">Your kinetic energy is at <span class="text-secondary font-bold">88%</span> today. Ready to play?</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Vibe Check (Mood Tracker) - Large Asymmetric Card -->
+<div class="md:col-span-8 bg-tertiary-container/30 rounded-xl p-8 relative overflow-hidden flex flex-col justify-between min-h-[320px]">
+<div class="relative z-10">
+<span class="bg-tertiary text-on-tertiary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">Vibe Check</span>
+<h3 class="font-headline text-4xl font-bold tracking-tight text-on-tertiary-container mt-2">How's the heart rate?</h3>
+<p class="text-on-tertiary-container/80 mt-2 max-w-md">The office mood is currently "Electric". Where do you land on the spectrum today?</p>
+</div>
+<div class="flex flex-wrap gap-4 mt-8 relative z-10">
+<button class="bg-surface-container-lowest hover:bg-white p-6 rounded-xl transition-all active:scale-90 flex flex-col items-center gap-2 group shadow-sm">
+<span class="material-symbols-outlined text-4xl text-tertiary group-hover:scale-110 transition-transform" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-bold text-xs">HYPED</span>
+</button>
+<button class="bg-surface-container-lowest hover:bg-white p-6 rounded-xl transition-all active:scale-90 flex flex-col items-center gap-2 group shadow-sm">
+<span class="material-symbols-outlined text-4xl text-secondary group-hover:scale-110 transition-transform" data-icon="insert_emoticon">insert_emoticon</span>
+<span class="font-bold text-xs">CHILL</span>
+</button>
+<button class="bg-surface-container-lowest hover:bg-white p-6 rounded-xl transition-all active:scale-90 flex flex-col items-center gap-2 group shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:scale-110 transition-transform" data-icon="bolt">bolt</span>
+<span class="font-bold text-xs">FOCUS</span>
+</button>
+</div>
+<!-- Abstract Organic Background Shape -->
+<div class="absolute -top-10 -right-10 w-64 h-64 bg-tertiary-container organic-blob opacity-40"></div>
+</div>
+<!-- Your Day at a Glance - Vertical Card -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline text-xl font-bold text-on-surface">Your Day</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="event_available">event_available</span>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex gap-4 items-start p-4 bg-surface-container-lowest rounded-lg">
+<div class="w-1 bg-primary h-12 rounded-full"></div>
+<div>
+<p class="font-bold text-on-surface">Design Sync</p>
+<p class="text-sm text-on-surface-variant">10:00 AM — 11:30 AM</p>
+</div>
+</div>
+<div class="flex gap-4 items-start p-4 bg-surface-container-lowest/50 rounded-lg">
+<div class="w-1 bg-secondary h-12 rounded-full"></div>
+<div>
+<p class="font-bold text-on-surface">Project Kinetic Kickoff</p>
+<p class="text-sm text-on-surface-variant">1:00 PM — 2:00 PM</p>
+</div>
+</div>
+<div class="flex gap-4 items-start p-4 bg-surface-container-lowest/50 rounded-lg">
+<div class="w-1 bg-tertiary h-12 rounded-full"></div>
+<div>
+<p class="font-bold text-on-surface">HR Deep Dive</p>
+<p class="text-sm text-on-surface-variant">4:30 PM</p>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full py-4 bg-primary text-on-primary rounded-full font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg">
+<span>Full Schedule</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Who's In? - Horizontal List Style -->
+<div class="md:col-span-12 bg-secondary-container/20 rounded-xl p-8">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="font-headline text-3xl font-bold text-on-secondary-container">Who's In?</h3>
+<p class="text-on-secondary-container/70">14 team members are currently active in the playground.</p>
+</div>
+<button class="text-secondary font-bold hover:underline flex items-center gap-1">
+                        View Directory <span class="material-symbols-outlined text-sm" data-icon="north_east">north_east</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-6">
+<!-- Member Blobs -->
+<div class="flex flex-col items-center gap-2">
+<div class="relative">
+<img alt="Team Member" class="w-16 h-16 organic-blob object-cover ring-4 ring-secondary-fixed shadow-md" data-alt="Close up portrait of a young professional smiling, wearing a mustard yellow sweater, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm_S8GpBMidW6GJbhIY61n0kDNhe8_SOB3GSs88O1mobEBmJoA-KTCXqUsFmQ5zPmhtkBLSSCwuKdRPE66S1fgioLLk3-5YwxZtpkni9tokDGieFVCj_Sx6mXwNJUeQDenVeio0ogCjk0RS2UbemJ1MYDuJ_B8975_zOAPW6fOfzokThhMJ5x2NSxPP6buAljMjB5imKxdgCBEH2j8b5-kB0Z_Yz2cqIQr9vtvowxEy19jV9-H5kX_OaOg0cR7Q-FZPFm4F2hLt04"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
+</div>
+<span class="font-bold text-xs uppercase tracking-tighter">Sarah M.</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="relative">
+<img alt="Team Member" class="w-16 h-16 organic-blob object-cover ring-4 ring-primary-fixed shadow-md" data-alt="Portrait of a man with a beard laughing, wearing a crisp white shirt, bright outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPnqq-V20ns6xmU8-8QSLs0Wc4XcAP4vGTT0aC_hiQdR3MFRUIsqKJYvstUiTAKVNMx60pw-K2kYgYowC1IIkIrVWH5CJg7GBxCNAVFZZthmYZXeYYaNG0kiNhgCCjI0pVSL1kg_-CCNUs0sf_uQupKPyclYAMAytCbbwRb1SP3YvAUa1pQy36T5wWcEusuzuWfbFLDwGnqsXGMLvfrvVimFqiOwWD0OF8fb9jR3VxTwN9YxASGdIcr1i5jnPfZ5vDXJuXmeM-K68"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
+</div>
+<span class="font-bold text-xs uppercase tracking-tighter">Marcus K.</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="relative">
+<img alt="Team Member" class="w-16 h-16 organic-blob object-cover ring-4 ring-tertiary-fixed shadow-md" data-alt="Stylish woman in denim jacket looking at camera, urban setting background with soft bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn1HV745Chyt7uVHE2gn2L7q-DiO7VTF1EIgO3aGmjpNsx8f63BlRcnbOh-EdRt2LFYsFa4oBRq50Gn9W_awTPnQwuhdg_6RtU3-q0fspEWe0_Mf_EpMCU_ERmtWlfAegnTjUkVVaeYtPKiH0GntVxrZENFcKUiywqzHR28yS1vXU84cSl18oRlUCOLyDTkFA7llwVHhPJzLzTMPbGjUCLz-QGXTQ6ASX5VtPnjlBGPYf0xYthy0qXFtwX7q9-PuxAPr9QaKFs1Xk"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-surface-dim rounded-full border-2 border-white"></div>
+</div>
+<span class="font-bold text-xs uppercase tracking-tighter">Lena V.</span>
+</div>
+<div class="flex flex-col items-center gap-2 opacity-60">
+<div class="relative">
+<img alt="Team Member" class="w-16 h-16 organic-blob object-cover ring-4 ring-outline-variant shadow-md" data-alt="Portrait of a young man in casual attire, moody indoor lighting with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoeUq0Nb_Y1pArhsoiMCrTz7ux0iaDdYYLvCyYExyeATTD823yeOd3czrnn8u22KKm2ccbiOyyI0UiDx980Vzk6SwjHO7A0nScr1HXmW4PiYVWxPJcMgIyC-e6XMjlSmp0jDQsLXUu2QdFtOyMtZsO-mCeFb-c9fkGEAofm4mzJcRV2GlMrgIDFMmTJKdM1IC527tuow72zmlFTrLdfsYGx1d8dROUNQCfMkt8weoMiBmm7fBgUS7z31isP3R6_Go0xfPsOop70_Q"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-error rounded-full border-2 border-white"></div>
+</div>
+<span class="font-bold text-xs uppercase tracking-tighter">Jordan P.</span>
+</div>
+<!-- Add more placeholder circles if needed -->
+<div class="w-16 h-16 rounded-full border-2 border-dashed border-secondary flex items-center justify-center cursor-pointer hover:bg-secondary/10 transition-colors">
+<span class="material-symbols-outlined text-secondary" data-icon="add">add</span>
+</div>
+</div>
+</div>
+<!-- Whimsical Progress Card -->
+<div class="md:col-span-12 bg-surface-dim/30 rounded-xl p-8">
+<h3 class="font-headline text-2xl font-bold text-on-surface mb-6">Playground Completion</h3>
+<div class="relative h-16 w-full bg-surface-container rounded-full overflow-hidden shadow-inner">
+<div class="absolute top-0 left-0 h-full bg-secondary rounded-full flex items-center justify-end pr-6 transition-all duration-1000" style="width: 72%;">
+<span class="text-on-secondary font-black text-xl italic tracking-widest">72%</span>
+</div>
+</div>
+<div class="mt-4 flex justify-between items-center text-sm font-bold uppercase tracking-widest text-on-surface-variant">
+<span>Performance Review</span>
+<span>12 Days Remaining</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-6 pt-2 backdrop-blur-2xl bg-[#fffbff]/80 dark:bg-slate-900/80 shadow-[0px_-10px_40px_rgba(57,57,31,0.06)] rounded-t-[3rem] border-none">
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#8b2ce3] to-[#c185ff] text-white rounded-full p-3 mb-2 scale-110 shadow-lg active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="insert_emoticon">insert_emoticon</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Work</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Time</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300 relative" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Alerts</span>
+<!-- Contextual Badge -->
+<div class="absolute top-0 right-1 w-2 h-2 bg-tertiary rounded-full"></div>
+</a>
+<a class="flex flex-col items-center justify-center text-[#39391f] dark:text-slate-400 opacity-70 hover:opacity-100 hover:translate-y-[-2px] transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="face_6">face_6</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold uppercase tracking-widest mt-1">Me</span>
+</a>
+</nav>
+</body></html>

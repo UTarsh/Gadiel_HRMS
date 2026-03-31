@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alex Rivera | Kinetic Culture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#fffbff",
+                        "error-dim": "#a70138",
+                        "on-primary-container": "#350062",
+                        "tertiary": "#ac4218",
+                        "tertiary-container": "#ff946e",
+                        "on-tertiary-container": "#5c1a00",
+                        "on-primary-fixed-variant": "#420078",
+                        "error-container": "#f74b6d",
+                        "on-primary-fixed": "#000000",
+                        "surface-container-high": "#f2f0c1",
+                        "surface-bright": "#fffbff",
+                        "outline": "#838262",
+                        "inverse-primary": "#b56eff",
+                        "on-background": "#39391f",
+                        "inverse-surface": "#0f0f00",
+                        "surface-variant": "#ecebb9",
+                        "secondary-fixed": "#8dedec",
+                        "on-tertiary-fixed": "#320a00",
+                        "secondary-fixed-dim": "#7fdede",
+                        "surface": "#fffbff",
+                        "surface-container": "#f8f6c9",
+                        "inverse-on-surface": "#a09f7d",
+                        "on-error-container": "#510017",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#8b2ce3",
+                        "secondary-container": "#8dedec",
+                        "on-tertiary-fixed-variant": "#6b1f00",
+                        "tertiary-fixed-dim": "#fe7e4f",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#c185ff",
+                        "outline-variant": "#bcbb97",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ff946e",
+                        "secondary": "#007070",
+                        "error": "#c12048",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#005858",
+                        "on-surface": "#39391f",
+                        "on-secondary-fixed": "#004343",
+                        "primary-container": "#c185ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#ecebb9",
+                        "surface-container-low": "#fdfcd1",
+                        "surface-dim": "#e6e5b1",
+                        "secondary-dim": "#006363",
+                        "on-secondary-fixed-variant": "#006262",
+                        "primary-dim": "#7e15d6",
+                        "tertiary-dim": "#9c370b",
+                        "surface-tint": "#8b2ce3",
+                        "primary-fixed-dim": "#b772ff",
+                        "on-surface-variant": "#666648"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .editorial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col gap-y-2 py-8 px-6 h-screen w-72 sticky left-0 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 shadow-[20px_0_40px_rgba(57,57,31,0.04)] z-50">
+<div class="flex flex-col mb-10 px-4">
+<div class="h-12 w-12 rounded-xl bg-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">celebration</span>
+</div>
+<h1 class="font-headline font-black text-purple-700 dark:text-purple-400 text-xl tracking-tight">The Playground</h1>
+<p class="font-headline font-medium text-xs text-zinc-500 uppercase tracking-widest">HR Reimagined</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">grid_view</span>
+<span class="font-headline font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-purple-700 dark:text-white font-bold border-r-4 border-purple-600 pl-4 bg-purple-50/50" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-headline font-medium text-sm">People</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">celebration</span>
+<span class="font-headline font-medium text-sm">Culture</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">card_giftcard</span>
+<span class="font-headline font-medium text-sm">Benefits</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">trending_up</span>
+<span class="font-headline font-medium text-sm">Growth</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-full transition-all text-zinc-500 dark:text-zinc-400 hover:text-purple-500 pl-4 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="font-headline font-medium text-sm">Settings</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-white py-4 px-6 rounded-full font-headline font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">bolt</span>
+                Quick Pulse
+            </button>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface">
+<!-- TopNavBar Component -->
+<header class="w-full sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl no-border bg-zinc-50 dark:bg-zinc-900">
+<div class="flex items-center justify-between px-8 py-4 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black italic text-purple-700 dark:text-purple-400 font-['Plus_Jakarta_Sans'] tracking-tight">Kinetic Culture</span>
+<div class="hidden lg:flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-full px-4 py-2 w-64">
+<span class="material-symbols-outlined text-zinc-400 text-xl">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-body" placeholder="Search people..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors relative">
+<span class="material-symbols-outlined text-zinc-600 dark:text-zinc-400">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors">
+<span class="material-symbols-outlined text-zinc-600 dark:text-zinc-400">bolt</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Employee Profile Avatar" class="h-full w-full object-cover" data-alt="professional headshot of a creative professional with a friendly smile, studio lighting, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcAmkoUFnTcjSehQ0WhRQU9kLdWlAUW85hnwisbyrO-kNYvHx7UddFEQ9_e1WKTDsYEveo-H6nk7hVpofL_bQhcz7PFV9WpF00rH8yFHAIkIWHEQPwEW7Z-kso4c0aRZKEMk6Qwn8dPf2boOGKpyQ_zGVNaIgbQjc0x83rJZc1QrwdpFYlMRrOz-gQlgCx2kqryc4yIbz9IBio5nHVxsTHkaJ4ypb3xEvdVjO_ffIN_y2rBC4STP31vvHfcOGktx_VB2QlMyRamIo"/>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8 lg:p-12 w-full max-w-[1440px] mx-auto space-y-12">
+<!-- Hero Section: Alex Rivera -->
+<section class="relative">
+<div class="flex flex-col lg:flex-row gap-12 items-end lg:items-center">
+<div class="relative group shrink-0">
+<!-- Quirky Profile Blob Overlay -->
+<div class="absolute -top-4 -left-4 w-24 h-24 bg-tertiary-container rounded-full -z-10 animate-pulse opacity-50"></div>
+<div class="absolute -bottom-6 -right-6 w-40 h-40 bg-secondary-container rounded-xl -z-10 rotate-12 opacity-30"></div>
+<div class="w-64 h-80 lg:w-80 lg:h-96 rounded-xl overflow-hidden shadow-2xl relative">
+<img alt="Alex Rivera Profile" class="h-full w-full object-cover" data-alt="handsome middle-aged hispanic man with stylish glasses and a short beard, wearing a casual linen shirt, warm natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPGj6et_vcOoNmhdvUwMahFS09oaYJKCWVTOxn5MUWoxz8KnVI484PI4gK9W9SHySLosBdslcXhbWtB34Cw2sSVrso2NzwTxrp2APT9C_MO3jpvWvWeLfaI5PJMHbAfCla6ti7-bCoy_cO_Z64Ha4dA3TJlo5a9LetJqYNAlUY_5S85HN5Hf18pQsKe5GHYQK6f-LBU5hGivYv-jlC7Z2ofqG7PvU6VOEOMJ4gSnj9K11JIbJeAApSNWV8H66yEw0oPctav-04Y1Q"/>
+<div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-xs font-headline font-bold text-on-surface">CULTURE LEAD</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-6">
+<div class="space-y-2">
+<div class="flex items-center gap-3">
+<span class="bg-primary/10 text-primary text-xs font-black px-3 py-1 rounded-full uppercase tracking-tighter">Availability: Focused</span>
+<span class="text-zinc-400 text-sm font-headline">Member since 2021</span>
+</div>
+<h2 class="text-6xl lg:text-8xl font-headline font-extrabold tracking-tighter text-on-surface leading-tight">
+                                    Alex <span class="text-primary italic">Rivera</span>
+</h2>
+<p class="text-xl lg:text-2xl font-body text-zinc-500 max-w-2xl leading-relaxed">
+                                    Architect of vibe, builder of communities, and a firm believer that <span class="bg-primary-fixed text-white px-1">great work</span> starts with even better espresso.
+                                </p>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary text-white px-8 py-4 rounded-full font-headline font-bold text-lg hover:shadow-xl transition-all active:scale-95 flex items-center gap-3">
+<span class="material-symbols-outlined">send</span>
+                                    Drop a Spark
+                                </button>
+<button class="bg-surface-container-low text-on-surface px-8 py-4 rounded-full font-headline font-bold text-lg hover:bg-surface-container-high transition-all flex items-center gap-3">
+<span class="material-symbols-outlined">calendar_today</span>
+                                    Grab Coffee
+                                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial Content Grid -->
+<div class="editorial-grid">
+<!-- Column 1: Learning & Mood -->
+<div class="space-y-8">
+<div class="bg-tertiary-container p-8 rounded-xl space-y-6 mood-blob relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
+<h3 class="text-2xl font-headline font-black text-on-tertiary-container tracking-tight">Weekly Vibe Check</h3>
+<div class="flex items-center gap-4">
+<span class="text-5xl">🔥</span>
+<div>
+<p class="font-headline font-extrabold text-on-tertiary-container text-lg">High Energy</p>
+<p class="text-sm font-body text-on-tertiary-container/80 italic">"Crushing the Q3 goals!"</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-headline font-black text-on-surface tracking-tight">Learning Journey</h3>
+<span class="material-symbols-outlined text-primary">auto_stories</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-headline font-bold text-sm">Strategic Design</span>
+<span class="font-headline font-black text-primary text-xl">82%</span>
+</div>
+<div class="h-10 w-full bg-surface-dim rounded-full overflow-hidden p-1">
+<div class="h-full bg-secondary rounded-full w-[82%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-headline font-bold text-sm">Conflict Alchemy</span>
+<span class="font-headline font-black text-primary text-xl">45%</span>
+</div>
+<div class="h-10 w-full bg-surface-dim rounded-full overflow-hidden p-1">
+<div class="h-full bg-tertiary rounded-full w-[45%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Skills & Milestones -->
+<div class="space-y-8">
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(57,57,31,0.06)] space-y-8">
+<h3 class="text-3xl font-headline font-black text-on-surface tracking-tighter">Skills &amp; Spells</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-6 py-3 bg-primary text-white rounded-full font-headline font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_fix_high</span> UI/UX Sorcery
+                                </span>
+<span class="px-6 py-3 bg-secondary-container text-on-secondary-container rounded-full font-headline font-bold text-sm">People Whisperer</span>
+<span class="px-6 py-3 bg-surface-variant text-on-surface-variant rounded-full font-headline font-bold text-sm">Agile Juggling</span>
+<span class="px-6 py-3 bg-primary-container text-on-primary-container rounded-full font-headline font-bold text-sm">Brand Alchemy</span>
+<span class="px-6 py-3 border-2 border-outline-variant text-on-surface-variant rounded-full font-headline font-bold text-sm">System Architect</span>
+<span class="px-6 py-3 bg-tertiary/10 text-tertiary rounded-full font-headline font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span> Mentor Mode
+                                </span>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-3xl font-headline font-black text-on-surface tracking-tighter px-4">Work Life</h3>
+<div class="space-y-4">
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-primary ring-8 ring-primary/10"></div>
+<div class="w-1 h-full bg-surface-container-highest rounded-full my-2"></div>
+</div>
+<div class="pb-8">
+<p class="font-headline font-black text-xl text-on-surface">Promoted to Culture Lead</p>
+<p class="text-zinc-500 font-body">Jan 2024 • Reimagined the global onboarding flow for 500+ nomads.</p>
+</div>
+</div>
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-secondary"></div>
+<div class="w-1 h-full bg-surface-container-highest rounded-full my-2"></div>
+</div>
+<div class="pb-8">
+<p class="font-headline font-black text-xl text-on-surface">Joined the Playground</p>
+<p class="text-zinc-500 font-body">Aug 2021 • Started as Senior Experience Designer.</p>
+</div>
+</div>
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-tertiary"></div>
+</div>
+<div class="">
+<p class="font-headline font-black text-xl text-on-surface">The "Golden Pixel" Award</p>
+<p class="text-zinc-500 font-body">Dec 2022 • Voted most likely to animate everything.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Interests & Social -->
+<div class="space-y-8">
+<div class="bg-surface-container p-8 rounded-xl space-y-6">
+<h3 class="text-2xl font-headline font-black text-on-surface tracking-tight">Interests</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-4 rounded-xl flex flex-col items-center gap-3 text-center hover:scale-105 transition-transform cursor-pointer shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary">coffee</span>
+<span class="font-headline font-bold text-xs uppercase">Obsessive Brewing</span>
+</div>
+<div class="bg-white p-4 rounded-xl flex flex-col items-center gap-3 text-center hover:scale-105 transition-transform cursor-pointer shadow-sm">
+<span class="material-symbols-outlined text-4xl text-secondary">hiking</span>
+<span class="font-headline font-bold text-xs uppercase">Peak Bagging</span>
+</div>
+<div class="bg-white p-4 rounded-xl flex flex-col items-center gap-3 text-center hover:scale-105 transition-transform cursor-pointer shadow-sm">
+<span class="material-symbols-outlined text-4xl text-tertiary">keyboard</span>
+<span class="font-headline font-bold text-xs uppercase">Custom Mechs</span>
+</div>
+<div class="bg-white p-4 rounded-xl flex flex-col items-center gap-3 text-center hover:scale-105 transition-transform cursor-pointer shadow-sm">
+<span class="material-symbols-outlined text-4xl text-purple-400">palette</span>
+<span class="font-headline font-bold text-xs uppercase">Generative Art</span>
+</div>
+</div>
+</div>
+<div class="bg-primary p-1 rounded-xl">
+<div class="bg-surface p-8 rounded-[calc(1rem-2px)] space-y-6">
+<h3 class="text-xl font-headline font-black text-on-surface tracking-tight">Current Jam</h3>
+<div class="flex items-center gap-4 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
+<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-zinc-200">
+<img alt="Album Art" class="w-full h-full object-cover" data-alt="abstract colorful music album cover with vibrant neon streaks and geometric patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM3Dd5rI6MlwKe7y8vpcCFwM3Xuzdn4FWKJVid65Czsz8tnNVs6tO7s-j0XtfjVVTTix22vu1N1mPPnAxXlZa-jgp6bmZiUZqegu9o8kP51La2q7QvfHdvjVWiUDS5DqfW_CPbx0N3jzKREc3g9E3udvamOiRCR16enJxjKAEPRIkygUPv7ebKY2UYCpCu8mpiSHixfmOqzbqCxh-28HrgEL7Aky0CGUc5L6je8MtMGKndo3pVJIp3CNALaNU3Uo7iMeKMztRdCno"/>
+</div>
+<div class="min-w-0">
+<p class="font-headline font-bold text-sm truncate">Midnight City Symphony</p>
+<p class="text-xs text-zinc-500 truncate">The Digital Voyagers</p>
+</div>
+<span class="material-symbols-outlined text-primary ml-auto" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<a class="flex-1 py-4 flex items-center justify-center bg-surface-container-high rounded-full hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">link</span>
+</a>
+<a class="flex-1 py-4 flex items-center justify-center bg-surface-container-high rounded-full hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">alternate_email</span>
+</a>
+<a class="flex-1 py-4 flex items-center justify-center bg-surface-container-high rounded-full hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Action Button - Only for Profile Context -->
+<div class="fixed bottom-8 right-8 z-50 md:hidden">
+<button class="w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</button>
+</div>
+</body></html>

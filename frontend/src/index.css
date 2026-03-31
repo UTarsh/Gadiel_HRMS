@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* shadcn compat vars — Gadiel Light Blue Theme */
+    --background: 204 94% 94%;
+    --foreground: 215 28% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 92%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 213 97% 85%;
+    --accent-foreground: 215 28% 17%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 213 32% 85%;
+    --input: 213 100% 96%;
+    --ring: 217 91% 60%;
+    --radius: 1.25rem;
+
+    /* ── Gadiel Theme Tokens — Light Blue ── */
+    --c-bg:       #E0F2FE; /* Sky 100 */
+    --c-card:     #ffffff;
+    --c-surface:  #F0F9FF; /* Sky 50 */
+    --c-surface2: #E0F2FE; /* Sky 100 */
+    --c-surface3: #BAE6FD; /* Sky 200 */
+    --c-t1:       #0F172A;
+    --c-t2:       #334155;
+    --c-t3:       #64748B;
+    --c-t4:       #94A3B8;
+    --c-border:   rgba(186,230,253,0.6);
+    --c-border2:  #BAE6FD;
+    --c-border3:  #E0F2FE;
+    --c-header:   rgba(224,242,254,0.85);
+    --c-sidebar:  #ffffff;
+    --c-input:    #F0F9FF;
+    --c-input-b:  #BAE6FD;
+    --c-footer:   #ffffff;
+    --c-scroll:   #7DD3FC;
+  }
+
+  html.dark {
+    --background: 220 50% 6%;
+    --foreground: 210 40% 90%;
+    --card: 220 45% 10%;
+    --card-foreground: 210 40% 90%;
+    --popover: 220 45% 8%;
+    --popover-foreground: 210 40% 90%;
+    --muted: 220 40% 12%;
+    --muted-foreground: 215 20% 55%;
+    --border: 217 40% 18%;
+    --input: 220 45% 12%;
+
+    /* ── Gadiel Theme Tokens — Dark ── */
+    --c-bg:       #080F1C;
+    --c-card:     #0C1828;
+    --c-surface:  #0F2040;
+    --c-surface2: #0A1830;
+    --c-surface3: #142040;
+    --c-t1:       #E2E8F0;
+    --c-t2:       #94A3B8;
+    --c-t3:       #64748B;
+    --c-t4:       #334155;
+    --c-border:   rgba(30,58,95,0.8);
+    --c-border2:  #1E3A5F;
+    --c-border3:  #0F2040;
+    --c-header:   rgba(8,15,28,0.92);
+    --c-sidebar:  #0C1828;
+    --c-input:    #0F2040;
+    --c-input-b:  #1E3A5F;
+    --c-footer:   #0C1828;
+    --c-scroll:   #1E3A5F;
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--c-bg);
+    color: var(--c-t1);
+    font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ── Material Symbols ──────────────────────────────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ── Gadiel Technologies Utilities ─────────────────────────────────────── */
+
+/* Primary gradient — Gadiel Blue */
+.kinetic-gradient {
+  background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%);
+}
+
+/* Glass panel */
+.glass-panel {
+  background: var(--c-header);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Surface system */
+.surface                  { background-color: var(--c-bg); }
+.surface-container-low    { background-color: var(--c-surface); }
+.surface-container        { background-color: var(--c-surface2); }
+.surface-container-high   { background-color: var(--c-surface3); }
+.surface-container-lowest { background-color: var(--c-card); }
+.surface-container-highest{ background-color: var(--c-surface3); }
+
+/* Gradient CTA button */
+.btn-primary {
+  background: linear-gradient(135deg, #1D4ED8, #3B82F6);
+  color: #ffffff;
+  border-radius: 9999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0px 8px 24px rgba(59, 130, 246, 0.28);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Input style */
+.input-kinetic {
+  background-color: var(--c-input);
+  border: 1px solid var(--c-input-b);
+  border-radius: 0.75rem;
+  color: var(--c-t1);
+  transition: background-color 0.15s, box-shadow 0.15s, border-color 0.2s;
+}
+.input-kinetic::placeholder { color: var(--c-t3); opacity: 0.5; }
+.input-kinetic:focus {
+  outline: none;
+  background-color: var(--c-card);
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Card with ambient shadow — Optimized for Sky-100 BG */
+.card-kinetic {
+  background-color: var(--c-card);
+  border-radius: 1.5rem;
+  box-shadow: 0px 8px 30px rgba(15, 23, 42, 0.05), 0px 0px 1px rgba(15, 23, 42, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.card-kinetic:hover {
+  box-shadow: 0px 12px 40px rgba(15, 23, 42, 0.08);
+}
+html.dark .card-kinetic {
+  box-shadow: 0px 4px 32px rgba(0,0,0,0.45);
+}
+
+/* Chip / badge */
+.chip {
+  background-color: var(--c-surface2);
+  color: #1D4ED8;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+}
+
+/* Sidebar nav active indicator */
+.nav-active {
+  color: #2563EB;
+  border-right: 4px solid #2563EB;
+  font-weight: 700;
+}
+
+/* Sidebar tooltip */
+.nav-item { @apply relative; }
+.nav-tooltip {
+  position: absolute;
+  left: 100%;
+  margin-left: 0.75rem;
+  padding: 0.375rem 0.625rem;
+  background-color: #1E293B;
+  color: #F8FAFC;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 200;
+  transform: translateX(8px);
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);
+}
+.nav-item:hover .nav-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Page enter animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter { animation: fadeUp 0.25s ease-out; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-scroll); border-radius: 9999px; }
+
+/* Glass overlay */
+.glass, .glass-panel {
+  background: var(--c-header);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Dark-mode: dialogs and popovers */
+html.dark [role="dialog"] {
+  background-color: var(--c-card) !important;
+  color: var(--c-t1) !important;
+  border-color: var(--c-border2) !important;
+}
