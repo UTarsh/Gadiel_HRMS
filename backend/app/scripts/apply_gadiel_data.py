@@ -497,8 +497,8 @@ async def run():
 
         await db.commit()
 
-        # ── 5. Add 3 new employees ────────────────────────────────────────
-        print("\n[5/7] Adding 3 new employees...")
+        # ── 5. Add 5 new employees ────────────────────────────────────────
+        print("\n[5/7] Adding 5 new employees...")
         result = await db.execute(select(Employee))
         emp_by_new_code = {e.emp_code: e for e in result.scalars().all()}
 
