@@ -81,9 +81,9 @@ _PROD_ORIGINS = settings.cors_origins_list
 if _IS_PROD:
     # Explicitly permit the server's public IP
     _PROD_ORIGINS.extend([
-        "http://144.24.97.120", 
+        "http://144.24.97.120",
         "http://144.24.97.120:80",
-        "144.24.97.120"
+        "https://144.24.97.120",
     ])
 
 app.add_middleware(

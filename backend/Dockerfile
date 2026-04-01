@@ -22,4 +22,4 @@ RUN mkdir -p uploads/avatars uploads/ghibli uploads/payslips
 EXPOSE 8001
 
 # 2 Uvicorn workers — tune via WEB_CONCURRENCY env var in production
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8001 --workers ${WEB_CONCURRENCY:-2}"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8001 --workers ${WEB_CONCURRENCY:-2} --proxy-headers --forwarded-allow-ips='*'"]

@@ -79,6 +79,16 @@ export function LoginPage() {
     e.preventDefault(); setError(''); setLoading(true)
     try {
       await authApi.login(email.trim().toLowerCase(), password)
+      
+      // Request location permission immediately after login
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          () => console.log("Location permission granted"),
+          (err) => console.warn("Location permission denied", err),
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        )
+      }
+
       // Backend sets httpOnly cookies — no client-side token storage needed
       const meRes = await authApi.me()
       const me = meRes.data.data!
