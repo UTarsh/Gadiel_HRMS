@@ -311,7 +311,14 @@ export function ProfilePage() {
       {/* ══════════════════════════════════════════════════════════════════════
           HERO CARD — full-width, horizontal
          ══════════════════════════════════════════════════════════════════════ */}
-      <div className="card-kinetic p-6 lg:p-8">
+      <div className="card-kinetic p-6 lg:p-8 relative overflow-hidden">
+        {/* Decorative branding for consistency */}
+        <img
+          src="/gadiel_logo.png"
+          alt="Gadiel"
+          className="absolute top-6 right-6 lg:top-8 lg:right-8 opacity-15 pointer-events-none"
+          style={{ height: 32, objectFit: 'contain' }}
+        />
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
 
           {/* Avatar column */}

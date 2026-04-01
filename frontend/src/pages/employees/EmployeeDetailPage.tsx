@@ -120,24 +120,28 @@ export function EmployeeDetailPage() {
 
       {/* Profile card */}
       <div className="card-kinetic overflow-hidden">
-        {/* Hero */}
+        {/* Hero banner */}
         <div
-          className="relative h-32 overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)' }}
+          className="relative h-36 overflow-hidden flex items-center justify-center"
+          style={{ background: 'linear-gradient(135deg, #93B8E8 0%, #A8C8F0 50%, #BFDBFE 100%)' }}
         >
-          <div
-            className="absolute top-[-20px] right-[-20px] w-32 h-32 rounded-full opacity-20"
-            style={{ background: 'radial-gradient(circle, #DBEAFE, transparent)' }}
-          />
-          <div
-            className="absolute bottom-[-40px] left-[-20px] w-40 h-40 rounded-full opacity-10"
-            style={{ background: 'radial-gradient(circle, #fff, transparent)' }}
+          {/* Subtle dot-grid texture */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }} />
+          {/* Gadiel logo — centered like a cover photo */}
+          <img
+            src="/gadiel_logo.png"
+            alt="Gadiel Technologies"
+            className="relative z-10"
+            style={{ height: 56, objectFit: 'contain', mixBlendMode: 'multiply', opacity: 0.9 }}
           />
         </div>
 
         {/* Avatar + info */}
         <div className="px-5 pb-6 -mt-10 relative z-10">
-          <div className="flex flex-col sm:flex-row items-end gap-4">
+          <div className="flex items-end gap-4">
             <Avatar className="h-20 w-20 shrink-0 border-4 border-white shadow-xl">
               <AvatarImage src={emp.profile_picture_url || undefined} />
               <AvatarFallback
@@ -147,9 +151,9 @@ export function EmployeeDetailPage() {
                 {getInitials(emp.full_name)}
               </AvatarFallback>
             </Avatar>
-            <div className="pb-1 flex-1 min-w-0 w-full">
+            <div className="pb-1 flex-1 min-w-0">
               <h1
-                className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight"
+                className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight truncate"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#1E293B' }}
               >
                 {emp.full_name}
@@ -158,7 +162,7 @@ export function EmployeeDetailPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-5">
+          <div className="flex flex-wrap gap-2 mt-4">
             <span
               className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider"
               style={{ backgroundColor: role.bg, color: role.color }}
@@ -193,19 +197,16 @@ export function EmployeeDetailPage() {
           </div>
 
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 pt-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4 pt-4"
             style={{ borderTop: '1px solid rgba(226,232,240,0.8)' }}
           >
             {emp.email && (
               <a
                 href={`mailto:${emp.email}`}
-                className="flex items-center gap-2.5 text-sm transition-colors"
+                className="flex items-center gap-2.5 transition-colors"
                 style={{ color: '#475569' }}
               >
-                <div
-                  className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: '#EFF6FF' }}
-                >
+                <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: '#EFF6FF' }}>
                   <Mail className="w-3.5 h-3.5" style={{ color: '#3B82F6' }} />
                 </div>
                 <span className="truncate text-xs">{emp.email}</span>
@@ -214,24 +215,18 @@ export function EmployeeDetailPage() {
             {emp.phone && (
               <a
                 href={`tel:${emp.phone}`}
-                className="flex items-center gap-2.5 text-sm transition-colors"
+                className="flex items-center gap-2.5 transition-colors"
                 style={{ color: '#475569' }}
               >
-                <div
-                  className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(37,99,235,0.1)' }}
-                >
+                <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(37,99,235,0.1)' }}>
                   <Phone className="w-3.5 h-3.5" style={{ color: '#2563EB' }} />
                 </div>
                 <span className="text-xs">{emp.phone}</span>
               </a>
             )}
             {emp.work_location && (
-              <div className="flex items-center gap-2.5 text-sm" style={{ color: '#475569' }}>
-                <div
-                  className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: '#DBEAFE' }}
-                >
+              <div className="flex items-center gap-2.5" style={{ color: '#475569' }}>
+                <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: '#DBEAFE' }}>
                   <MapPin className="w-3.5 h-3.5" style={{ color: '#2563EB' }} />
                 </div>
                 <span className="text-xs">{emp.work_location}</span>
