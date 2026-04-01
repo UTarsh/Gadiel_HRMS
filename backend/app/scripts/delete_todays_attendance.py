@@ -42,7 +42,7 @@ async def run():
 
         print(f"Found {len(logs)} log(s) for {emp.full_name} on {today}:")
         for log in logs:
-            print(f"  - punch_in={log.punch_in_time}  punch_out={log.punch_out_time}  status={log.status}")
+            print(f"  - punch_in={log.punch_in}  punch_out={log.punch_out}  status={log.status}")
 
         await db.execute(
             delete(AttendanceLog).where(
