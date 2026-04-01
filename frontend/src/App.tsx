@@ -13,6 +13,7 @@ import { EmployeeFormPage } from '@/pages/employees/EmployeeFormPage'
 import { GeofencePage } from '@/pages/admin/GeofencePage'
 import { SalaryPage } from '@/pages/salary/SalaryPage'
 import { MonthlyReportPage } from '@/pages/reports/MonthlyReportPage'
+import { PeoplePage } from '@/pages/people/PeoplePage'
 import { useAuthStore } from '@/store/auth'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
@@ -53,6 +54,7 @@ export default function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/salary" element={<SalaryPage />} />
               <Route path="/monthly-report" element={<MonthlyReportPage />} />
+              <Route path="/employees" element={<PeoplePage />} />
               <Route path="/employees/:id" element={<EmployeeDetailPage />} />
               <Route path="/employees/:id/edit" element={<EmployeeFormPage />} />
               <Route path="/geofence" element={<GeofencePage />} />

@@ -120,22 +120,22 @@ export function EmployeeDetailPage() {
 
       {/* Profile card */}
       <div className="card-kinetic overflow-hidden">
-        {/* Hero banner */}
+        {/* Hero banner — Gadiel logo as full cover */}
         <div
           className="relative h-36 overflow-hidden flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #93B8E8 0%, #A8C8F0 50%, #BFDBFE 100%)' }}
+          style={{ backgroundColor: '#DBEAFE' }}
         >
           {/* Subtle dot-grid texture */}
           <div className="absolute inset-0 pointer-events-none" style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)',
+            backgroundSize: '22px 22px',
           }} />
-          {/* Gadiel logo — centered like a cover photo */}
+          {/* Gadiel logo — large, centered, fills the banner */}
           <img
             src="/gadiel_logo.png"
             alt="Gadiel Technologies"
             className="relative z-10"
-            style={{ height: 56, objectFit: 'contain', mixBlendMode: 'multiply', opacity: 0.9 }}
+            style={{ width: '65%', maxWidth: 320, height: '100%', objectFit: 'contain', mixBlendMode: 'multiply', opacity: 0.95, padding: '12px 0' }}
           />
         </div>
 

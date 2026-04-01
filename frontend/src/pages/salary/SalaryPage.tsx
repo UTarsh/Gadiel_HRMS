@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { 
-  Loader2, Banknote, TrendingUp, TrendingDown, 
+import {
+  Loader2, Banknote, TrendingUp, TrendingDown,
   Plus, Download, CalendarDays, Wallet,
-  PieChart, History, ChevronRight, Target, FileText
+  PieChart, History, ChevronRight, Target, FileText, Pencil, Check, X
 } from 'lucide-react'
 import { compensationApi } from '@/api/compensation'
 import { RingChart } from '@/components/shared/RingChart'
@@ -45,6 +45,8 @@ export function SalaryPage() {
   const [month, setMonth] = useState(now.getMonth() + 1)
   const [year, setYear] = useState(now.getFullYear())
   const [showAddRecord, setShowAddRecord] = useState(false)
+  const [editingBudget, setEditingBudget] = useState(false)
+  const [budgetDraft, setBudgetDraft] = useState('')
   
   const qc = useQueryClient()
 
@@ -61,6 +63,17 @@ export function SalaryPage() {
   const { data: payslipsData } = useQuery({
     queryKey: ['my-payslips'],
     queryFn: () => compensationApi.myPayslips({ per_page: 5 }),
+  })
+
+  const updateBudgetMutation = useMutation({
+    mutationFn: (planned_budget: number) =>
+      compensationApi.updateTracker({ month, year, planned_budget }),
+    onSuccess: () => {
+      toast.success('Budget updated')
+      setEditingBudget(false)
+      qc.invalidateQueries({ queryKey: ['salary-overview'] })
+    },
+    onError: () => toast.error('Failed to update budget'),
   })
 
   const addRecordMutation = useMutation({
@@ -95,34 +108,34 @@ export function SalaryPage() {
 
   return (
     <div className="space-y-6 md:space-y-8 page-enter pb-10">
-      {/* ── Light Blue Premium Header ── */}
-      <div className="card-kinetic p-8 md:p-10 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #E0F2FE, #DBEAFE)', border: 'none shadow-xl shadow-blue-100/50' }}>
+      {/* ── Financial Portfolio Header ── */}
+      <div className="card-kinetic p-8 md:p-10 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%)', border: 'none' }}>
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-200">
-              <Banknote className="w-3.5 h-3.5 text-blue-600" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600">Earnings Portal</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30">
+              <Banknote className="w-3.5 h-3.5 text-white" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white">Earnings Portal</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
-              Financial <span className="text-blue-600 italic">Portfolio</span>
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-none">
+              Financial <span className="text-blue-100 italic">Portfolio</span>
             </h1>
-            <p className="text-sm text-slate-500 max-w-lg font-medium">Verify your disbursement accuracy, track personal fiscal growth, and manage your monthly organizational budget.</p>
+            <p className="text-sm text-blue-100 max-w-lg font-medium opacity-90">Verify your disbursement accuracy, track personal fiscal growth, and manage your monthly organizational budget.</p>
           </div>
 
-          <div className="flex bg-white/60 p-1.5 rounded-2xl border border-white gap-1 shadow-inner">
-            <select 
-              value={month} 
+          <div className="flex bg-white p-1.5 rounded-2xl border border-white/50 gap-1 shadow-inner">
+            <select
+              value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
-              className="appearance-none bg-transparent font-bold px-4 py-2 rounded-xl text-sm focus:outline-none cursor-pointer hover:bg-white transition-all"
+              className="appearance-none bg-transparent font-bold px-4 py-2 rounded-xl text-sm text-slate-800 focus:outline-none cursor-pointer hover:bg-slate-50 transition-all"
             >
               {monthNames.map((m, i) => <option key={i+1} value={i+1}>{m}</option>)}
             </select>
             <div className="w-px bg-slate-200 my-2"></div>
-            <select 
-              value={year} 
+            <select
+              value={year}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="appearance-none bg-transparent font-bold px-4 py-2 rounded-xl text-sm focus:outline-none cursor-pointer hover:bg-white transition-all"
+              className="appearance-none bg-transparent font-bold px-4 py-2 rounded-xl text-sm text-slate-800 focus:outline-none cursor-pointer hover:bg-slate-50 transition-all"
             >
               {[2024, 2025, 2026].map(y => <option key={y} value={y}>{y}</option>)}
             </select>
@@ -199,6 +212,36 @@ export function SalaryPage() {
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pre-tax Component Breakdown</p>
                 </div>
               </div>
+              {!editingBudget ? (
+                <button
+                  onClick={() => { setEditingBudget(true); setBudgetDraft(String(overview?.tracker?.planned_budget || '')) }}
+                  className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full transition-colors"
+                  style={{ backgroundColor: 'rgba(37,99,235,0.08)', color: '#2563EB' }}
+                >
+                  <Pencil className="w-3 h-3" /> Edit Budget
+                </button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={budgetDraft}
+                    onChange={e => setBudgetDraft(e.target.value)}
+                    placeholder="Planned budget (₹)"
+                    className="w-36 px-3 py-1.5 text-xs rounded-xl border outline-none focus:ring-2 focus:ring-blue-200"
+                    style={{ borderColor: '#BFDBFE', color: '#1E293B' }}
+                  />
+                  <button
+                    onClick={() => { if (!budgetDraft || Number(budgetDraft) < 0) { toast.error('Enter a valid amount'); return; } updateBudgetMutation.mutate(Number(budgetDraft)) }}
+                    disabled={updateBudgetMutation.isPending}
+                    className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center"
+                  >
+                    {updateBudgetMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
+                  </button>
+                  <button onClick={() => setEditingBudget(false)} className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F1F5F9', color: '#94A3B8' }}>
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
@@ -377,17 +420,17 @@ export function SalaryPage() {
             </div>
           </div>
 
-          <div className="card-kinetic p-6 bg-slate-900 text-white overflow-hidden relative">
-             <div className="absolute inset-0 bg-blue-600 opacity-20 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-             <div className="relative z-10 flex flex-col gap-6">
+          <div className="card-kinetic p-6 overflow-hidden relative" style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)' }}>
+             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+             <div className="relative z-10 flex flex-col gap-5">
                 <div>
-                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300 mb-2">Fiscal Insight</p>
-                   <p className="text-sm font-medium leading-relaxed italic opacity-90">"Strategic financial planning is the foundation of organizational stability and personal prosperity."</p>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-100 mb-2">Fiscal Insight</p>
+                   <p className="text-sm font-semibold leading-relaxed italic text-white">"Strategic financial planning is the foundation of organizational stability and personal prosperity."</p>
                 </div>
-                <div className="h-px bg-white/10"></div>
+                <div className="h-px bg-white/20"></div>
                 <div className="flex items-center justify-between">
-                   <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">Support</span>
-                   <ChevronRight className="w-4 h-4 opacity-50" />
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Gadiel HRMS</span>
+                   <ChevronRight className="w-4 h-4 text-white/70" />
                 </div>
              </div>
           </div>

@@ -132,9 +132,9 @@ export function Header() {
         <div ref={searchRef} className="relative hidden lg:block ml-2">
           <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2" style={{ fontSize: '18px', color: 'var(--c-t3)' }}>search</span>
           <input
-            className="border-none rounded-full pl-10 pr-5 py-2 w-64 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition-all focus:w-72"
+            className="rounded-full pl-10 pr-5 py-2 w-64 focus:ring-2 focus:ring-blue-300 text-sm outline-none transition-all focus:w-72"
             placeholder="Search employees..."
-            style={{ backgroundColor: 'var(--c-surface)', color: 'var(--c-t1)' }}
+            style={{ backgroundColor: '#fff', color: '#1E293B', border: '1.5px solid #BFDBFE' }}
             value={searchQuery}
             onChange={(e) => handleSearchInput(e.target.value)}
             onFocus={() => searchQuery.length >= 2 && setDropdownOpen(true)}

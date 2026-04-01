@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m app.scripts.patch_org_chart)",
+      "Bash(python -m app.scripts.delete_todays_attendance)"
+    ]
+  }
+}
