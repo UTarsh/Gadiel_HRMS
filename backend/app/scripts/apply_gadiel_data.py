@@ -713,21 +713,6 @@ async def run():
 if __name__ == "__main__":
     asyncio.run(run())
 
-        result = await db.execute(
-            select(Employee).where(Employee.is_active == False)
-        )
-        inactive = result.scalars().all()
-        if inactive:
-            print(f"\n  Inactive employees: {len(inactive)}")
-            for e in inactive:
-                print(f"    {e.emp_code:15} {e.first_name} {e.last_name} (deactivated)")
-
-    print("\n=== Done! All Gadiel data applied. ===\n")
-
-
-if __name__ == "__main__":
-    asyncio.run(run())
-
 
 
 
