@@ -303,6 +303,7 @@ NEW_EMPLOYEES = [
         "annual_ctc": 240000,
         "skip_loc": True,
         "manager_new_code": "GTPL-25002",
+        "is_active_fix": False, # Hidden from org chart
     },
 ]
 
@@ -523,7 +524,11 @@ async def run():
         for nd in NEW_EMPLOYEES:
             existing = emp_by_new_code.get(nd["emp_code"])
             if existing:
-                print(f"  = {nd['emp_code']} {nd['first_name']} already exists (skipped)")
+                if "is_active_fix" in nd:
+                    existing.is_active = nd["is_active_fix"]
+                    print(f"  = {nd['emp_code']} {nd['first_name']} updated is_active={nd['is_active_fix']}")
+                else:
+                    print(f"  = {nd['emp_code']} {nd['first_name']} already exists (skipped)")
                 new_emp_objects.append(existing)
                 continue
 
@@ -561,7 +566,7 @@ async def run():
                 geofence_zone_id    = (geofence_zone.id
                                        if geofence_zone and not nd.get("skip_loc")
                                        else None),
-                is_active           = True,
+                is_active           = nd.get("is_active_fix", True),
                 password_hash       = None,  # will set password on first login
             )
             db.add(emp)
