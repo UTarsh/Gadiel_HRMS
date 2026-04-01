@@ -22,7 +22,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - uploads:/app/uploads
+      - ./uploads:/app/uploads
       - ./secrets/firebase-credentials.json:/app/secrets/firebase-credentials.json:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
@@ -51,6 +51,3 @@ services:
     depends_on:
       - api
       - frontend
-
-volumes:
-  uploads:
