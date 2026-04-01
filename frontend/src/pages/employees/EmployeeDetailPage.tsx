@@ -122,69 +122,73 @@ export function EmployeeDetailPage() {
       <div className="card-kinetic overflow-hidden">
         {/* Hero */}
         <div
-          className="relative h-24 overflow-hidden"
+          className="relative h-32 overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)' }}
         >
           <div
-            className="absolute top-[-15px] right-[-15px] w-24 h-24 rounded-full opacity-20"
+            className="absolute top-[-20px] right-[-20px] w-32 h-32 rounded-full opacity-20"
             style={{ background: 'radial-gradient(circle, #DBEAFE, transparent)' }}
+          />
+          <div
+            className="absolute bottom-[-40px] left-[-20px] w-40 h-40 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #fff, transparent)' }}
           />
         </div>
 
         {/* Avatar + info */}
-        <div className="px-5 pb-5 -mt-7">
-          <div className="flex items-end gap-4">
-            <Avatar className="h-14 w-14 shrink-0 border-4 border-white shadow-lg">
+        <div className="px-5 pb-6 -mt-10 relative z-10">
+          <div className="flex flex-col sm:flex-row items-end gap-4">
+            <Avatar className="h-20 w-20 shrink-0 border-4 border-white shadow-xl">
               <AvatarImage src={emp.profile_picture_url || undefined} />
               <AvatarFallback
-                className="text-white text-base font-extrabold"
+                className="text-white text-2xl font-extrabold"
                 style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
               >
                 {getInitials(emp.full_name)}
               </AvatarFallback>
             </Avatar>
-            <div className="pb-1 flex-1 min-w-0">
+            <div className="pb-1 flex-1 min-w-0 w-full">
               <h1
-                className="text-lg font-extrabold leading-tight"
+                className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#1E293B' }}
               >
                 {emp.full_name}
               </h1>
-              <p className="text-xs mt-0.5" style={{ color: '#94A3B8' }}>{emp.emp_code}</p>
+              <p className="text-xs font-semibold mt-0.5 tracking-wide" style={{ color: '#94A3B8' }}>{emp.emp_code}</p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 mt-3">
+          <div className="flex flex-wrap gap-2 mt-5">
             <span
-              className="text-[10px] px-2.5 py-0.5 rounded-full font-bold"
+              className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider"
               style={{ backgroundColor: role.bg, color: role.color }}
             >
               {capitalize((emp.role || 'employee').replace('_', ' '))}
             </span>
             {emp.department && (
               <span
-                className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold"
-                style={{ backgroundColor: '#EFF6FF', color: '#1E293B' }}
+                className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider"
+                style={{ backgroundColor: '#F1F5F9', color: '#475569' }}
               >
                 {emp.department.name}
               </span>
             )}
             {emp.designation && (
               <span
-                className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold"
+                className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider"
                 style={{ backgroundColor: 'rgba(37,99,235,0.08)', color: '#2563EB' }}
               >
                 {emp.designation.name}
               </span>
             )}
             <span
-              className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold"
+              className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider"
               style={isActive
-                ? { backgroundColor: 'rgba(22,163,74,0.1)', color: '#16A34A' }
-                : { backgroundColor: '#EFF6FF', color: '#94A3B8' }
+                ? { backgroundColor: 'rgba(34,197,94,0.1)', color: '#16A34A' }
+                : { backgroundColor: '#F1F5F9', color: '#94A3B8' }
               }
             >
-              {capitalize((emp.employment_status || 'active').replace('_', ' '))}
+              {isActive ? 'Active' : 'Inactive'}
             </span>
           </div>
 

@@ -66,12 +66,12 @@ UPDATES = {
         "last_name_fix":   None,
         "email_fix":       None,
         "department":      "IT & Consultancy",
-        "designation":     "Intern Python Developer",
+        "designation":     "Python Developer",
         "doj":             date(2025, 9, 24),
         "role":            "employee",
-        "employment_type": "intern",
+        "employment_type": "full_time",
         "salary_level":    1,
-        "annual_ctc":      240000,
+        "annual_ctc":      300000,
         "skip_loc":        False,
         "manager_new_code": "GTPL-25002",  # Utkarsh
     },
@@ -143,7 +143,7 @@ UPDATES = {
         "salary_level":    1,
         "annual_ctc":      240000,
         "skip_loc":        False,
-        "manager_new_code": "GTPLT-25005",  # Karthik
+        "manager_new_code": "GTPL-25002",  # Changed: Utkarsh
     },
     "GTPL008": {  # Pratima Maurya
         "new_emp_code":    "GTPL-25007",
@@ -269,7 +269,7 @@ NEW_EMPLOYEES = [
         "salary_level": 1,
         "annual_ctc": 240000,
         "skip_loc": False,
-        "manager_new_code": "GTPL-25002",
+        "manager_new_code": "GTPL-25010", # Changed: Shruti
     },
     {
         "emp_code": "GTPPT-26006",
@@ -286,24 +286,23 @@ NEW_EMPLOYEES = [
         "salary_level": 1,
         "annual_ctc": 240000,
         "skip_loc": False,
-        "manager_new_code": "GTPL-25010",
+        "manager_new_code": "GTPL-25011", # Changed: Akanksha
     },
     {
-        "emp_code": "GTPPT-26007",
-        "first_name": "Ridhi",
-        "middle_name": None,
-        "last_name": "",
-        "email": "ridhi@gadieltechnologies.com",
-        "gender": "female",
+        "emp_code": "GTPL-TEST-01",
+        "first_name": "Test",
+        "last_name": "User",
+        "email": "test@gadieltechnologies.com",
+        "gender": "male",
         "department": "IT & Consultancy",
-        "designation": "Intern Dev AI",
+        "designation": "QA Tester",
         "doj": date(2026, 4, 1),
         "role": "employee",
-        "employment_type": "intern",
+        "employment_type": "full_time",
         "salary_level": 1,
         "annual_ctc": 240000,
-        "skip_loc": False,
-        "manager_new_code": "GTPL-25011",
+        "skip_loc": True,
+        "manager_new_code": "GTPL-25002",
     },
 ]
 
@@ -728,3 +727,7 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     asyncio.run(run())
+
+
+
+
