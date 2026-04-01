@@ -106,9 +106,18 @@ export function AttendancePage() {
   const handlePunch = async () => {
     setPunchLoading(true)
     try {
-      const loc = await getLocation()
-      const lat = loc?.latitude ?? 0
-      const lng = loc?.longitude ?? 0
+      let lat = 0
+      let lng = 0
+
+      if (!isWfh) {
+        const loc = await getLocation()
+        if (!loc) {
+          toast.error('Location access is required. Please enable location permissions or mark as WFH.')
+          return
+        }
+        lat = loc.latitude
+        lng = loc.longitude
+      }
 
       if (canPunchIn) {
         await attendanceApi.punchIn(lat, lng, isWfh)
@@ -121,7 +130,7 @@ export function AttendancePage() {
       refetchToday()
       refetchSummary()
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Synchronization failed')
+      toast.error(err?.response?.data?.detail || err?.response?.data?.message || 'Synchronization failed')
     } finally {
       setPunchLoading(false)
     }
