@@ -154,16 +154,17 @@ async def assign_employees_to_zone(zone_id: str, employee_ids: list[str], db: As
 async def count_grace_uses_this_month(
     employee_id: str,
     shift_start: time_type,
-    grace_period_minutes: int,
     year: int,
     month: int,
     exclude_date: date,
     db: AsyncSession,
 ) -> int:
     """
-    Count how many days this month the employee punched in during the grace window
-    (shift_start < punch_time <= shift_start + grace_period_minutes)
-    AND was NOT marked late (i.e., grace was actually granted on that day).
+    Count how many days this month the employee punched in AFTER shift_start
+    but was NOT marked late (i.e., grace was granted on that day).
+
+    Rule: any punch after 9:30 uses one grace slot (max 3/month).
+    There is no separate grace window — any late arrival counts.
     """
     start_of_month = date(year, month, 1)
     end_of_month = date(year, month, calendar.monthrange(year, month)[1])
@@ -180,16 +181,14 @@ async def count_grace_uses_this_month(
     )
     logs = result.scalars().all()
 
-    grace_start_min = minutes_since_midnight(shift_start)
-    grace_end_min = grace_start_min + grace_period_minutes
-    grace_end = time_type(grace_end_min // 60, grace_end_min % 60)
+    shift_start_min = minutes_since_midnight(shift_start)
 
     count = 0
     for log in logs:
         if log.punch_in:
             punch_ist = log.punch_in.replace(tzinfo=timezone.utc).astimezone(IST)
-            punch_t = punch_ist.time().replace(second=0, microsecond=0)
-            if shift_start < punch_t <= grace_end:
+            punch_min = minutes_since_midnight(punch_ist.time().replace(second=0, microsecond=0))
+            if punch_min > shift_start_min:
                 count += 1
     return count
 
@@ -244,33 +243,29 @@ async def punch_in(
 
     if shift:
         shift_start = shift.start_time          # e.g. time(9, 30)
-        grace_end_min = minutes_since_midnight(shift_start) + shift.grace_period_minutes
 
         punch_time = now_ist.time().replace(second=0, microsecond=0)
         punch_min = minutes_since_midnight(punch_time)
         shift_start_min = minutes_since_midnight(shift_start)
 
         if punch_min <= shift_start_min:
-            # On time or early
+            # On time or early — no action needed
             pass
 
-        elif punch_min <= grace_end_min:
-            # In grace window (e.g. 9:30 < punch <= 9:45)
+        else:
+            # Punched in AFTER shift start (after 9:30 AM).
+            # Rule: first 3 occurrences per month are forgiven (grace).
+            # From the 4th occurrence onwards → marked LATE.
             grace_used = await count_grace_uses_this_month(
-                current_employee.id, shift_start, shift.grace_period_minutes,
+                current_employee.id, shift_start,
                 today.year, today.month, today, db
             )
             if grace_used >= GRACE_MONTHLY_LIMIT:
-                # Grace quota exhausted — record late_minutes but keep wfh status for WFH
+                # Grace exhausted — mark late
                 late_minutes = punch_min - shift_start_min
                 if not body.is_wfh:
                     status = AttendanceStatus.late
-
-        else:
-            # After grace window — late; keep wfh status for WFH employees
-            late_minutes = punch_min - shift_start_min
-            if not body.is_wfh:
-                status = AttendanceStatus.late
+            # else: grace slot still available — treated as on time, status stays present
 
     remarks = "WFH" if body.is_wfh else None
 
