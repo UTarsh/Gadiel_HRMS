@@ -1,6 +1,9 @@
 """
-Delete today's attendance log for Utkarsh Jha (GTPL-25002).
-Run with: python -m app.scripts.delete_todays_attendance
+Delete today's attendance log for one or ALL employees.
+
+Usage:
+  python -m app.scripts.delete_todays_attendance           # clears ALL employees today
+  python -m app.scripts.delete_todays_attendance GTPL-25002 # clears one employee
 """
 import asyncio
 import sys
@@ -17,41 +20,51 @@ from app.models.attendance import AttendanceLog
 
 async def run():
     today = date.today()
+    emp_code_filter = sys.argv[1] if len(sys.argv) > 1 else None
+
     async with AsyncSessionLocal() as db:
-        # Get Utkarsh
-        result = await db.execute(
-            select(Employee).where(Employee.emp_code == 'GTPL-25002')
-        )
-        emp = result.scalar_one_or_none()
-        if not emp:
-            print("ERROR: Employee GTPL-25002 not found")
-            return
-
-        # Find today's logs
-        result = await db.execute(
-            select(AttendanceLog).where(
-                AttendanceLog.employee_id == emp.id,
-                AttendanceLog.date == today,
+        if emp_code_filter:
+            # Single employee
+            result = await db.execute(
+                select(Employee).where(Employee.emp_code == emp_code_filter)
             )
-        )
-        logs = result.scalars().all()
-
-        if not logs:
-            print(f"No attendance logs found for {emp.full_name} on {today}.")
-            return
-
-        print(f"Found {len(logs)} log(s) for {emp.full_name} on {today}:")
-        for log in logs:
-            print(f"  - punch_in={log.punch_in}  punch_out={log.punch_out}  status={log.status}")
-
-        await db.execute(
-            delete(AttendanceLog).where(
-                AttendanceLog.employee_id == emp.id,
-                AttendanceLog.date == today,
+            emp = result.scalar_one_or_none()
+            if not emp:
+                print(f"ERROR: Employee {emp_code_filter!r} not found")
+                return
+            employees = [emp]
+        else:
+            # All active employees
+            result = await db.execute(
+                select(Employee).where(Employee.is_active == True).order_by(Employee.first_name)
             )
-        )
-        await db.commit()
-        print(f"Deleted {len(logs)} log(s). Attendance cleared for today.")
+            employees = result.scalars().all()
+
+        total_deleted = 0
+        for emp in employees:
+            logs_result = await db.execute(
+                select(AttendanceLog).where(
+                    AttendanceLog.employee_id == emp.id,
+                    AttendanceLog.date == today,
+                )
+            )
+            logs = logs_result.scalars().all()
+            if logs:
+                for log in logs:
+                    print(f"  [{emp.emp_code}] {emp.full_name}: punch_in={log.punch_in}  status={log.status}  late={log.late_minutes}m  --> DELETING")
+                await db.execute(
+                    delete(AttendanceLog).where(
+                        AttendanceLog.employee_id == emp.id,
+                        AttendanceLog.date == today,
+                    )
+                )
+                total_deleted += len(logs)
+
+        if total_deleted == 0:
+            print(f"No attendance logs found for {today}.")
+        else:
+            await db.commit()
+            print(f"\nDeleted {total_deleted} log(s) for {today}. All cleared.")
 
 
 if __name__ == '__main__':
