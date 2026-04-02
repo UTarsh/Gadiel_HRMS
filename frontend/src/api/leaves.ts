@@ -30,4 +30,7 @@ export const leavesApi = {
 
   cancel: (leaveId: string) =>
     api.patch<APIResponse<null>>(`/leaves/${leaveId}/cancel`),
+
+  updateBalance: (balanceId: string, data: { total_entitled?: number; available?: number }) =>
+    api.patch<APIResponse<LeaveBalance>>(`/leaves/balance/${balanceId}`, data),
 }

@@ -270,6 +270,13 @@ export function DashboardPage() {
     enabled: !!employee,
   })
 
+  const { data: employeesTodayData } = useQuery({
+    queryKey: ['employees-today-status'],
+    queryFn: () => attendanceApi.todayAll(),
+    enabled: isHrOrAdmin,
+    refetchInterval: 60000,
+  })
+
   const actionMutation = useMutation({
     mutationFn: ({ id, action }: { id: string; action: 'approve' | 'reject' }) => leavesApi.action(id, action),
     onSuccess: (_, { action }) => { toast.success(`Leave ${action === 'approve' ? 'approved ✅' : 'rejected'}`); qc.invalidateQueries({ queryKey: ['team-leaves-pending'] }) },
@@ -289,6 +296,7 @@ export function DashboardPage() {
   )
   const attendancePct = summary?.attendance_percentage ?? 0
   const orgEmployees = orgData?.data?.data ?? []
+  const employeesToday = employeesTodayData?.data?.data ?? []
   const myProfile = profileData?.data?.data
   const ghibliImageUrl = resolveAvatarUrl(myProfile?.profile?.ghibli_image_url, ghibliTs || undefined)
   const canPunchIn = !today
@@ -523,6 +531,57 @@ export function DashboardPage() {
 
       {/* ══ ROW 3: Full Org Chart ══ */}
       {orgEmployees.length > 0 && <OrgChartSection employees={orgEmployees} currentEmployeeId={employee?.id} />}
+
+      {/* ══ ROW 4: Employee Today Status (Admin/HR only) ══ */}
+      {isHrOrAdmin && employeesToday.length > 0 && (
+        <div className="rounded-[24px] overflow-hidden shadow-sm" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
+          <div className="px-8 py-5 flex items-center justify-between border-b" style={{ borderColor: 'var(--c-border3)' }}>
+            <div>
+              <h3 className="text-base font-bold flex items-center gap-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>
+                <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ backgroundColor: 'var(--c-surface)', color: '#1D4ED8' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>groups</span>
+                </span>
+                Employee Attendance — Today
+              </h3>
+              <p className="text-xs mt-1 ml-10" style={{ color: 'var(--c-t3)' }}>
+                {employeesToday.filter(e => ['present','late','wfh'].includes(e.status)).length} present · {employeesToday.filter(e => e.status === 'absent').length} absent · {employeesToday.filter(e => e.status === 'not_checked_in').length} not checked in
+              </p>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0.5 p-2">
+              {employeesToday.map(emp => {
+                const statusColors: Record<string, { bg: string; color: string; dot: string }> = {
+                  present: { bg: 'rgba(22,163,74,0.07)', color: '#16A34A', dot: '#16A34A' },
+                  late:    { bg: 'rgba(217,119,6,0.07)', color: '#D97706', dot: '#D97706' },
+                  wfh:     { bg: 'rgba(139,92,246,0.07)', color: '#7C3AED', dot: '#8B5CF6' },
+                  absent:  { bg: 'rgba(239,68,68,0.07)', color: '#DC2626', dot: '#EF4444' },
+                  on_leave:{ bg: 'rgba(59,130,246,0.07)', color: '#2563EB', dot: '#3B82F6' },
+                  not_checked_in: { bg: 'rgba(148,163,184,0.07)', color: '#64748B', dot: '#94A3B8' },
+                }
+                const sc = statusColors[emp.status] || statusColors.not_checked_in
+                return (
+                  <div key={emp.id} className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-blue-50/30" style={{ backgroundColor: sc.bg }}>
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: sc.dot }}></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold truncate" style={{ color: 'var(--c-t1)' }}>{emp.full_name}</p>
+                      <p className="text-[10px]" style={{ color: 'var(--c-t3)' }}>{emp.emp_code}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ backgroundColor: sc.bg, color: sc.color }}>
+                        {emp.status.replace('_', ' ')}
+                      </span>
+                      {emp.punch_in && (
+                        <p className="text-[9px] mt-0.5 font-mono" style={{ color: 'var(--c-t3)' }}>{formatTime(emp.punch_in)}</p>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )

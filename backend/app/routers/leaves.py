@@ -246,3 +246,45 @@ async def cancel_leave(
         description="Leave cancelled by employee",
     )
     return ok(message="Leave cancelled")
+
+
+@router.patch("/balance/{balance_id}", summary="Update leave balance (super_admin only)")
+async def update_leave_balance(
+    balance_id: str,
+    body: dict,
+    current_employee: Employee = Depends(get_current_employee),
+    db: AsyncSession = Depends(get_db),
+):
+    if current_employee.role not in (UserRole.super_admin, UserRole.hr_admin):
+        raise HTTPException(status_code=403, detail="Only super admins can modify leave balances")
+
+    from sqlalchemy.orm import selectinload
+    result = await db.execute(
+        select(LeaveBalance)
+        .options(selectinload(LeaveBalance.leave_type))
+        .where(LeaveBalance.id == balance_id)
+    )
+    balance = result.scalar_one_or_none()
+    if not balance:
+        raise HTTPException(status_code=404, detail="Leave balance not found")
+
+    if "total_entitled" in body:
+        val = float(body["total_entitled"])
+        if val < 0:
+            raise HTTPException(status_code=400, detail="total_entitled cannot be negative")
+        balance.total_entitled = val
+    if "available" in body:
+        val = float(body["available"])
+        if val < 0:
+            raise HTTPException(status_code=400, detail="available cannot be negative")
+        balance.available = val
+
+    await write_audit_log(
+        db=db,
+        action=AuditAction.updated,
+        entity_type="leave_balance",
+        entity_id=balance_id,
+        performed_by_id=current_employee.id,
+        description=f"Leave balance manually updated by {current_employee.full_name}",
+    )
+    return ok(data=LeaveBalanceOut.model_validate(balance), message="Leave balance updated")

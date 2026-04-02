@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
+import { Plus, Pencil, Check, X } from 'lucide-react'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -41,6 +41,9 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
   const [rejectId, setRejectId] = useState<string | null>(null)
   const [rejectReason, setRejectReason] = useState('')
   const [form, setForm] = useState({ leave_type_id: '', from_date: '', to_date: '', reason: '' })
+  const [editingBalanceId, setEditingBalanceId] = useState<string | null>(null)
+  const [editDraft, setEditDraft] = useState({ total_entitled: '', available: '' })
+  const isSuperAdmin = employee?.role === 'super_admin' || employee?.role === 'hr_admin'
 
   const { data: types } = useQuery({ queryKey: ['leave-types'], queryFn: () => leavesApi.types() })
   const { data: balance, isLoading: balanceLoading } = useQuery({ queryKey: ['leave-balance'], queryFn: () => leavesApi.myBalance() })
@@ -65,6 +68,17 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
       qc.invalidateQueries({ queryKey: ['team-leaves-pending'] })
     },
     onError: (err: any) => toast.error(err?.response?.data?.message || 'Failed to apply'),
+  })
+
+  const updateBalanceMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { total_entitled?: number; available?: number } }) =>
+      leavesApi.updateBalance(id, data),
+    onSuccess: () => {
+      toast.success('Leave balance updated')
+      setEditingBalanceId(null)
+      qc.invalidateQueries({ queryKey: ['leave-balance'] })
+    },
+    onError: (err: any) => toast.error(err?.response?.data?.detail || 'Failed to update balance'),
   })
 
   const actionMutation = useMutation({
@@ -120,30 +134,84 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
             const pct = Math.min(100, (Number(b.available) / Math.max(Number(b.total_entitled), 1)) * 100)
             const color = leaveTypeColors[idx % leaveTypeColors.length]
             const icon = leaveTypeIcons[b.leave_type.code] ?? 'event'
+            const isEditingThis = editingBalanceId === b.id
             return (
-              <div key={b.id} className="card-kinetic p-6 flex flex-col items-center text-center" style={{ border: '1px solid var(--c-border3)' }}>
-                <div className="relative w-20 h-20 mb-3">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="34" fill="none" stroke={`${color}15`} strokeWidth="8" />
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="34"
-                      fill="none"
-                      stroke={color}
-                      strokeWidth="8"
-                      strokeLinecap="round"
-                      strokeDasharray={`${pct * 2.136} 213.6`}
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="material-symbols-outlined" style={{ color, fontSize: '24px' }}>{icon}</span>
+              <div key={b.id} className="card-kinetic p-6 flex flex-col items-center text-center relative" style={{ border: '1px solid var(--c-border3)' }}>
+                {isSuperAdmin && !isEditingThis && (
+                  <button
+                    onClick={() => { setEditingBalanceId(b.id); setEditDraft({ total_entitled: String(Number(b.total_entitled).toFixed(0)), available: String(Number(b.available).toFixed(0)) }) }}
+                    className="absolute top-3 right-3 p-1.5 rounded-lg opacity-40 hover:opacity-100 transition-opacity"
+                    style={{ backgroundColor: 'var(--c-surface)' }}
+                    title="Edit balance"
+                  >
+                    <Pencil className="w-3 h-3" style={{ color }} />
+                  </button>
+                )}
+                {isEditingThis ? (
+                  <div className="w-full space-y-3">
+                    <p className="text-xs font-bold" style={{ color }}>{b.leave_type.name}</p>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Entitled</p>
+                        <input
+                          type="number"
+                          value={editDraft.total_entitled}
+                          onChange={e => setEditDraft(d => ({ ...d, total_entitled: e.target.value }))}
+                          className="w-full h-9 px-3 text-xs rounded-xl border outline-none focus:ring-2"
+                          style={{ borderColor: `${color}40`, color: 'var(--c-t1)' }}
+                        />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available</p>
+                        <input
+                          type="number"
+                          value={editDraft.available}
+                          onChange={e => setEditDraft(d => ({ ...d, available: e.target.value }))}
+                          className="w-full h-9 px-3 text-xs rounded-xl border outline-none focus:ring-2"
+                          style={{ borderColor: `${color}40`, color: 'var(--c-t1)' }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => updateBalanceMutation.mutate({ id: b.id, data: { total_entitled: Number(editDraft.total_entitled), available: Number(editDraft.available) } })}
+                        disabled={updateBalanceMutation.isPending}
+                        className="flex-1 h-8 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1"
+                        style={{ backgroundColor: color }}
+                      >
+                        <Check className="w-3 h-3" /> Save
+                      </button>
+                      <button onClick={() => setEditingBalanceId(null)} className="flex-1 h-8 rounded-xl text-xs font-bold" style={{ backgroundColor: 'var(--c-surface)', color: 'var(--c-t2)' }}>
+                        <X className="w-3 h-3 inline mr-1" />Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color }}>{Number(b.available).toFixed(0)}</p>
-                <p className="text-xs mt-0.5 break-words max-w-full" style={{ color: 'var(--c-t3)' }}>
-                  of {Number(b.total_entitled).toFixed(0)} {b.leave_type.code === 'EL' ? 'Earned' : b.leave_type.code === 'CL' ? 'Casual' : b.leave_type.code === 'SL' ? 'Sick' : b.leave_type.name}
-                </p>
+                ) : (
+                  <>
+                    <div className="relative w-20 h-20 mb-3">
+                      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="34" fill="none" stroke={`${color}15`} strokeWidth="8" />
+                        <circle
+                          cx="40"
+                          cy="40"
+                          r="34"
+                          fill="none"
+                          stroke={color}
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray={`${pct * 2.136} 213.6`}
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="material-symbols-outlined" style={{ color, fontSize: '24px' }}>{icon}</span>
+                      </div>
+                    </div>
+                    <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color }}>{Number(b.available).toFixed(0)}</p>
+                    <p className="text-xs mt-0.5 break-words max-w-full" style={{ color: 'var(--c-t3)' }}>
+                      of {Number(b.total_entitled).toFixed(0)} {b.leave_type.code === 'EL' ? 'Earned' : b.leave_type.code === 'CL' ? 'Casual' : b.leave_type.code === 'SL' ? 'Sick' : b.leave_type.name}
+                    </p>
+                  </>
+                )}
               </div>
             )
           })}

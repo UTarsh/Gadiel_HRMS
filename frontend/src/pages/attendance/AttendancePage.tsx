@@ -445,23 +445,55 @@ export function AttendancePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="card-kinetic p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-            <MapPin className="w-24 h-24" />
-          </div>
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-6">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-100">
               <MapPin className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Operational Coordinates</h3>
-          </div>
-          <div className="rounded-[2.5rem] h-40 flex items-center justify-center border-2 border-dashed border-slate-100 bg-slate-50/50" style={{ borderColor: 'var(--c-border3)' }}>
-            <div className="text-center">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mx-auto mb-4 border border-slate-100 shadow-sm">
-                <Activity className="w-6 h-6 text-blue-300" />
-              </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30" style={{ color: 'var(--c-t1)' }}>Awaiting Spatial Sync</p>
+            <div>
+              <h3 className="text-lg font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Operational Coordinates</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{MONTH_NAMES[month - 1]} {year} · Punch Log</p>
             </div>
           </div>
+          {logs.length === 0 ? (
+            <div className="flex items-center justify-center h-32 rounded-2xl border-2 border-dashed" style={{ borderColor: 'var(--c-border3)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-30" style={{ color: 'var(--c-t1)' }}>No logs for this period</p>
+            </div>
+          ) : (
+            <div className="overflow-y-auto max-h-64 space-y-1.5 pr-1">
+              {logs.filter(l => l.punch_in).map((log) => {
+                const d = new Date(log.date)
+                const dayName = d.toLocaleDateString('en-IN', { weekday: 'short' }).toUpperCase()
+                const dayNum = d.getDate()
+                const config = statusConfig[log.status] || statusConfig.week_off
+                return (
+                  <div key={log.id} className="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-blue-50/30 transition-colors">
+                    <div className="w-10 text-center shrink-0">
+                      <p className="text-[9px] font-black uppercase opacity-40" style={{ color: 'var(--c-t1)' }}>{dayName}</p>
+                      <p className="text-lg font-black leading-tight" style={{ color: 'var(--c-t1)' }}>{dayNum}</p>
+                    </div>
+                    <span className={cn('text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest shrink-0', config.bg, config.color)}>
+                      {(log.status || '').replace('_', ' ')}
+                    </span>
+                    <div className="flex items-center gap-3 flex-1 text-xs font-bold min-w-0" style={{ color: 'var(--c-t2)' }}>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                        <span>{formatTime(log.punch_in)}</span>
+                      </div>
+                      {log.punch_out && (
+                        <div className="flex items-center gap-1 shrink-0">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                          <span>{formatTime(log.punch_out)}</span>
+                        </div>
+                      )}
+                      {log.working_minutes ? (
+                        <span className="text-[10px] opacity-50 ml-auto shrink-0">{Math.floor(log.working_minutes / 60)}h {log.working_minutes % 60}m</span>
+                      ) : null}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         <LeavesPanel embedded />

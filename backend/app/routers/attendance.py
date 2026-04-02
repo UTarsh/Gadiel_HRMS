@@ -422,6 +422,46 @@ async def today_status(
     return ok(data=AttendanceLogOut.model_validate(log) if log else None)
 
 
+@router.get("/today-all", summary="Get today's attendance status for all active employees (HR/Admin only)")
+async def all_employees_today_status(
+    current_employee: Employee = Depends(get_current_employee),
+    db: AsyncSession = Depends(get_db),
+):
+    if current_employee.role not in (UserRole.super_admin, UserRole.hr_admin, UserRole.manager):
+        raise HTTPException(status_code=403, detail="Access denied")
+
+    today = datetime.now(timezone.utc).astimezone(IST).date()
+
+    # Get all active employees
+    emp_result = await db.execute(
+        select(Employee)
+        .where(Employee.is_active == True)
+        .order_by(Employee.first_name)
+    )
+    employees = emp_result.scalars().all()
+
+    # Get today's logs
+    log_result = await db.execute(
+        select(AttendanceLog).where(AttendanceLog.date == today)
+    )
+    logs = {l.employee_id: l for l in log_result.scalars().all()}
+
+    result = []
+    for emp in employees:
+        log = logs.get(emp.id)
+        result.append({
+            "id": emp.id,
+            "emp_code": emp.emp_code,
+            "full_name": emp.full_name,
+            "role": emp.role.value,
+            "status": log.status.value if log else "not_checked_in",
+            "punch_in": log.punch_in.isoformat() if log and log.punch_in else None,
+            "punch_out": log.punch_out.isoformat() if log and log.punch_out else None,
+        })
+
+    return ok(data=result)
+
+
 @router.get("/today/{employee_id}", summary="Get today's attendance for a specific employee (managers/HR only)")
 async def employee_today_status(
     employee_id: str,

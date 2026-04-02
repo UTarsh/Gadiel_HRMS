@@ -4,6 +4,9 @@ import type { APIResponse, PaginatedResponse, AttendanceLog, AttendanceSummary, 
 export const attendanceApi = {
   today: () => api.get<APIResponse<AttendanceLog | null>>('/attendance/today'),
 
+  todayAll: () =>
+    api.get<APIResponse<{ id: string; emp_code: string; full_name: string; role: string; status: string; punch_in: string | null; punch_out: string | null }[]>>('/attendance/today-all'),
+
   todayForEmployee: (employeeId: string) =>
     api.get<APIResponse<AttendanceLog | null>>(`/attendance/today/${employeeId}`),
 

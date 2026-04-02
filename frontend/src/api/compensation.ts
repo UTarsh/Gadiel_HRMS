@@ -45,6 +45,9 @@ export const compensationApi = {
       summary: { total_employees: number; total_gross: number; total_deductions: number; total_net: number }
     }>>('/compensation/payslips/generate', { month, year }),
 
+  updateSalary: (employeeId: string, data: { annual_ctc?: number; gross_salary?: number; basic_salary?: number; hra?: number; special_allowance?: number }) =>
+    api.patch<APIResponse<Record<string, number>>>(`/compensation/salary/${employeeId}`, data),
+
   uploadPayslip: (payslipId: string, file: File) => {
     const formData = new FormData()
     formData.append('file', file)

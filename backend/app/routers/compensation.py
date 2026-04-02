@@ -648,6 +648,44 @@ async def upload_payslip_pdf(
     payslip.pdf_url = f"/uploads/payslips/{safe_name}"
     payslip.status = PayslipStatus.finalized
     payslip.remarks = "Custom PDF uploaded via HRMS"
-    
+
     await db.flush()
     return ok(data=_payslip_to_dict(payslip, ""), message="Payslip PDF uploaded successfully")
+
+
+@router.patch("/salary/{employee_id}", summary="Update salary components for an employee (HR/Admin only)")
+async def update_salary_component(
+    employee_id: str,
+    body: dict,
+    current_employee: Employee = Depends(get_current_employee),
+    db: AsyncSession = Depends(get_db),
+):
+    if current_employee.role not in (UserRole.super_admin, UserRole.hr_admin):
+        raise HTTPException(status_code=403, detail="Only HR administrators can modify salary data")
+
+    today = date.today()
+    salary = await _current_salary_component(employee_id, today, db)
+    if not salary:
+        raise HTTPException(status_code=404, detail="No salary record found for this employee")
+
+    updatable_fields = [
+        "basic_salary", "hra", "transport_allowance", "special_allowance",
+        "medical_allowance", "gross_salary", "net_salary", "total_deductions",
+    ]
+    for field in updatable_fields:
+        if field in body:
+            setattr(salary, field, Decimal(str(body[field])))
+
+    # Recalculate annual CTC from gross if provided
+    if "annual_ctc" in body:
+        salary.gross_salary = Decimal(str(body["annual_ctc"])) / 12
+
+    return ok(data={
+        "employee_id": employee_id,
+        "basic_salary": float(salary.basic_salary),
+        "hra": float(salary.hra),
+        "special_allowance": float(salary.special_allowance),
+        "gross_salary": float(salary.gross_salary),
+        "net_salary": float(salary.net_salary),
+        "annual_ctc": float(salary.gross_salary) * 12,
+    }, message="Salary updated")

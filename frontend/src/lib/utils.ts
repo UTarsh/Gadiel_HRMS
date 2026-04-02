@@ -19,7 +19,9 @@ export function formatDate(date: string | Date, fmt = 'dd MMM yyyy'): string {
 
 export function formatTime(datetime: string | null | undefined): string {
   if (!datetime) return '—'
-  const d = new Date(datetime)
+  // Ensure UTC interpretation: if no timezone offset present, treat as UTC (backend stores UTC)
+  const str = /[Zz]|[+-]\d{2}:?\d{2}$/.test(datetime) ? datetime : datetime + 'Z'
+  const d = new Date(str)
   if (isNaN(d.getTime())) return '—'
   return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
 }

@@ -30,8 +30,12 @@ export function FloatingBot() {
       const res = await aiApi.chat(next)
       const reply = res.data?.data?.reply || 'I could not process that. Please try again.'
       setMessages([...next, { role: 'assistant', content: reply }])
-    } catch {
-      setMessages([...next, { role: 'assistant', content: 'Chat is currently unavailable.' }])
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail || err?.message || ''
+      const msg = detail.includes('AI service error')
+        ? 'AI service is temporarily unavailable. Please try again in a moment.'
+        : detail || 'Chat is currently unavailable. Make sure the backend server is running.'
+      setMessages([...next, { role: 'assistant', content: msg }])
     } finally {
       setLoading(false)
     }

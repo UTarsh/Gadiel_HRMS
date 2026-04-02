@@ -298,6 +298,37 @@ async def chat(
     last_msg = body.messages[-1].content.strip()
     last_msg_lower = last_msg.lower()
 
+    # ── Trigger-word broadcast interceptor ───────────────────────────────────
+    # When a super_admin/hr_admin sends a message containing one of these words,
+    # broadcast it as an announcement to all employees and show it in their
+    # announcement cards on the dashboard.
+    BROADCAST_TRIGGERS = ("announcement", "critical", "important", "holiday")
+    first_word_lower = last_msg_lower.split()[0] if last_msg_lower.split() else ""
+    if first_word_lower in BROADCAST_TRIGGERS:
+        if current_employee.role in (UserRole.super_admin, UserRole.hr_admin):
+            trigger_word = last_msg.split()[0].upper()
+            broadcast_body = last_msg[len(trigger_word):].strip() or last_msg
+            title_map = {
+                "ANNOUNCEMENT": "Company Announcement",
+                "CRITICAL": "Critical Alert",
+                "IMPORTANT": "Important Notice",
+                "HOLIDAY": "Holiday Notice",
+            }
+            notif_title = title_map.get(trigger_word, "Company Announcement")
+            emps_result = await db.execute(select(Employee).where(Employee.is_active == True))
+            for emp in emps_result.scalars().all():
+                db.add(Notification(
+                    employee_id=emp.id,
+                    notification_type=NotificationType.announcement,
+                    title=notif_title,
+                    body=broadcast_body,
+                ))
+            await db.commit()
+            return ok(data={"reply": f"[{trigger_word}] Broadcasted to all employees: \"{broadcast_body}\""})
+        else:
+            # Non-admin users: just pass the message to the AI normally (no broadcast)
+            pass
+
     # ── HR-only command interceptors ─────────────────────────────────────────
     # These commands send notifications to employees and must be restricted to
     # HR / super_admin roles. Any other caller gets a 403.

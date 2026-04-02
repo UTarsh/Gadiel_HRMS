@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(python -m app.scripts.patch_org_chart)",
-      "Bash(python -m app.scripts.delete_todays_attendance)"
+      "Bash(python -m app.scripts.delete_todays_attendance)",
+      "Bash(python -m app.scripts.fix_employee_data)",
+      "Bash(python -c ':*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }
