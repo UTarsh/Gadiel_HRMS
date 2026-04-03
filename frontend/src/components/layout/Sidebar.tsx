@@ -19,7 +19,6 @@ export function Sidebar() {
 
   const navItems = [
     { to: '/', icon: 'grid_view', label: 'Dashboard', end: true },
-    { to: '/employees', icon: 'groups', label: 'People' },
     { to: '/attendance', icon: 'fingerprint', label: 'Attendance & Leaves' },
     { to: '/notifications', icon: 'notifications', label: 'Notifications' },
     { to: '/salary', icon: 'payments', label: 'Salary & Payslips' },

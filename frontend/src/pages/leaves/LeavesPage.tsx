@@ -98,8 +98,8 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
   const leaveTypes = types?.data?.data ?? []
   const myList: LeaveRequest[] = myLeaves?.data?.data ?? []
   const pendingList: LeaveRequest[] = teamLeaves?.data?.data ?? []
-  const totalUsed = balances.reduce((sum, b) => sum + (Number(b.total_entitled) - Number(b.available)), 0)
-  const totalEntitled = balances.reduce((sum, b) => sum + Number(b.total_entitled), 0)
+  const totalUsed = balances.reduce((sum, b) => sum + Math.max(0, Number(b.total_entitled) - Number(b.available)), 0)
+  const totalAvailable = balances.reduce((sum, b) => sum + Math.max(0, Number(b.available)), 0)
 
   return (
     <div className={cn("page-enter", embedded ? 'space-y-6' : 'space-y-8')}>
@@ -206,9 +206,14 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
                         <span className="material-symbols-outlined" style={{ color, fontSize: '24px' }}>{icon}</span>
                       </div>
                     </div>
-                    <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color }}>{Number(b.available).toFixed(0)}</p>
-                    <p className="text-xs mt-0.5 break-words max-w-full" style={{ color: 'var(--c-t3)' }}>
-                      of {Number(b.total_entitled).toFixed(0)} {b.leave_type.code === 'EL' ? 'Earned' : b.leave_type.code === 'CL' ? 'Casual' : b.leave_type.code === 'SL' ? 'Sick' : b.leave_type.name}
+                    <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color }}>
+                      {Math.max(0, Number(b.total_entitled) - Number(b.available)).toFixed(0)}
+                    </p>
+                    <p className="text-xs font-bold mt-0.5" style={{ color: 'var(--c-t3)' }}>
+                      {b.leave_type.code === 'EL' ? 'Earned Leaves Taken' : b.leave_type.code === 'CL' ? 'Casual Leaves Taken' : b.leave_type.code === 'SL' ? 'Sick Leaves Taken' : `${b.leave_type.name} Taken`}
+                    </p>
+                    <p className="text-[10px] mt-0.5" style={{ color: 'var(--c-t4, #94A3B8)' }}>
+                      {Number(b.available).toFixed(0)} remaining of {Number(b.total_entitled).toFixed(0)}
                     </p>
                   </>
                 )}
@@ -221,15 +226,15 @@ export function LeavesPanel({ embedded = false }: LeavesPanelProps) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-3xl p-5 text-center" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border3)' }}>
           <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>{totalUsed.toFixed(0)}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Leaves Taken</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Leaves Taken This Year</p>
         </div>
         <div className="rounded-3xl p-5 text-center" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border3)' }}>
-          <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#3B82F6' }}>{totalEntitled.toFixed(0)}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Total Entitled</p>
+          <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#3B82F6' }}>{totalAvailable.toFixed(0)}</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Leaves Remaining</p>
         </div>
         <div className="rounded-3xl p-5 text-center" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border3)' }}>
           <p className="text-2xl font-extrabold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#2563EB' }}>{pendingList.length}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Pending</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--c-t3)' }}>Pending Requests</p>
         </div>
       </div>
 

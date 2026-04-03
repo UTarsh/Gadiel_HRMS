@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ':*)",
+      "Bash(grep -n \"probation\\\\|employment_type\" /c/Users/utkku/OneDrive/Desktop/my_products/HRMS/frontend/src/types/*.ts)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

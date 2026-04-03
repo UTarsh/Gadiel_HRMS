@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, Loader2, MapPin, Clock, PlayCircle, StopCircle, CheckCircle2, CalendarDays, Activity } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -121,7 +121,7 @@ export function AttendancePage() {
 
       if (canPunchIn) {
         await attendanceApi.punchIn(lat, lng, isWfh)
-        toast.success(isWfh ? 'WFH Session Initiated!' : 'Punched in successfully!')
+        toast.success(isWfh ? 'WFH Punch In recorded!' : 'Punched in successfully!')
       } else if (canPunchOut) {
         await attendanceApi.punchOut(lat, lng)
         toast.success('Punched out successfully!')
@@ -144,9 +144,29 @@ export function AttendancePage() {
   const isCurrentMonth = month === now.getMonth() + 1 && year === now.getFullYear()
   const todayDate = isCurrentMonth ? now.getDate() : -1
   const cells = buildCalendarCells(year, month)
-  const attendancePct = summary?.attendance_percentage ?? 0
-  const presentCount = (summary?.present ?? 0) + (summary?.late ?? 0)
-  const flowScore = Math.min(100, Math.round(attendancePct * 1.1))
+  const presentCount = (summary?.present ?? 0) + (summary?.late ?? 0) + (summary?.wfh ?? 0)
+
+  // Compute working days elapsed this month (Mon–Fri, excluding 2nd & last Saturday)
+  const workingDaysSoFar = useMemo(() => {
+    const lastDay = new Date(year, month, 0).getDate()
+    const endDay = isCurrentMonth ? now.getDate() : lastDay
+    const sats: number[] = []
+    for (let d = 1; d <= lastDay; d++) {
+      if (new Date(year, month - 1, d).getDay() === 6) sats.push(d)
+    }
+    const offSats = new Set([sats[1], sats[sats.length - 1]].filter(Boolean))
+    let count = 0
+    for (let d = 1; d <= endDay; d++) {
+      const dow = new Date(year, month - 1, d).getDay()
+      if (dow === 0) continue
+      if (dow === 6 && offSats.has(d)) continue
+      count++
+    }
+    return count
+  }, [year, month, isCurrentMonth, now])
+
+  const attendancePct = workingDaysSoFar > 0 ? Math.round((presentCount / workingDaysSoFar) * 100) : 0
+  const flowScore = Math.min(100, attendancePct)
 
   return (
     <div className="space-y-6 md:space-y-10 pb-10 page-enter">
@@ -155,13 +175,13 @@ export function AttendancePage() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
             <Activity className="w-3 h-3" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Attendance Console</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Attendance</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>
             {getGreeting()}, <span className="text-blue-600">{employee?.first_name}</span>
           </h1>
           <p className="text-sm font-medium opacity-60" style={{ color: 'var(--c-t2)' }}>
-            Maintain your professional cadence and track operational cycles.
+            Track your punch-ins, attendance record, and monthly summary.
           </p>
         </div>
 
@@ -182,25 +202,21 @@ export function AttendancePage() {
         {/* ── Pulse Control ── */}
         <div className="card-kinetic p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
-          <p className="text-[11px] font-black uppercase tracking-[0.3em] mb-6 opacity-40" style={{ color: 'var(--c-t1)' }}>Operational Switch</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.3em] mb-6 opacity-40" style={{ color: 'var(--c-t1)' }}>Punch Control</p>
 
           {!today && (
             <button
               onClick={() => setIsWfh(!isWfh)}
               className={cn(
-                "mb-8 flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all duration-300",
-                isWfh 
-                  ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-200" 
-                  : "bg-white border-slate-100 text-slate-500 hover:border-blue-200"
+                "mb-8 flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all duration-300 font-black text-sm",
+                isWfh
+                  ? "bg-violet-600 border-violet-500 text-white shadow-xl shadow-violet-300/50 scale-105"
+                  : "bg-white border-slate-200 text-slate-600 hover:border-violet-300 hover:bg-violet-50"
               )}
             >
-              <div className={cn(
-                "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors",
-                isWfh ? "border-white bg-white" : "border-slate-300 bg-transparent"
-              )}>
-                {isWfh && <div className="w-2 h-2 rounded-full bg-blue-600"></div>}
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-widest">Work From Home</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '20px', color: isWfh ? 'white' : '#7C3AED' }}>home_work</span>
+              <span className="uppercase tracking-widest text-[11px]">Work From Home</span>
+              {isWfh && <span className="ml-1 text-[9px] bg-white/20 px-2 py-0.5 rounded-full">ON</span>}
             </button>
           )}
 
@@ -224,7 +240,7 @@ export function AttendancePage() {
                   {hasPunchedOut ? <CheckCircle2 className="w-12 h-12 text-white" /> : canPunchIn ? <PlayCircle className="w-12 h-12 text-white" /> : <StopCircle className="w-12 h-12 text-white" />}
                 </div>
                 <span className="text-white text-[11px] font-black uppercase tracking-[0.2em]">
-                  {hasPunchedOut ? 'COMPLETED' : canPunchIn ? 'INITIATE' : 'TERMINATE'}
+                  {hasPunchedOut ? 'DONE' : canPunchIn ? 'PUNCH IN' : 'PUNCH OUT'}
                 </span>
                 {!hasPunchedOut && !canPunchIn && (
                   <span className="absolute -bottom-2 px-3 py-1 rounded-full bg-white text-blue-600 text-[10px] font-black shadow-lg">ACTIVE</span>
@@ -237,13 +253,13 @@ export function AttendancePage() {
             <div className="space-y-3 w-full max-w-xs">
               {today.punch_in && (
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-blue-50/50 border border-blue-100/50">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-800/60">Activation</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-800/60">Punch In</span>
                   <span className="font-black text-blue-700">{formatTime(today.punch_in)}</span>
                 </div>
               )}
               {today.punch_out && (
                 <div className="flex justify-between items-center p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800/60">Release</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800/60">Punch Out</span>
                   <span className="font-black text-emerald-700">{formatTime(today.punch_out)}</span>
                 </div>
               )}
@@ -256,7 +272,7 @@ export function AttendancePage() {
             </div>
           ) : (
             <div className="p-6 rounded-[2rem] border-2 border-dashed border-slate-100" style={{ borderColor: 'var(--c-border3)' }}>
-              <p className="text-[10px] font-bold opacity-40" style={{ color: 'var(--c-t1)' }}>No active session identified</p>
+              <p className="text-[10px] font-bold opacity-40" style={{ color: 'var(--c-t1)' }}>Not punched in yet</p>
             </div>
           )}
         </div>
@@ -266,7 +282,7 @@ export function AttendancePage() {
           <div className="card-kinetic p-6 flex flex-col justify-between group overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Attendance Yield</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Attendance Rate</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-black tracking-tighter text-blue-600 group-hover:scale-110 transition-transform origin-left inline-block">{Math.round(attendancePct)}</span>
                 <span className="text-lg font-black text-blue-400/60">%</span>
@@ -278,16 +294,16 @@ export function AttendancePage() {
           </div>
 
           <div className="card-kinetic p-6 group">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Session Streak</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Days Present</p>
             <div className="flex items-baseline gap-3">
               <span className="text-4xl font-black tracking-tighter text-indigo-600">{presentCount}</span>
-              <span className="text-xs font-bold opacity-40 uppercase tracking-widest" style={{ color: 'var(--c-t1)' }}>Cycles This Month</span>
+              <span className="text-xs font-bold opacity-40 uppercase tracking-widest" style={{ color: 'var(--c-t1)' }}>of {workingDaysSoFar} days</span>
             </div>
           </div>
 
           <div className="card-kinetic p-6 group relative overflow-hidden">
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"></div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Operational Score</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4" style={{ color: 'var(--c-t1)' }}>Attendance Score</p>
             <div className="flex items-baseline gap-3">
               <span className="text-4xl font-black tracking-tighter text-emerald-600">{flowScore}</span>
               <span className="text-lg font-black text-emerald-400/60">/ 100</span>
@@ -302,7 +318,7 @@ export function AttendancePage() {
               <ChevronLeft className="w-5 h-5" />
             </button>
             <div className="text-center">
-              <span className="text-xs font-black uppercase tracking-[0.3em] block opacity-30 mb-1" style={{ color: 'var(--c-t1)' }}>Temporal View</span>
+              <span className="text-xs font-black uppercase tracking-[0.3em] block opacity-30 mb-1" style={{ color: 'var(--c-t1)' }}>Calendar</span>
               <span className="text-lg font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>
                 {MONTH_NAMES[month - 1]} <span className="text-blue-600">{year}</span>
               </span>
@@ -352,7 +368,7 @@ export function AttendancePage() {
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
               <CalendarDays className="w-4 h-4" />
             </div>
-            <h3 className="text-base font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Cycle Manifest</h3>
+            <h3 className="text-base font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Today's Attendance Log</h3>
           </div>
           <span className="text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-white border border-slate-100 shadow-sm text-blue-600">
             {logs.length} ENTRIES
@@ -368,7 +384,7 @@ export function AttendancePage() {
             <div className="w-20 h-20 rounded-[2rem] bg-slate-50 flex items-center justify-center mx-auto mb-6">
               <Activity className="w-10 h-10 text-slate-200" />
             </div>
-            <p className="text-sm font-bold opacity-30 uppercase tracking-[0.2em]" style={{ color: 'var(--c-t1)' }}>No operational logs identified</p>
+            <p className="text-sm font-bold opacity-30 uppercase tracking-[0.2em]" style={{ color: 'var(--c-t1)' }}>No attendance logs for this month</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -450,13 +466,13 @@ export function AttendancePage() {
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Operational Coordinates</h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{MONTH_NAMES[month - 1]} {year} · Punch Log</p>
+              <h3 className="text-lg font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>Monthly Attendance Log</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{MONTH_NAMES[month - 1]} {year} · Punch times</p>
             </div>
           </div>
           {logs.length === 0 ? (
             <div className="flex items-center justify-center h-32 rounded-2xl border-2 border-dashed" style={{ borderColor: 'var(--c-border3)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest opacity-30" style={{ color: 'var(--c-t1)' }}>No logs for this period</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-30" style={{ color: 'var(--c-t1)' }}>No punch records this month</p>
             </div>
           ) : (
             <div className="overflow-y-auto max-h-64 space-y-1.5 pr-1">
