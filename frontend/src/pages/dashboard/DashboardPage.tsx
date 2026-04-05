@@ -248,7 +248,7 @@ function RoadToGoalChart({ currentPct }: { currentPct: number }) {
 
 // ─── Attendance Today Widget ──────────────────────────────────────────────────
 
-type AttEmp = { id: string; full_name: string; emp_code: string; status: string; punch_in?: string }
+type AttEmp = { id: string; full_name: string; emp_code: string; status: string; punch_in?: string | null }
 
 const ATT_STATUS_CFG: Record<string, { bg: string; color: string; dot: string; label: string }> = {
   present:        { bg: 'rgba(34,197,94,0.08)',  color: '#16A34A', dot: '#22C55E', label: 'Present' },
@@ -259,7 +259,7 @@ const ATT_STATUS_CFG: Record<string, { bg: string; color: string; dot: string; l
   not_checked_in: { bg: 'rgba(148,163,184,0.08)',color: '#64748B', dot: '#94A3B8', label: 'Not Checked In' },
 }
 
-function AttendanceTodayWidget({ employeesToday, navigate }: { employeesToday: AttEmp[]; navigate: (p: string) => void }) {
+function AttendanceTodayWidget({ employeesToday, navigate }: { employeesToday: any[]; navigate: any }) {
   const [expanded, setExpanded] = useState<string | null>(null)
 
   const presentList  = employeesToday.filter(e => ['present', 'late', 'wfh'].includes(e.status))
