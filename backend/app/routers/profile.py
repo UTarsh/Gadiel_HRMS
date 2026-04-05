@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
-from app.models.employee import Employee
+from app.models.employee import Employee, UserRole
 from app.models.employee_profile import EmployeeProfile
 from app.schemas.employee_profile import ProfileUpdate, ProfileOut
 from app.schemas.common import ok
@@ -131,6 +131,31 @@ async def get_my_profile(
         .where(Employee.id == current_employee.id)
     )
     employee = result.scalar_one()
+    return ok(data=_build_response(employee))
+
+
+@router.get("/{employee_id}", summary="Get extended profile of any employee (HR/admin/manager or self)")
+async def get_employee_profile(
+    employee_id: str,
+    current_employee: Employee = Depends(get_current_employee),
+    db: AsyncSession = Depends(get_db),
+):
+    allowed_roles = (UserRole.hr_admin, UserRole.super_admin, UserRole.manager)
+    if current_employee.role not in allowed_roles and current_employee.id != employee_id:
+        raise HTTPException(status_code=403, detail="Access denied")
+
+    result = await db.execute(
+        select(Employee)
+        .options(
+            selectinload(Employee.department),
+            selectinload(Employee.designation),
+            selectinload(Employee.profile),
+        )
+        .where(Employee.id == employee_id)
+    )
+    employee = result.scalar_one_or_none()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
     return ok(data=_build_response(employee))
 
 

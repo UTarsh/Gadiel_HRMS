@@ -22,4 +22,6 @@ export const employeesApi = {
   departments: () => api.get<APIResponse<Department[]>>('/employees/departments/all'),
 
   designations: () => api.get<APIResponse<Designation[]>>('/employees/designations/all'),
+
+  birthdaysToday: () => api.get<APIResponse<{ id: string; full_name: string; emp_code: string; age: number | null; avatar_url: string | null }[]>>('/employees/birthdays/today'),
 }

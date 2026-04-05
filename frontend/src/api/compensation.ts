@@ -55,4 +55,9 @@ export const compensationApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
+
+  downloadPayslipFile: (pdfUrl: string) => {
+    const filename = pdfUrl.split('/').pop() || ''
+    return api.get(`/files/payslips/${filename}`, { responseType: 'blob' })
+  },
 }

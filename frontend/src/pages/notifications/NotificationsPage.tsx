@@ -67,14 +67,18 @@ export function NotificationsPage() {
     e.stopPropagation()
     try {
       const res = await compensationApi.getPayslip(payslipId)
-      const url = res.data?.data?.pdf_url
-      if (url) {
-        const fullUrl = url.startsWith('http') ? url : `${import.meta.env.VITE_API_URL || 'http://localhost:8001'}${url}`
-        window.open(fullUrl, '_blank')
-      } else {
-        toast.error('Payslip PDF not available')
-      }
-    } catch (err) {
+      const pdfUrl = res.data?.data?.pdf_url
+      if (!pdfUrl) { toast.error('Payslip PDF not available'); return }
+      const blobRes = await compensationApi.downloadPayslipFile(pdfUrl)
+      const filename = pdfUrl.split('/').pop() || 'payslip'
+      const blob = new Blob([blobRes.data], { type: filename.endsWith('.html') ? 'text/html' : 'application/pdf' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch {
       toast.error('Failed to download payslip')
     }
   }

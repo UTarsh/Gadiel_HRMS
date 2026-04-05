@@ -1,3 +1,4 @@
+from datetime import date
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, update
@@ -7,6 +8,7 @@ from typing import Optional
 from app.database import get_db
 from app.models.audit_log import AuditAction
 from app.models.employee import Department, Designation, Employee, UserRole
+from app.models.employee_profile import EmployeeProfile
 from app.schemas.common import ok, fail
 from app.schemas.employee import EmployeeCreate, EmployeeDetailOut, EmployeeOut, EmployeeUpdate
 from app.middleware.auth import get_current_employee, require_hr, require_manager
@@ -138,6 +140,35 @@ async def get_org_chart(
         row["ghibli_image_url"] = e.profile.ghibli_image_url if e.profile else None
         data.append(row)
     return ok(data=data)
+
+
+@router.get("/birthdays/today", summary="Get employees whose birthday is today")
+async def todays_birthdays(
+    _auth: Employee = Depends(get_current_employee),
+    db: AsyncSession = Depends(get_db),
+):
+    today = date.today()
+    result = await db.execute(
+        select(Employee, EmployeeProfile)
+        .join(EmployeeProfile, EmployeeProfile.employee_id == Employee.id, isouter=True)
+        .where(
+            Employee.is_active == True,
+            func.month(EmployeeProfile.birthday) == today.month,
+            func.day(EmployeeProfile.birthday) == today.day,
+        )
+    )
+    rows = result.all()
+    birthdays = []
+    for emp, profile in rows:
+        age = today.year - profile.birthday.year if profile and profile.birthday else None
+        birthdays.append({
+            "id": emp.id,
+            "full_name": emp.full_name,
+            "emp_code": emp.emp_code,
+            "age": age,
+            "avatar_url": profile.avatar_url if profile else None,
+        })
+    return ok(data=birthdays)
 
 
 @router.get("/{employee_id}", summary="Get employee by ID")

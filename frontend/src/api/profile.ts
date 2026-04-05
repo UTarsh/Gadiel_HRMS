@@ -63,6 +63,8 @@ export interface MyProfileResponse {
 export const profileApi = {
   getMe: () => api.get<APIResponse<MyProfileResponse>>('/profile/me'),
 
+  getById: (employeeId: string) => api.get<APIResponse<MyProfileResponse>>(`/profile/${employeeId}`),
+
   update: (data: Partial<UserProfile>) =>
     api.patch<APIResponse<UserProfile>>('/profile/me', data),
 

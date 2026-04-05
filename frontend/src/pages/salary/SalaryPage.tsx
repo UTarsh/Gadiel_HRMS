@@ -7,8 +7,17 @@ import type { Payslip as PayslipDoc } from '@/types'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1'
-const FILE_BASE_URL = (BASE_URL as string).replace('/api/v1', '')
+async function downloadPayslipBlob(pdfUrl: string) {
+  const blobRes = await compensationApi.downloadPayslipFile(pdfUrl)
+  const filename = pdfUrl.split('/').pop() || 'payslip'
+  const blob = new Blob([blobRes.data], { type: filename.endsWith('.html') ? 'text/html' : 'application/pdf' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
 function fmt(v: number) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(v || 0)
@@ -294,14 +303,12 @@ export function SalaryPage() {
                 <div className="text-right shrink-0">
                   <p className="text-sm font-black" style={{ color: 'var(--c-t1)' }}>{fmt(ps.net_salary)}</p>
                   {ps.pdf_url && (
-                    <a
-                      href={ps.pdf_url.startsWith('http') ? ps.pdf_url : `${FILE_BASE_URL}${ps.pdf_url}`}
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      onClick={() => downloadPayslipBlob(ps.pdf_url!).catch(() => {})}
                       className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 mt-1 hover:underline"
                     >
                       <Download className="w-3 h-3" /> PDF
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>
