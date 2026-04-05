@@ -49,7 +49,7 @@ function Field({
           autoFocus={autoFocus} autoComplete={autoComplete} required={required}
           style={{
             ...inputBase,
-            ...(focused ? { borderColor: '#3B82F6', boxShadow: '0 0 0 3px rgba(59,130,246,0.1)', backgroundColor: '#fff' } : {}),
+            ...(focused ? { borderColor: '#F97316', boxShadow: '0 0 0 3px rgba(249,115,22,0.10)', backgroundColor: '#fff' } : {}),
             ...extraStyle,
           }}
           onFocus={() => setFocused(true)}
@@ -131,7 +131,7 @@ export function LoginPage() {
   const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 md:p-8" style={{ backgroundColor: '#E8EFF8' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8" style={{ background: 'linear-gradient(135deg, #FFEADF 0%, #FFD6C8 20%, #F5E8FF 55%, #D6E4FF 100%)' }}>
       <main
         className="w-full max-w-[1200px] grid grid-cols-1 lg:grid-cols-[55%_45%] overflow-hidden bg-white lg:bg-transparent"
         style={{ borderRadius: '28px', boxShadow: '0 32px 72px rgba(15,31,92,0.22)', minHeight: 'auto' }}
@@ -281,7 +281,7 @@ export function LoginPage() {
 
                 <p className="mt-8 text-sm text-center" style={{ color: '#94A3B8' }}>
                   New employee?{' '}
-                  <button onClick={() => { setStep('email'); setEmail(''); setError('') }} className="font-bold hover:underline" style={{ color: '#1D4ED8' }}>
+                  <button onClick={() => { setStep('email'); setEmail(''); setError('') }} className="font-bold hover:underline" style={{ color: '#F97316' }}>
                     Activate your account
                   </button>
                 </p>
@@ -316,7 +316,7 @@ export function LoginPage() {
                   Hey, {firstName}!
                 </h2>
                 <p className="mb-1 text-sm" style={{ color: '#94A3B8' }}>Set a password to activate your account</p>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-8" style={{ background: '#EFF6FF', color: '#2563EB' }}>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-8" style={{ background: '#FFF7ED', color: '#F97316' }}>
                   <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>check_circle</span>
                   {email}
                 </span>
@@ -365,7 +365,7 @@ function PrimaryBtn({ loading, label, disabled }: { loading: boolean; label: str
   return (
     <button type="submit" disabled={loading || disabled}
       className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
-      style={{ background: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)', boxShadow: '0 6px 20px rgba(37,99,235,0.28)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      style={{ background: 'linear-gradient(135deg, #EA580C 0%, #F97316 100%)', boxShadow: '0 6px 20px rgba(249,115,22,0.28)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       {loading
         ? <><Loader2 className="w-4 h-4 animate-spin" /> Please wait…</>

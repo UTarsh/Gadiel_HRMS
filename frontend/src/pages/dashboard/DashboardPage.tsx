@@ -11,28 +11,22 @@ import { useNavigate } from 'react-router-dom'
 import type { LeaveRequest, Employee } from '@/types'
 import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
 import { AdjustableImageUpload } from '@/components/shared/AdjustableImageUpload'
+import {
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
+} from 'recharts'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function getGreeting() {
   const h = new Date().getHours()
-  if (h < 5) return { text: 'Late-night focus', emoji: '🌙' }
-  if (h < 12) return { text: 'Fresh morning start', emoji: '☀️' }
-  if (h < 17) return { text: 'Powering through the day', emoji: '🚀' }
-  if (h < 21) return { text: 'Evening momentum', emoji: '✨' }
-  return { text: 'Night shift energy', emoji: '🌟' }
-}
-
-function getThoughtfulWelcomeLine() {
-  const h = new Date().getHours()
-  if (h < 5) return 'Welcome to HRMS. Quiet hours, clear focus, strong output. 🌙'
-  if (h < 12) return 'Welcome to HRMS. One steady step now saves ten later. ☀️'
-  if (h < 17) return 'Welcome to HRMS. Keep the flow going, your consistency compounds. 🚀'
-  if (h < 21) return 'Welcome to HRMS. Wrap up with intention and leave no loose ends. ✨'
-  return 'Welcome to HRMS. Calm mind, sharp execution, great outcomes. 🌟'
+  if (h < 5)  return { text: 'Good night',    emoji: '🌙' }
+  if (h < 12) return { text: 'Good morning',  emoji: '☀️' }
+  if (h < 17) return { text: 'Good afternoon',emoji: '🚀' }
+  if (h < 21) return { text: 'Good evening',  emoji: '✨' }
+  return       { text: 'Good night',          emoji: '🌟' }
 }
 
 function getLocation(): Promise<{ latitude: number; longitude: number } | null> {
@@ -46,10 +40,17 @@ function getLocation(): Promise<{ latitude: number; longitude: number } | null> 
   })
 }
 
+function getPerfLabel(pct: number) {
+  if (pct >= 95) return 'Excellent'
+  if (pct >= 85) return 'Good'
+  if (pct >= 70) return 'Average'
+  return 'Needs Work'
+}
+
 // ─── Org Tree ─────────────────────────────────────────────────────────────────
 
 function getConnectorStyle(isFirst: boolean, isLast: boolean, isSingle: boolean): React.CSSProperties {
-  const color = '#60A5FA'
+  const color = '#F97316'
   if (isSingle) return { display: 'none' }
   if (isFirst)  return { background: `linear-gradient(to right, transparent 50%, ${color} 50%)`, height: 2 }
   if (isLast)   return { background: `linear-gradient(to right, ${color} 50%, transparent 50%)`, height: 2 }
@@ -71,17 +72,17 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
     .sort((a, b) => a.full_name.localeCompare(b.full_name))
 
   const cardStyles: Record<number, React.CSSProperties> = {
-    0: { background: '#1D4ED8', color: '#fff', boxShadow: '0 8px 24px rgba(29,78,216,0.35)' },
+    0: { background: 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff', boxShadow: '0 8px 24px rgba(249,115,22,0.30)' },
     1: {
-      background: isDark ? '#0F2040' : 'var(--c-card)',
-      color: isDark ? '#E2E8F0' : '#1E293B',
-      border: `1.5px solid ${isDark ? '#1E3A5F' : '#2563EB'}`,
-      boxShadow: '0 4px 12px rgba(0,0,0,0.07)',
+      background: isDark ? '#1A1A30' : 'var(--c-card)',
+      color: isDark ? '#E8E8F0' : '#1A1A2E',
+      border: `1.5px solid ${isDark ? '#2A2A48' : '#F97316'}`,
+      boxShadow: '0 4px 12px rgba(249,115,22,0.08)',
     },
     2: {
-      background: isDark ? '#0A1830' : 'var(--c-card)',
-      color: isDark ? '#94A3B8' : '#1E293B',
-      border: `1.5px solid ${isDark ? '#142040' : '#93C5FD'}`,
+      background: isDark ? '#12122A' : 'var(--c-card)',
+      color: isDark ? '#9B9BB4' : '#1A1A2E',
+      border: `1.5px solid ${isDark ? '#1E1E38' : '#FFD9C0'}`,
     },
   }
   const style = cardStyles[Math.min(depth, 2)]
@@ -99,18 +100,18 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
             <AvatarImage src={resolveAvatarUrl((emp.ghibli_image_url ?? emp.profile_picture_url) || undefined) || undefined} />
             <AvatarFallback
               className="text-[10px] font-bold"
-              style={{ background: depth === 0 ? 'rgba(255,255,255,0.25)' : 'linear-gradient(135deg,#1D4ED8,#3B82F6)', color: '#fff' }}
+              style={{ background: depth === 0 ? 'rgba(255,255,255,0.25)' : 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff' }}
             >
               {getInitials(emp.full_name)}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
             <p className={`font-bold leading-tight break-words ${isDeep ? 'text-[10px]' : 'text-xs'}`}
-              style={{ color: depth === 0 ? '#fff' : (isDark ? '#E2E8F0' : '#1E3A5F'), fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              style={{ color: depth === 0 ? '#fff' : (isDark ? '#E8E8F0' : '#1A1A2E'), fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {emp.full_name}
             </p>
             <p className={`break-words ${isDeep ? 'text-[9px]' : 'text-[10px]'} mt-0.5`}
-              style={{ color: depth === 0 ? 'rgba(255,255,255,0.75)' : (isDark ? '#64748B' : '#64748B') }}>
+              style={{ color: depth === 0 ? 'rgba(255,255,255,0.8)' : (isDark ? '#6B6B84' : '#6B7280') }}>
               {emp.designation?.name || (emp.role || 'Employee').replace(/_/g, ' ')}
             </p>
           </div>
@@ -119,7 +120,7 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
 
       {children.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ width: 2, height: 20, backgroundColor: '#60A5FA' }} />
+          <div style={{ width: 2, height: 20, backgroundColor: '#F97316' }} />
           <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             {children.map((child, i) => {
               const isFirst = i === 0
@@ -128,7 +129,7 @@ function OrgTreeNode({ emp, allEmployees, depth = 0, isDark, onClickEmp }: OrgNo
               return (
                 <div key={child.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <div style={{ width: '100%', ...getConnectorStyle(isFirst, isLast, isSingle) }} />
-                  <div style={{ width: 2, height: 20, backgroundColor: isSingle ? 'transparent' : '#60A5FA' }} />
+                  <div style={{ width: 2, height: 20, backgroundColor: isSingle ? 'transparent' : '#F97316' }} />
                   <div style={{ paddingLeft: 10, paddingRight: 10 }}>
                     <OrgTreeNode emp={child} allEmployees={allEmployees} depth={depth + 1} isDark={isDark} onClickEmp={onClickEmp} />
                   </div>
@@ -158,21 +159,23 @@ function OrgChartSection({ employees, currentEmployeeId }: { employees: Employee
   if (roots.length === 0) return null
 
   return (
-    <div className="rounded-[24px] overflow-hidden shadow-sm" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-      <div className="px-8 py-6 flex items-center justify-between" style={{ borderBottom: '1px solid var(--c-border3)' }}>
+    <div className="rounded-[24px] overflow-hidden" style={{ backgroundColor: 'var(--c-card)', boxShadow: '0 4px 24px rgba(249,115,22,0.06)', border: '1px solid var(--c-border2)' }}>
+      <div className="px-8 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid var(--c-border3)' }}>
         <div>
           <h3 className="text-base font-bold flex items-center gap-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>
-            <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ backgroundColor: 'var(--c-surface)', color: '#1D4ED8' }}>🏢</span>
+            <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>account_tree</span>
+            </span>
             Organization Chart
           </h3>
           <p className="text-xs mt-1 ml-10" style={{ color: 'var(--c-t3)' }}>
-            {employees.length} people · complete company hierarchy
+            {employees.length} people · complete hierarchy
           </p>
         </div>
         <button
           onClick={() => setCollapsed(v => !v)}
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors hover:opacity-80"
-          style={{ backgroundColor: 'var(--c-surface)', color: '#2563EB' }}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors hover:bg-orange-50"
+          style={{ color: '#F97316', backgroundColor: '#FFF7ED' }}
         >
           <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{collapsed ? 'unfold_more' : 'unfold_less'}</span>
           {collapsed ? 'Expand' : 'Collapse'}
@@ -199,42 +202,47 @@ function OrgChartSection({ employees, currentEmployeeId }: { employees: Employee
   )
 }
 
-// ─── Ghibli Frame Card ────────────────────────────────────────────────────────
+// ─── Road to Goal Chart ───────────────────────────────────────────────────────
 
-function GhibliFrameCard({ imageUrl, onUpload, uploading }: { imageUrl: string | null; onUpload: (f: File) => void; uploading: boolean }) {
-  const inputRef = useRef<HTMLInputElement>(null)
+function RoadToGoalChart({ currentPct }: { currentPct: number }) {
+  // Build a smooth rising curve from 0% to current pct across the month
+  const now = new Date()
+  const monthDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const dayNum = now.getDate()
+
+  const data = Array.from({ length: dayNum }, (_, i) => {
+    const d = i + 1
+    const pct = Math.round((d / monthDays) * 100 * (currentPct / 100))
+    return { day: d, value: pct }
+  })
+
   return (
-    <div className="relative flex flex-col items-center justify-center gap-3">
-      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden"
-        onChange={(e) => { const f = e.target.files?.[0]; if (f) onUpload(f); e.target.value = '' }} />
-
-      {imageUrl ? (
-        <div className="relative group">
-          <div className="relative rounded-[20px] overflow-hidden shadow-sm" style={{ width: 140, height: 140, border: '1px solid var(--c-border2)' }}>
-            <img src={imageUrl} alt="Profile" className="w-full h-full object-cover" />
-          </div>
-          <button onClick={() => inputRef.current?.click()} disabled={uploading}
-            className="absolute inset-0 rounded-[20px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-slate-900/40 backdrop-blur-sm">
-            <span className="material-symbols-outlined text-white" style={{ fontSize: '24px' }}>photo_camera</span>
-            <span className="text-white text-[10px] font-bold mt-1">Change</span>
-          </button>
-        </div>
-      ) : (
-        <button onClick={() => inputRef.current?.click()} disabled={uploading}
-          className="relative rounded-[20px] flex flex-col items-center justify-center gap-2 transition-all group"
-          style={{ width: 140, height: 140, backgroundColor: 'var(--c-surface)', border: '2px dashed var(--c-border2)' }}>
-          {uploading ? <Loader2 className="h-6 w-6 animate-spin text-blue-500" /> : (
-            <>
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>cloud_upload</span>
-              </div>
-              <p className="text-xs font-bold" style={{ color: 'var(--c-t2)' }}>Upload Photo</p>
-              <p className="text-[9px] px-2 leading-tight text-center" style={{ color: 'var(--c-t3)' }}>Ghibli character or anything fun</p>
-            </>
-          )}
-        </button>
-      )}
-    </div>
+    <ResponsiveContainer width="100%" height={130}>
+      <AreaChart data={data} margin={{ top: 8, right: 8, left: -28, bottom: 0 }}>
+        <defs>
+          <linearGradient id="goalGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#F97316" stopOpacity={0.25} />
+            <stop offset="100%" stopColor="#F97316" stopOpacity={0.03} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="day" tick={{ fontSize: 9, fill: '#9CA3AF' }} tickLine={false} axisLine={false} interval={Math.floor(dayNum / 4)} />
+        <YAxis domain={[0, 100]} tick={{ fontSize: 9, fill: '#9CA3AF' }} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} />
+        <Tooltip
+          contentStyle={{ backgroundColor: '#fff', border: '1px solid #FFD9C0', borderRadius: '12px', fontSize: '11px' }}
+          formatter={(v: number) => [`${v}%`, 'Progress']}
+          labelFormatter={(l) => `Day ${l}`}
+        />
+        <Area
+          type="monotone"
+          dataKey="value"
+          stroke="#F97316"
+          strokeWidth={2.5}
+          fill="url(#goalGrad)"
+          dot={false}
+          activeDot={{ r: 4, fill: '#F97316', strokeWidth: 0 }}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
   )
 }
 
@@ -249,7 +257,6 @@ export function DashboardPage() {
 
   const [punchLoading, setPunchLoading] = useState(false)
   const [ghibliTs, setGhibliTs] = useState(0)
-  const [ghibliUploading, setGhibliUploading] = useState(false)
 
   const greeting = getGreeting()
 
@@ -269,7 +276,6 @@ export function DashboardPage() {
     queryFn: () => notificationsApi.list({ per_page: 50 }),
     enabled: !!employee,
   })
-
   const { data: employeesTodayData } = useQuery({
     queryKey: ['employees-today-status'],
     queryFn: () => attendanceApi.todayAll(),
@@ -279,7 +285,7 @@ export function DashboardPage() {
 
   const actionMutation = useMutation({
     mutationFn: ({ id, action }: { id: string; action: 'approve' | 'reject' }) => leavesApi.action(id, action),
-    onSuccess: (_, { action }) => { toast.success(`Leave ${action === 'approve' ? 'approved ✅' : 'rejected'}`); qc.invalidateQueries({ queryKey: ['team-leaves-pending'] }) },
+    onSuccess: (_, { action }) => { toast.success(`Leave ${action === 'approve' ? 'approved' : 'rejected'}`); qc.invalidateQueries({ queryKey: ['team-leaves-pending'] }) },
     onError: () => toast.error('Action failed'),
   })
 
@@ -289,29 +295,34 @@ export function DashboardPage() {
   const allNotifs = notificationsData?.data?.data?.notifications ?? []
   const announcements = allNotifs.filter((n: any) => n.type === 'announcement')
 
-  // Personal celebration for the logged-in user today
   const todayCelebration = allNotifs.find(
     (n: any) => (n.type === 'birthday' || n.type === 'work_anniversary') &&
     new Date(n.created_at).toDateString() === new Date().toDateString()
   )
-  const attendancePct = summary?.attendance_percentage ?? 0
-  const orgEmployees = orgData?.data?.data ?? []
+
+  const attendancePct  = summary?.attendance_percentage ?? 0
+  const orgEmployees   = orgData?.data?.data ?? []
   const employeesToday = employeesTodayData?.data?.data ?? []
-  const myProfile = profileData?.data?.data
+  const myProfile      = profileData?.data?.data
   const ghibliImageUrl = resolveAvatarUrl(myProfile?.profile?.ghibli_image_url, ghibliTs || undefined)
-  const canPunchIn = !today
+  const canPunchIn  = !today
   const canPunchOut = today && !today.punch_out
-  const monthDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-  const dayNumber = now.getDate()
-  const monthRoadPct = Math.max(0, Math.min(100, (dayNumber / Math.max(monthDays, 1)) * 100))
+  const monthDays   = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const dayNumber   = now.getDate()
+  const monthRoadPct = Math.max(0, Math.min(100, Math.round((dayNumber / monthDays) * 100)))
+  const leaveBalance = (myBalance?.data?.data ?? []).find((b: any) => b.leave_type?.code === 'EL' || b.leave_type?.code === 'PL')
+  const leaveLeft = leaveBalance ? leaveBalance.available : null
+
+  const perfScore = Math.round(attendancePct * 0.85 + 15)
+  const perfLabel = getPerfLabel(attendancePct)
 
   const handlePunch = async () => {
     setPunchLoading(true)
     try {
       const loc = await getLocation()
       const lat = loc?.latitude ?? 0; const lng = loc?.longitude ?? 0
-      if (canPunchIn) { await attendanceApi.punchIn(lat, lng); toast.success('Punched in! Have a great day 🎉') }
-      else if (canPunchOut) { await attendanceApi.punchOut(lat, lng); toast.success('Day wrapped! See you tomorrow 👋') }
+      if (canPunchIn)  { await attendanceApi.punchIn(lat, lng);  toast.success('Punched in! Have a great day') }
+      else if (canPunchOut) { await attendanceApi.punchOut(lat, lng); toast.success('Day wrapped! See you tomorrow') }
       refetchToday()
     } catch (err: any) { toast.error(err?.response?.data?.message || 'Punch failed') }
     finally { setPunchLoading(false) }
@@ -319,31 +330,28 @@ export function DashboardPage() {
 
   const handleGhibliUpload = async (file: File) => {
     if (file.size > 5 * 1024 * 1024) { toast.error('File must be under 5 MB'); return }
-    setGhibliUploading(true)
     try {
       await profileApi.uploadGhibliImage(file)
       setGhibliTs(Date.now())
       qc.invalidateQueries({ queryKey: ['my-profile-dash'] })
-      toast.success('Photo uploaded! 🌸')
+      toast.success('Photo uploaded!')
     } catch { toast.error('Upload failed') }
-    finally { setGhibliUploading(false) }
   }
 
   const celebrationConfig = todayCelebration?.type === 'birthday'
-    ? { emoji: '🎂', gradient: 'linear-gradient(135deg,#be185d,#ec4899)', glow: 'rgba(236,72,153,0.18)' }
-    : { emoji: '🎉', gradient: 'linear-gradient(135deg,#1D4ED8,#7C3AED)', glow: 'rgba(124,58,237,0.18)' }
+    ? { emoji: '🎂', gradient: 'linear-gradient(135deg,#BE185D,#EC4899)', glow: 'rgba(236,72,153,0.18)' }
+    : { emoji: '🎉', gradient: 'linear-gradient(135deg,#EA580C,#F97316)', glow: 'rgba(249,115,22,0.18)' }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
 
       {/* ══ Celebration Banner ══ */}
       {todayCelebration && (
         <div
-          className="rounded-[20px] px-6 py-5 flex items-center gap-5 shadow-md relative overflow-hidden"
+          className="rounded-[20px] px-6 py-5 flex items-center gap-5 relative overflow-hidden"
           style={{ background: celebrationConfig.gradient, boxShadow: `0 8px 32px ${celebrationConfig.glow}` }}
         >
-          {/* Confetti-like dots */}
-          {[...Array(6)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div key={i} className="absolute rounded-full opacity-20 pointer-events-none"
               style={{ width: 60 + i * 30, height: 60 + i * 30, background: '#fff', top: -20 - i * 10, right: 40 + i * 60 }} />
           ))}
@@ -357,228 +365,342 @@ export function DashboardPage() {
         </div>
       )}
 
-      {/* ══ ROW 1: Hero & Stats ══ */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      {/* ══ ROW 1: Greeting + Stats ══ */}
+      <div className="grid grid-cols-1 xl:grid-cols-5 gap-5">
 
-        {/* Hero Card */}
-        <div className="xl:col-span-2 rounded-[24px] p-8 relative overflow-hidden shadow-sm" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 w-full h-full">
-            <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {greeting.text} {greeting.emoji}, {employee?.first_name}!
-              </h1>
-              <p className="mt-2 text-sm max-w-sm" style={{ color: 'var(--c-t3)' }}>
-                {getThoughtfulWelcomeLine()}
+        {/* ── Greeting Card (spans 3 cols) ── */}
+        <div
+          className="xl:col-span-3 rounded-[28px] p-7 relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #FFEADF 0%, #FFD6C8 50%, #FFF5F0 100%)',
+            boxShadow: '0 8px 32px rgba(249,115,22,0.12)',
+          }}
+        >
+          {/* Decorative circles */}
+          <div className="absolute -top-10 -right-10 w-52 h-52 rounded-full opacity-20 pointer-events-none" style={{ background: '#F97316' }} />
+          <div className="absolute top-6 -right-4 w-28 h-28 rounded-full opacity-10 pointer-events-none" style={{ background: '#EA580C' }} />
+
+          <div className="relative z-10 flex items-center justify-between gap-4 h-full">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold mb-1" style={{ color: '#F97316', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {greeting.emoji} {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
               </p>
-              <div className="mt-5 max-w-md">
-                <div className="flex items-center justify-between text-[11px] font-semibold" style={{ color: 'var(--c-t2)' }}>
-                  <span>Road to Goal</span>
-                  <span>Day {dayNumber}/{monthDays}</span>
-                </div>
-                <div className="mt-2 relative h-3 rounded-full overflow-visible" style={{ backgroundColor: 'var(--c-surface)' }}>
-                  <div
-                    className="h-3 rounded-full transition-all duration-700"
-                    style={{ width: `${monthRoadPct}%`, background: 'linear-gradient(135deg,#1D4ED8,#3B82F6)' }}
-                  />
-                  <span
-                    className="absolute top-1/2 -translate-y-1/2 text-sm transition-all duration-700"
-                    style={{ left: `calc(${Math.min(monthRoadPct, 92)}% - 8px)` }}
-                  >
-                    🏃
-                  </span>
-                  <span className="absolute -right-1 top-1/2 -translate-y-1/2 text-sm">🏆</span>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 mt-6">
+              <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight mb-3" style={{ color: '#1A1A2E', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {greeting.text},<br />{employee?.first_name}!
+              </h1>
+              <p className="text-sm mb-5" style={{ color: '#6B7280', maxWidth: 300 }}>
+                {summary
+                  ? `You've been present ${summary.present} out of ${summary.present + summary.absent + summary.late} working days this month.`
+                  : 'Track your attendance, leaves and performance all in one place.'
+                }
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3">
                 {!isManagerOrHr && (
                   <>
-                    <button onClick={() => navigate('/attendance')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 bg-blue-600 text-white shadow-sm hover:bg-blue-700">
-                      <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>beach_access</span> Request Leave
-                    </button>
-                    <button onClick={handlePunch} disabled={punchLoading} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 border shadow-sm"
-                      style={{ borderColor: 'var(--c-border2)', color: 'var(--c-t1)', backgroundColor: 'var(--c-card)' }}>
-                      {punchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{canPunchIn ? 'login' : 'logout'}</span>}
+                    <button
+                      onClick={handlePunch}
+                      disabled={punchLoading}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold text-white transition-all hover:scale-105 active:scale-95"
+                      style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', boxShadow: '0 4px 16px rgba(249,115,22,0.30)' }}
+                    >
+                      {punchLoading
+                        ? <Loader2 className="w-4 h-4 animate-spin" />
+                        : <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{canPunchIn ? 'login' : 'logout'}</span>
+                      }
                       {canPunchIn ? 'Punch In' : 'Punch Out'}
+                    </button>
+                    <button
+                      onClick={() => navigate('/attendance')}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.7)', color: '#374151', backdropFilter: 'blur(8px)', border: '1.5px solid rgba(249,115,22,0.2)' }}
+                    >
+                      <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>beach_access</span>
+                      Request Leave
                     </button>
                   </>
                 )}
-                <button onClick={() => navigate('/profile')} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors border border-transparent"
-                  style={{ color: 'var(--c-t2)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--c-surface)'; e.currentTarget.style.borderColor = 'var(--c-border2)' }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = 'transparent' }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>person</span> View Profile
-                </button>
+                {isManagerOrHr && (
+                  <button
+                    onClick={() => navigate('/attendance')}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff', boxShadow: '0 4px 16px rgba(249,115,22,0.25)' }}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>manage_accounts</span>
+                    Manage Team
+                  </button>
+                )}
               </div>
             </div>
-            <div className="shrink-0 flex items-center justify-center mt-4 md:mt-0">
+
+            {/* Avatar */}
+            <div className="shrink-0 hidden sm:flex items-center justify-center">
               <AdjustableImageUpload
                 currentUrl={ghibliImageUrl}
-                alt={`${employee?.first_name || 'Your'} dashboard image`}
-                frameSize={232}
+                alt={`${employee?.first_name || 'Your'} avatar`}
+                frameSize={160}
                 caption="My Avatar"
-                title="Update dashboard image"
-                description="Adjust the crop before uploading. The saved image is reused in the organization chart."
-                confirmLabel="Save Image"
-                onUpload={handleGhibliUpload}
+                title="Update avatar"
+                description="Adjust and upload your avatar image."
+                confirmLabel="Save"
+                onUpload={async (file) => {
+                  if (file.size > 5 * 1024 * 1024) { toast.error('File must be under 5 MB'); return }
+                  try {
+                    await profileApi.uploadGhibliImage(file)
+                    setGhibliTs(Date.now())
+                    qc.invalidateQueries({ queryKey: ['my-profile-dash'] })
+                    toast.success('Photo updated!')
+                  } catch { toast.error('Upload failed') }
+                }}
               />
             </div>
           </div>
         </div>
 
-        {/* 4 Stats Cards */}
-        {summary ? (
-          <div className="xl:col-span-1 grid grid-cols-2 gap-4">
-            {[
-              { label: 'Present',  val: summary.present,  sub: `${attendancePct.toFixed(0)}% this month`, icon: 'groups' },
-              { label: 'Absent',   val: summary.absent,   sub: 'Needs attention', icon: 'work_history' },
-              { label: 'Late',     val: summary.late,     sub: 'Avg arrival', icon: 'payments' },
-              { label: 'On Leave', val: summary.on_leave, sub: 'Approved log', icon: 'event' },
-            ].map((s) => (
-              <div key={s.label} className="rounded-[20px] p-5 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1"
-                style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--c-surface)' }}>
-                    <span className="material-symbols-outlined" style={{ color: '#1D4ED8', fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
-                  </div>
-                  <p className="text-xs font-bold" style={{ color: 'var(--c-t2)' }}>{s.label}</p>
-                </div>
-                <div className="mt-4">
-                  <p className="text-3xl font-extrabold" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.val}</p>
-                  <p className="text-[10px] text-emerald-500 font-semibold mt-1 truncate">{s.sub}</p>
-                </div>
-              </div>
-            ))}
+        {/* ── Stat Cards (spans 2 cols) ── */}
+        <div className="xl:col-span-2 flex flex-col gap-4">
+
+          {/* Attendance */}
+          <div
+            className="flex-1 rounded-[20px] p-5 flex items-center gap-4 transition-all hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg,#1D4ED8,#3B82F6)', boxShadow: '0 6px 20px rgba(59,130,246,0.25)' }}
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <span className="material-symbols-outlined text-white" style={{ fontSize: '24px', fontVariationSettings: "'FILL' 1" }}>calendar_month</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white/80 text-xs font-semibold">Attendance</p>
+              <p className="text-white font-extrabold text-2xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {summary ? `${attendancePct.toFixed(0)}%` : '--'}
+              </p>
+              <p className="text-white/70 text-[11px] mt-0.5">
+                {summary ? `${summary.present}/${summary.present + summary.absent + summary.late} days` : 'Loading...'}
+              </p>
+            </div>
           </div>
-        ) : (
-          <div className="xl:col-span-1 grid grid-cols-2 gap-4">
-            {[...Array(4)].map((_, i) => <div key={i} className="rounded-[20px] animate-pulse" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)', minHeight: '140px' }} />)}
+
+          {/* Leave Balance */}
+          <div
+            className="flex-1 rounded-[20px] p-5 flex items-center gap-4 transition-all hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg,#B45309,#D97706)', boxShadow: '0 6px 20px rgba(217,119,6,0.25)' }}
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <span className="material-symbols-outlined text-white" style={{ fontSize: '24px', fontVariationSettings: "'FILL' 1" }}>beach_access</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white/80 text-xs font-semibold">Leave Balance</p>
+              <p className="text-white font-extrabold text-2xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {leaveLeft !== null ? `${leaveLeft}d` : '--'}
+              </p>
+              <p className="text-white/70 text-[11px] mt-0.5">Earned leave remaining</p>
+            </div>
           </div>
-        )}
+
+          {/* Performance */}
+          <div
+            className="flex-1 rounded-[20px] p-5 flex items-center gap-4 transition-all hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', boxShadow: '0 6px 20px rgba(249,115,22,0.25)' }}
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <span className="material-symbols-outlined text-white" style={{ fontSize: '24px', fontVariationSettings: "'FILL' 1" }}>star</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white/80 text-xs font-semibold">Performance</p>
+              <p className="text-white font-extrabold text-2xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {summary ? `${perfScore}/100` : '--'}
+              </p>
+              <p className="text-white/70 text-[11px] mt-0.5">{summary ? perfLabel : 'Loading...'}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* ══ ROW 2: Attendance Overview & Announcements ══ */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      {/* ══ ROW 2: Road to Goal + Attendance Stats + Announcements ══ */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
-        <div className="xl:col-span-2 rounded-[24px] p-8 shadow-sm flex flex-col justify-between" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-          <h3 className="text-base font-bold mb-6" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>Monthly Attendance Overview</h3>
-          {summary ? (
-            <>
-              <div className="flex justify-between items-end mb-2">
-                <span className="text-sm font-semibold" style={{ color: 'var(--c-t2)' }}>Progress</span>
-                <span className="text-sm font-bold" style={{ color: 'var(--c-t1)' }}>{attendancePct.toFixed(0)}%</span>
-              </div>
-              <div className="h-4 rounded-full w-full flex overflow-hidden mb-8" style={{ backgroundColor: 'var(--c-surface)' }}>
-                <div className="h-full bg-blue-600 rounded-full transition-all duration-1000" style={{ width: `${attendancePct}%` }} />
-              </div>
-              <div className="flex items-center justify-between">
-                {[{ label: 'Present', val: summary.present }, { label: 'Absent', val: summary.absent }, { label: 'Late', val: summary.late }].map((s, i) => (
-                  <div key={s.label} className="flex-1 text-center">
-                    <p className="text-sm font-semibold" style={{ color: 'var(--c-t3)' }}>{s.label}</p>
-                    <p className="text-3xl font-extrabold mt-1" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.val}</p>
-                    {i < 2 && <div className="hidden" />}
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : <div className="h-32 animate-pulse rounded-xl" style={{ backgroundColor: 'var(--c-surface)' }} />}
+        {/* Road to Goal */}
+        <div
+          className="xl:col-span-2 rounded-[24px] p-6"
+          style={{ backgroundColor: 'var(--c-card)', boxShadow: '0 4px 24px rgba(249,115,22,0.06)', border: '1px solid var(--c-border2)' }}
+        >
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="text-base font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>
+              Road to Goal
+            </h3>
+            <div className="flex items-center gap-2">
+              <span
+                className="text-sm font-black"
+                style={{ color: '#F97316', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              >
+                {monthRoadPct}%
+              </span>
+              <span className="text-xs" style={{ color: 'var(--c-t3)' }}>Day {dayNumber}/{monthDays}</span>
+            </div>
+          </div>
+          <p className="text-xs mb-4" style={{ color: 'var(--c-t3)' }}>Monthly progress based on attendance</p>
+
+          <RoadToGoalChart currentPct={attendancePct} />
+
+          {/* Summary row */}
+          {summary && (
+            <div className="grid grid-cols-3 gap-4 mt-4 pt-4" style={{ borderTop: '1px solid var(--c-border3)' }}>
+              {[
+                { label: 'Present', val: summary.present, color: '#22C55E' },
+                { label: 'Late',    val: summary.late,    color: '#EAB308' },
+                { label: 'Absent',  val: summary.absent,  color: '#EF4444' },
+              ].map((s) => (
+                <div key={s.label} className="text-center">
+                  <div className="w-2 h-2 rounded-full mx-auto mb-1" style={{ backgroundColor: s.color }} />
+                  <p className="text-xs font-medium" style={{ color: 'var(--c-t3)' }}>{s.label}</p>
+                  <p className="text-xl font-extrabold" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.val}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="xl:col-span-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4">
-          <div className="rounded-[24px] p-6 shadow-sm" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-            <h3 className="text-sm font-bold mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>Announcements</h3>
+        {/* Announcements */}
+        <div
+          className="xl:col-span-1 rounded-[24px] p-6"
+          style={{ backgroundColor: 'var(--c-card)', boxShadow: '0 4px 24px rgba(249,115,22,0.06)', border: '1px solid var(--c-border2)' }}
+        >
+          <h3 className="text-base font-bold mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>
+            Announcements
+          </h3>
+
+          <div className="space-y-3">
             {today?.punch_in && (
-              <div className="flex gap-3 mb-4 p-3 rounded-lg" style={{ backgroundColor: 'var(--c-surface)' }}>
-                <span className="material-symbols-outlined text-blue-500 mt-0.5" style={{ fontSize: '18px' }}>notifications_active</span>
+              <div className="flex gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'rgba(34,197,94,0.07)' }}>
+                <span className="material-symbols-outlined mt-0.5 shrink-0" style={{ fontSize: '18px', color: '#22C55E' }}>check_circle</span>
                 <div>
                   <p className="text-xs font-bold" style={{ color: 'var(--c-t1)' }}>Shift Started</p>
-                  <p className="text-[10px] mt-0.5" style={{ color: 'var(--c-t3)' }}>Punched in at <span className="font-semibold">{formatTime(today.punch_in)}</span>.</p>
+                  <p className="text-[10px] mt-0.5" style={{ color: 'var(--c-t3)' }}>
+                    Punched in at <span className="font-semibold">{formatTime(today.punch_in)}</span>
+                  </p>
                 </div>
               </div>
             )}
-            
+
             {announcements.length > 0 ? (
               announcements.slice(0, 3).map((ann: any, idx: number) => {
                 const isBirthday = ann.reference_type === 'birthday_broadcast'
-                const isAnniv = ann.reference_type === 'anniversary_broadcast'
+                const isAnniv    = ann.reference_type === 'anniversary_broadcast'
                 const icon = isBirthday ? '🎂' : isAnniv ? '🎉' : null
                 return (
-                  <div key={ann.id} className={`flex gap-3 p-3 rounded-lg ${idx > 0 ? 'mt-2' : ''}`}
-                    style={{ backgroundColor: (isBirthday || isAnniv) ? 'rgba(59,130,246,0.06)' : undefined }}>
+                  <div key={ann.id} className="flex gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'var(--c-surface)' }}>
                     {icon
                       ? <span className="text-lg mt-0.5 shrink-0">{icon}</span>
-                      : <span className="material-symbols-outlined text-blue-500 mt-0.5 shrink-0" style={{ fontSize: '18px' }}>campaign</span>
+                      : <span className="material-symbols-outlined mt-0.5 shrink-0" style={{ fontSize: '18px', color: '#F97316' }}>campaign</span>
                     }
                     <div>
                       <p className="text-xs font-bold" style={{ color: 'var(--c-t1)' }}>{ann.title}</p>
-                      <p className="text-[10px] mt-0.5 max-w-[200px] leading-relaxed" style={{ color: 'var(--c-t3)' }}>{ann.body}</p>
-                      <p className="text-[9px] mt-1 font-semibold text-blue-600">{formatDate(ann.created_at)}</p>
+                      <p className="text-[10px] mt-0.5 leading-relaxed" style={{ color: 'var(--c-t3)' }}>{ann.body}</p>
+                      <p className="text-[9px] mt-1 font-semibold" style={{ color: '#F97316' }}>{formatDate(ann.created_at)}</p>
                     </div>
                   </div>
                 )
               })
             ) : (
-              <div className="flex gap-3 p-3 rounded-lg">
-                <span className="material-symbols-outlined text-emerald-500 mt-0.5" style={{ fontSize: '18px' }}>info</span>
-                <div>
-                  <p className="text-[10px] mt-0.5" style={{ color: 'var(--c-t3)' }}>No new announcements from management.</p>
-                </div>
+              <div className="flex gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'var(--c-surface)' }}>
+                <span className="material-symbols-outlined mt-0.5" style={{ fontSize: '18px', color: '#F97316' }}>info</span>
+                <p className="text-[10px] mt-0.5" style={{ color: 'var(--c-t3)' }}>No new announcements right now.</p>
               </div>
             )}
           </div>
+
+          {/* Pending Approvals (managers) */}
+          {isManagerOrHr && pending.length > 0 && (
+            <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--c-border3)' }}>
+              <p className="text-xs font-bold mb-3" style={{ color: 'var(--c-t1)' }}>Pending Approvals ({pending.length})</p>
+              <div className="space-y-2">
+                {pending.slice(0, 3).map((req: LeaveRequest) => (
+                  <div key={req.id} className="flex items-center justify-between gap-2 p-3 rounded-2xl" style={{ backgroundColor: 'var(--c-surface)' }}>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold truncate" style={{ color: 'var(--c-t1)' }}>{(req as any).employee?.full_name ?? 'Employee'}</p>
+                      <p className="text-[10px]" style={{ color: 'var(--c-t3)' }}>{req.leave_type?.name} · {req.days}d</p>
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button
+                        onClick={() => actionMutation.mutate({ id: req.id, action: 'approve' })}
+                        disabled={actionMutation.isPending}
+                        className="w-7 h-7 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E' }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>check</span>
+                      </button>
+                      <button
+                        onClick={() => actionMutation.mutate({ id: req.id, action: 'reject' })}
+                        disabled={actionMutation.isPending}
+                        className="w-7 h-7 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#EF4444' }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ══ ROW 3: Full Org Chart ══ */}
-      {orgEmployees.length > 0 && <OrgChartSection employees={orgEmployees} currentEmployeeId={employee?.id} />}
+      {/* ══ ROW 3: Org Chart ══ */}
+      {orgEmployees.length > 0 && (
+        <OrgChartSection employees={orgEmployees} currentEmployeeId={employee?.id} />
+      )}
 
-      {/* ══ ROW 4: Employee Today Status (Admin/HR only) ══ */}
+      {/* ══ ROW 4: Employee Today Status (HR/Admin) ══ */}
       {isHrOrAdmin && employeesToday.length > 0 && (
-        <div className="rounded-[24px] overflow-hidden shadow-sm" style={{ backgroundColor: 'var(--c-card)', border: '1px solid var(--c-border2)' }}>
-          <div className="px-8 py-5 flex items-center justify-between border-b" style={{ borderColor: 'var(--c-border3)' }}>
+        <div
+          className="rounded-[24px] overflow-hidden"
+          style={{ backgroundColor: 'var(--c-card)', boxShadow: '0 4px 24px rgba(249,115,22,0.06)', border: '1px solid var(--c-border2)' }}
+        >
+          <div className="px-8 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid var(--c-border3)' }}>
             <div>
               <h3 className="text-base font-bold flex items-center gap-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--c-t1)' }}>
-                <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ backgroundColor: 'var(--c-surface)', color: '#1D4ED8' }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>groups</span>
+                <span className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>groups</span>
                 </span>
                 Employee Attendance — Today
               </h3>
               <p className="text-xs mt-1 ml-10" style={{ color: 'var(--c-t3)' }}>
-                {employeesToday.filter(e => ['present','late','wfh'].includes(e.status)).length} present · {employeesToday.filter(e => e.status === 'absent').length} absent · {employeesToday.filter(e => e.status === 'not_checked_in').length} not checked in
+                {employeesToday.filter((e: any) => ['present','late','wfh'].includes(e.status)).length} present ·{' '}
+                {employeesToday.filter((e: any) => e.status === 'absent').length} absent ·{' '}
+                {employeesToday.filter((e: any) => e.status === 'not_checked_in').length} not checked in
               </p>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0.5 p-2">
-              {employeesToday.map(emp => {
-                const statusColors: Record<string, { bg: string; color: string; dot: string }> = {
-                  present: { bg: 'rgba(22,163,74,0.07)', color: '#16A34A', dot: '#16A34A' },
-                  late:    { bg: 'rgba(217,119,6,0.07)', color: '#D97706', dot: '#D97706' },
-                  wfh:     { bg: 'rgba(139,92,246,0.07)', color: '#7C3AED', dot: '#8B5CF6' },
-                  absent:  { bg: 'rgba(239,68,68,0.07)', color: '#DC2626', dot: '#EF4444' },
-                  on_leave:{ bg: 'rgba(59,130,246,0.07)', color: '#2563EB', dot: '#3B82F6' },
-                  not_checked_in: { bg: 'rgba(148,163,184,0.07)', color: '#64748B', dot: '#94A3B8' },
-                }
-                const sc = statusColors[emp.status] || statusColors.not_checked_in
-                return (
-                  <div key={emp.id} className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-blue-50/30" style={{ backgroundColor: sc.bg }}>
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: sc.dot }}></div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold truncate" style={{ color: 'var(--c-t1)' }}>{emp.full_name}</p>
-                      <p className="text-[10px]" style={{ color: 'var(--c-t3)' }}>{emp.emp_code}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ backgroundColor: sc.bg, color: sc.color }}>
-                        {emp.status.replace('_', ' ')}
-                      </span>
-                      {emp.punch_in && (
-                        <p className="text-[9px] mt-0.5 font-mono" style={{ color: 'var(--c-t3)' }}>{formatTime(emp.punch_in)}</p>
-                      )}
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0.5 p-3">
+            {employeesToday.map((emp: any) => {
+              const sc: Record<string, { bg: string; color: string; dot: string }> = {
+                present:        { bg: 'rgba(34,197,94,0.07)',  color: '#16A34A', dot: '#22C55E' },
+                late:           { bg: 'rgba(234,179,8,0.07)',  color: '#B45309', dot: '#EAB308' },
+                wfh:            { bg: 'rgba(139,92,246,0.07)', color: '#7C3AED', dot: '#8B5CF6' },
+                absent:         { bg: 'rgba(239,68,68,0.07)',  color: '#DC2626', dot: '#EF4444' },
+                on_leave:       { bg: 'rgba(59,130,246,0.07)', color: '#2563EB', dot: '#3B82F6' },
+                not_checked_in: { bg: 'rgba(148,163,184,0.07)',color: '#64748B', dot: '#9CA3AF' },
+              }
+              const s = sc[emp.status] || sc.not_checked_in
+              return (
+                <div key={emp.id} className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors" style={{ backgroundColor: s.bg }}>
+                  <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: s.dot }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold truncate" style={{ color: 'var(--c-t1)' }}>{emp.full_name}</p>
+                    <p className="text-[10px]" style={{ color: 'var(--c-t3)' }}>{emp.emp_code}</p>
                   </div>
-                )
-              })}
-            </div>
+                  <div className="text-right shrink-0">
+                    <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ color: s.color, backgroundColor: s.bg }}>
+                      {emp.status.replace('_', ' ')}
+                    </span>
+                    {emp.punch_in && (
+                      <p className="text-[9px] mt-0.5 font-mono" style={{ color: 'var(--c-t3)' }}>{formatTime(emp.punch_in)}</p>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

@@ -5,8 +5,8 @@ import { notificationsApi } from '@/api/notifications'
 
 const items = [
   { to: '/', icon: 'grid_view', label: 'Home', end: true },
-  { to: '/attendance', icon: 'fingerprint', label: 'Attendance' },
-  { to: '/salary', icon: 'payments', label: 'Salary' },
+  { to: '/attendance', icon: 'event_available', label: 'Leave' },
+  { to: '/salary', icon: 'payments', label: 'Payroll' },
   { to: '/notifications', icon: 'notifications', label: 'Alerts' },
 ]
 
@@ -22,12 +22,14 @@ export function BottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-2 py-2 flex justify-around items-center glass-panel"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-2 py-2"
       style={{
-        backgroundColor: 'var(--c-header)',
-        boxShadow: '0 -8px 30px rgba(15,23,42,0.08)',
+        backgroundColor: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 -4px 24px rgba(249,115,22,0.08)',
+        borderTop: '1px solid rgba(255,217,192,0.6)',
         paddingBottom: 'env(safe-area-inset-bottom)',
-        borderTop: '1px solid var(--c-border)',
       }}
     >
       {items.map((item) => (
@@ -35,28 +37,40 @@ export function BottomNav() {
           key={item.to}
           to={item.to}
           end={item.end}
-          className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all"
+          className="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all"
         >
           {({ isActive }) => (
             <>
-              <div className="relative">
+              <div
+                className="relative w-10 h-8 flex items-center justify-center rounded-xl transition-all"
+                style={{ backgroundColor: isActive ? '#FFF7ED' : 'transparent' }}
+              >
                 <span
                   className="material-symbols-outlined"
                   style={{
-                    color: isActive ? '#3B82F6' : 'var(--c-t3)',
+                    color: isActive ? '#F97316' : 'var(--c-t3)',
                     fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
-                    fontSize: '22px',
+                    fontSize: '21px',
                   }}
                 >
                   {item.icon}
                 </span>
                 {item.to === '/notifications' && unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] text-white flex items-center justify-center font-bold" style={{ backgroundColor: '#DC2626' }}>
+                  <span
+                    className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-[9px] text-white flex items-center justify-center font-bold"
+                    style={{ backgroundColor: '#EF4444' }}
+                  >
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </div>
-              <span className="text-[10px] font-bold" style={{ color: isActive ? '#2563EB' : 'var(--c-t3)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              <span
+                className="text-[10px] font-bold"
+                style={{
+                  color: isActive ? '#F97316' : 'var(--c-t3)',
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                }}
+              >
                 {item.label}
               </span>
             </>

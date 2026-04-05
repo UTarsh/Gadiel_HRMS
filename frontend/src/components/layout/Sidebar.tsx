@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -7,22 +7,30 @@ import { getInitials } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { notificationsApi } from '@/api/notifications'
 import { useSidebar } from '@/contexts/SidebarContext'
+import { LogOut, Settings } from 'lucide-react'
 
 export function Sidebar() {
-  const { employee } = useAuthStore()
+  const { employee, logout } = useAuthStore()
   const { isOpen, close } = useSidebar()
+  const navigate = useNavigate()
   const touchStartX = useRef<number | null>(null)
+
+  const isHrOrAdmin = employee?.role === 'hr_admin' || employee?.role === 'super_admin'
   const canViewMonthlyReport =
-    employee?.role === 'hr_admin' ||
-    employee?.role === 'super_admin' ||
+    isHrOrAdmin ||
     ['vishal', 'namrata'].includes((employee?.first_name || '').toLowerCase())
 
   const navItems = [
     { to: '/', icon: 'grid_view', label: 'Dashboard', end: true },
-    { to: '/attendance', icon: 'fingerprint', label: 'Attendance & Leaves' },
+    { to: '/attendance', icon: 'event_available', label: 'Leave & Attendance' },
+    { to: '/salary', icon: 'payments', label: 'Payroll' },
     { to: '/notifications', icon: 'notifications', label: 'Notifications' },
-    { to: '/salary', icon: 'payments', label: 'Salary & Payslips' },
-    ...(canViewMonthlyReport ? [{ to: '/monthly-report', icon: 'monitoring', label: 'Monthly Report' }] : []),
+    ...(canViewMonthlyReport
+      ? [{ to: '/monthly-report', icon: 'monitoring', label: 'Monthly Report' }]
+      : []),
+    ...(isHrOrAdmin
+      ? [{ to: '/geofence', icon: 'location_on', label: 'Geofence' }]
+      : []),
   ]
 
   const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX }
@@ -51,14 +59,20 @@ export function Sidebar() {
   })
   const unread = notifData?.data?.data?.unread_count ?? 0
 
+  const handleLogout = () => {
+    close()
+    logout()
+    navigate('/login')
+  }
+
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop — mobile only */}
       <div
         onClick={close}
-        className="fixed inset-0 z-40 transition-all duration-300"
+        className="fixed inset-0 z-40 transition-all duration-300 md:hidden"
         style={{
-          backgroundColor: 'rgba(15,23,42,0.5)',
+          backgroundColor: 'rgba(26,26,46,0.5)',
           backdropFilter: isOpen ? 'blur(2px)' : 'none',
           WebkitBackdropFilter: isOpen ? 'blur(2px)' : 'none',
           opacity: isOpen ? 1 : 0,
@@ -66,38 +80,41 @@ export function Sidebar() {
         }}
       />
 
-      {/* Panel */}
+      {/* Drawer panel — mobile only */}
       <aside
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        className="fixed top-0 left-0 h-full z-50 flex flex-col w-72 transition-transform duration-300 ease-out"
+        className="fixed top-0 left-0 h-full z-50 flex flex-col w-72 transition-transform duration-300 ease-out md:hidden"
         style={{
           backgroundColor: 'var(--c-sidebar)',
-          boxShadow: '8px 0 40px rgba(30,41,59,0.18)',
+          boxShadow: '8px 0 40px rgba(249,115,22,0.12)',
           transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
         }}
       >
-        {/* Top row: logo + close */}
+        {/* Header */}
         <div className="flex items-center justify-between px-5 py-5" style={{ borderBottom: '1px solid var(--c-border3)' }}>
           <div className="flex items-center gap-3">
-            <img src="/gadiel_logo.png" alt="Gadiel Technologies" style={{ height: '36px', width: 'auto', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+            <div
+              className="w-9 h-9 rounded-2xl flex items-center justify-center text-white font-bold text-base"
+              style={{ background: 'linear-gradient(135deg, #EA580C, #F97316)' }}
+            >
+              G
+            </div>
+            <p className="text-sm font-bold" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Gadiel HRMS
+            </p>
           </div>
-          <button onClick={close} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" aria-label="Close"
-            style={{ color: 'var(--c-t3)' }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--c-surface)')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+          <button
+            onClick={close}
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-orange-50"
+            aria-label="Close"
           >
-            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>close</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '18px', color: 'var(--c-t3)' }}>close</span>
           </button>
         </div>
 
-        {/* Drag pill hint */}
-        <div className="flex justify-center py-1.5">
-          <div className="w-8 h-1 rounded-full" style={{ backgroundColor: 'var(--c-border2)' }} />
-        </div>
-
-        {/* Nav items */}
-        <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -105,24 +122,39 @@ export function Sidebar() {
               end={item.end}
               onClick={close}
               className={({ isActive }) =>
-                cn('flex items-center gap-4 py-3 pl-4 pr-3 rounded-xl transition-all duration-150',
-                  isActive ? 'font-bold' : '')
+                cn('flex items-center gap-4 py-3 pl-4 pr-3 rounded-2xl transition-all duration-150',
+                  isActive ? '' : 'hover:bg-orange-50')
               }
-              style={({ isActive }) => isActive
-                ? { backgroundColor: 'var(--c-surface)', color: '#2563EB' }
-                : { color: 'var(--c-t3)' }
+              style={({ isActive }) =>
+                isActive
+                  ? { backgroundColor: '#FFF7ED' }
+                  : {}
               }
             >
               {({ isActive }) => (
                 <>
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px', fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{
+                      fontSize: '20px',
+                      fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                      color: isActive ? '#F97316' : 'var(--c-t3)',
+                    }}
+                  >
                     {item.icon}
                   </span>
-                  <span className="text-sm flex-1" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: isActive ? 700 : 500 }}>
+                  <span
+                    className="text-sm flex-1"
+                    style={{
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      fontWeight: isActive ? 700 : 500,
+                      color: isActive ? '#F97316' : 'var(--c-t2)',
+                    }}
+                  >
                     {item.label}
                   </span>
                   {item.to === '/notifications' && unread > 0 && (
-                    <span className="w-5 h-5 rounded-full text-[10px] text-white flex items-center justify-center font-bold" style={{ backgroundColor: '#DC2626' }}>
+                    <span className="w-5 h-5 rounded-full text-[10px] text-white flex items-center justify-center font-bold" style={{ backgroundColor: '#EF4444' }}>
                       {unread > 9 ? '9+' : unread}
                     </span>
                   )}
@@ -131,43 +163,52 @@ export function Sidebar() {
             </NavLink>
           ))}
 
-          {(employee?.role === 'hr_admin' || employee?.role === 'super_admin') && (
-            <NavLink
-              to="/geofence"
-              onClick={close}
-              className={({ isActive }) =>
-                cn('flex items-center gap-4 py-3 pl-4 pr-3 rounded-xl transition-all duration-150',
-                  isActive ? 'font-bold' : '')
-              }
-              style={({ isActive }) => isActive
-                ? { backgroundColor: 'var(--c-surface)', color: '#2563EB' }
-                : { color: 'var(--c-t3)' }
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px', fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>location_on</span>
-                  <span className="text-sm flex-1" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: isActive ? 700 : 500 }}>Geofence</span>
-                </>
-              )}
-            </NavLink>
-          )}
+          <NavLink
+            to="/profile"
+            onClick={close}
+            className={({ isActive }) =>
+              cn('flex items-center gap-4 py-3 pl-4 pr-3 rounded-2xl transition-all duration-150',
+                isActive ? '' : 'hover:bg-orange-50')
+            }
+            style={({ isActive }) => isActive ? { backgroundColor: '#FFF7ED' } : {}}
+          >
+            {({ isActive }) => (
+              <>
+                <Settings size={20} style={{ color: isActive ? '#F97316' : 'var(--c-t3)', flexShrink: 0 }} />
+                <span
+                  className="text-sm flex-1"
+                  style={{
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    fontWeight: isActive ? 700 : 500,
+                    color: isActive ? '#F97316' : 'var(--c-t2)',
+                  }}
+                >
+                  Settings
+                </span>
+              </>
+            )}
+          </NavLink>
         </nav>
 
         {/* User footer */}
         {employee && (
-          <div className="px-4 pb-4 pt-2" style={{ borderTop: '1px solid var(--c-border3)' }}>
+          <div className="px-4 pb-6 pt-3" style={{ borderTop: '1px solid var(--c-border3)' }}>
             <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'var(--c-surface)' }}>
               <Avatar className="h-9 w-9 shrink-0">
                 <AvatarImage src={employee.profile_picture_url || undefined} />
-                <AvatarFallback className="text-xs font-bold" style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)', color: '#fff' }}>
+                <AvatarFallback className="text-xs font-bold" style={{ background: 'linear-gradient(135deg,#EA580C,#F97316)', color: '#fff' }}>
                   {getInitials(employee.full_name)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold truncate" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{employee.full_name}</p>
+                <p className="text-xs font-semibold truncate" style={{ color: 'var(--c-t1)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {employee.full_name}
+                </p>
                 <p className="text-[10px] truncate" style={{ color: 'var(--c-t3)' }}>{employee.emp_code}</p>
               </div>
+              <button onClick={handleLogout} className="w-7 h-7 rounded-xl flex items-center justify-center hover:bg-red-50 transition-colors" title="Sign out">
+                <LogOut size={14} style={{ color: '#EF4444' }} />
+              </button>
             </div>
           </div>
         )}
