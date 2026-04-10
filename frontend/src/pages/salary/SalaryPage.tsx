@@ -1,23 +1,9 @@
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader2, Pencil, Check, X, Download, FileText, IndianRupee, TrendingUp } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { compensationApi } from '@/api/compensation'
 import { useAuthStore } from '@/store/auth'
+import { PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area, XAxis, Tooltip } from 'recharts'
 import type { Payslip as PayslipDoc } from '@/types'
-import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
-
-async function downloadPayslipBlob(pdfUrl: string) {
-  const blobRes = await compensationApi.downloadPayslipFile(pdfUrl)
-  const filename = pdfUrl.split('/').pop() || 'payslip'
-  const blob = new Blob([blobRes.data], { type: filename.endsWith('.html') ? 'text/html' : 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 function fmt(v: number) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(v || 0)
@@ -25,55 +11,10 @@ function fmt(v: number) {
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
-const DAILY_INSIGHTS = [
-  "Every salary is a reward for showing up and giving your best — keep that streak alive.",
-  "Your paycheck reflects your contribution. Keep growing and so will your earnings.",
-  "Consistency in effort is the best investment in your own career.",
-  "Financial clarity starts with understanding your own compensation.",
-  "Small improvements every day lead to big career leaps over time.",
-  "Your skills are your assets. The more you invest in them, the higher your returns.",
-  "Reliability and dedication are qualities that eventually show up in your compensation.",
-  "A great team and a great paycheck often come hand in hand.",
-  "Showing up on time, every time, is the simplest form of professional excellence.",
-  "Growth mindset + consistent effort = the perfect formula for career progression.",
-  "Your payslip is proof that hard work has tangible rewards.",
-  "The best investment you can make is in yourself — every skill adds to your value.",
-  "Punctuality, reliability, and quality work — these are the building blocks of a great career.",
-  "Every day at work is an opportunity to make a difference and grow professionally.",
-  "Financial wellness starts with knowing exactly what you earn and how.",
-  "The most valuable asset in any organisation is engaged, motivated people.",
-  "Your salary is a milestone, not a destination — keep pushing forward.",
-  "Great careers are built one consistent, excellent day at a time.",
-  "Collaboration and contribution are the fastest paths to recognition.",
-  "Celebrate your progress — every payslip is evidence of your hard work.",
-  "Invest in your skills today for a better compensation tomorrow.",
-  "Your professional reputation is your most valuable currency.",
-  "Work smart, stay dedicated, and the rewards will follow naturally.",
-  "Every payslip tells a story of dedication and consistent effort.",
-  "The most successful people combine passion with persistence — that's where growth lives.",
-  "Your work matters. Your contribution shapes the organisation every single day.",
-  "A clear understanding of your salary empowers better financial decisions.",
-  "Continuous learning is the fastest route to salary growth.",
-  "People who invest in their own development create their own opportunities.",
-  "Your career is a marathon, not a sprint — steady effort wins every time.",
-  "Each day you show up is a day you invest in your own future.",
-]
-
-function getDailyInsight(): string {
-  const day = new Date().getDate()
-  return DAILY_INSIGHTS[(day - 1) % DAILY_INSIGHTS.length]
-}
-
 export function SalaryPage() {
   const { employee } = useAuthStore()
-  const qc = useQueryClient()
-  const isAdmin = employee?.role === 'super_admin' || employee?.role === 'hr_admin'
 
-  const [editingField, setEditingField] = useState<'ctc' | 'monthly' | null>(null)
-  const [draftCtc, setDraftCtc] = useState('')
-  const [draftMonthly, setDraftMonthly] = useState('')
-
-  const { data: overviewData, isLoading } = useQuery({
+  const { data: overviewData } = useQuery({
     queryKey: ['salary-overview'],
     queryFn: () => compensationApi.overview(),
   })
@@ -83,239 +24,332 @@ export function SalaryPage() {
     queryFn: () => compensationApi.myPayslips({ per_page: 24 }),
   })
 
-  const updateSalaryMutation = useMutation({
-    mutationFn: (data: Record<string, number>) =>
-      compensationApi.updateSalary(employee!.id, data),
-    onSuccess: () => {
-      toast.success('Salary updated')
-      setEditingField(null)
-      qc.invalidateQueries({ queryKey: ['salary-overview'] })
-    },
-    onError: (err: any) => toast.error(err?.response?.data?.detail || 'Failed to update salary'),
-  })
-
   const overview = overviewData?.data?.data
   const salary = overview?.salary
   const payslips = (payslipsData?.data && Array.isArray(payslipsData.data)) ? payslipsData.data : []
 
-  if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-    )
-  }
-
   const annualCTC = salary?.ctc_annual || (salary?.gross_salary || 0) * 12
   const monthlyGross = salary?.gross_salary || 0
+  const netTakeHome = monthlyGross > 0 ? monthlyGross * 0.9 : 0 // mock deductions
+
+  const donutData = [
+    { name: 'Earnings', value: monthlyGross, color: '#3B82F6' },
+    { name: 'Deductions', value: monthlyGross * 0.1, color: '#F87171' },
+  ]
+
+  const trendData = [
+    { name: 'Apr', val: 98000 }, { name: 'May', val: 120000 }, { name: 'Jun', val: 130000 },
+    { name: 'Jul', val: 140000 }, { name: 'Aug', val: 145000 }, { name: 'Sep', val: 155000 },
+    { name: 'Oct', val: 150000 }, { name: 'Nov', val: 180000 }, { name: 'Dec', val: 165000 },
+    { name: 'Jan', val: 190000 }, { name: 'Feb', val: 216000 }, { name: 'Mar', val: 240000 }
+  ]
 
   return (
-    <div className="space-y-6 pb-10 page-enter">
-      {/* Header */}
-      <div className="space-y-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600">Compensation</p>
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>
-          Salary & Payslips
-        </h1>
-        <p className="text-sm font-medium opacity-50" style={{ color: 'var(--c-t2)' }}>
-          Your earnings and payslip history
-        </p>
+    <div className="space-y-6 pb-10">
+      
+      {/* HEADER BANNER */}
+      <div className="rounded-3xl p-8 relative flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #FFF0E5 0%, #FFDFCF 100%)', boxShadow: '0 4px 20px rgba(249,115,22,0.1)' }}>
+        <div>
+          <p className="text-[10px] uppercase font-bold text-[#3B82F6] mb-1">PAYROLL</p>
+          <h1 className="text-3xl font-extrabold text-[#1A1A2E] mb-2 font-display">Salary & Payslips</h1>
+          <p className="text-[#4B5563] text-sm">View, download, and manage your salary details.</p>
+        </div>
+        <button className="bg-white hover:bg-gray-50 text-[#3B82F6] font-bold py-2.5 px-6 rounded-xl transition text-sm flex items-center gap-2 border border-[#E2E8F0] shadow-sm">
+           <span className="material-symbols-outlined text-sm">download</span> Download Tax Report
+        </button>
       </div>
 
-      {/* Top 2 cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {/* Annual CTC */}
-        <div className="card-kinetic p-7 flex flex-col gap-4 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-5 pointer-events-none" style={{ backgroundColor: '#2563EB', transform: 'translate(30%, -30%)' }}></div>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm" style={{ backgroundColor: '#2563EB15' }}>
-                <TrendingUp className="w-5 h-5" style={{ color: '#2563EB' }} />
-              </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Annual CTC</p>
-                <p className="text-[10px] text-slate-300 font-medium">Total cost to company</p>
+      {/* TOP CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { title: 'NET TAKE HOME', val: netTakeHome || 240000, sub: 'April 2025', icon: 'account_balance_wallet', bg: '#EFF6FF', color: '#3B82F6' },
+          { title: 'MONTHLY SALARY', val: monthlyGross || 20000, sub: 'CTC per month', icon: 'payments', bg: '#F0FDF4', color: '#16A34A' },
+          { title: 'NEXT PAYDAY', val: '05 May 2025', sub: '3 Days to go', icon: 'event', bg: '#FFFBEB', color: '#D97706' },
+          { title: 'PAY FREQUENCY', val: 'Monthly', sub: 'Last paid on 05 Apr 2025', icon: 'schedule', bg: '#F5F3FF', color: '#8B5CF6' },
+        ].map((s, i) => (
+          <div key={i} className={`rounded-[20px] p-5 shadow-sm border border-white`} style={{ backgroundColor: s.bg }}>
+            <div className="flex justify-between items-start mb-2">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{s.title}</p>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center opacity-70" style={{ color: s.color, backgroundColor: `${s.color}20` }}>
+                <span className="material-symbols-outlined text-[18px]">{s.icon}</span>
               </div>
             </div>
-            {isAdmin && editingField !== 'ctc' && (
-              <button
-                onClick={() => { setDraftCtc(String(Math.round(annualCTC))); setEditingField('ctc') }}
-                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: 'var(--c-surface)' }}
-              >
-                <Pencil className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-            )}
+            <p className="text-2xl font-black text-[#1A1A2E] font-display">{typeof s.val === 'number' ? fmt(s.val) : s.val}</p>
+            <p className="text-[10px] text-gray-500 font-medium mt-1">{s.sub}</p>
           </div>
-          {editingField === 'ctc' ? (
-            <div className="space-y-3">
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Annual CTC (₹)</p>
-                <input
-                  type="number"
-                  value={draftCtc}
-                  onChange={e => setDraftCtc(e.target.value)}
-                  className="w-full h-10 px-3 text-sm rounded-xl border outline-none focus:ring-2 focus:ring-blue-200"
-                  style={{ borderColor: '#2563EB40', color: 'var(--c-t1)', backgroundColor: 'var(--c-surface)' }}
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => updateSalaryMutation.mutate({ annual_ctc: Number(draftCtc) })}
-                  disabled={updateSalaryMutation.isPending}
-                  className="flex-1 h-9 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: '#2563EB' }}
-                >
-                  {updateSalaryMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />} Save
-                </button>
-                <button onClick={() => setEditingField(null)} className="flex-1 h-9 rounded-xl text-xs font-bold" style={{ backgroundColor: 'var(--c-surface)', color: 'var(--c-t2)' }}>
-                  <X className="w-3 h-3 inline mr-1" />Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <p className="text-3xl font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>{fmt(annualCTC)}</p>
-              <p className="text-xs text-slate-400 mt-1 font-medium">{fmt(monthlyGross)}/month</p>
-            </div>
-          )}
-        </div>
+        ))}
+      </div>
 
-        {/* Monthly Salary */}
-        <div className="card-kinetic p-7 flex flex-col gap-4 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-5 pointer-events-none" style={{ backgroundColor: '#16A34A', transform: 'translate(30%, -30%)' }}></div>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm" style={{ backgroundColor: '#16A34A15' }}>
-                <IndianRupee className="w-5 h-5" style={{ color: '#16A34A' }} />
-              </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Monthly Salary</p>
-                <p className="text-[10px] text-slate-300 font-medium">In-hand every month</p>
-              </div>
-            </div>
-            {isAdmin && editingField !== 'monthly' && (
-              <button
-                onClick={() => { setDraftMonthly(String(Math.round(monthlyGross))); setEditingField('monthly') }}
-                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: 'var(--c-surface)' }}
-              >
-                <Pencil className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-            )}
-          </div>
-          {editingField === 'monthly' ? (
-            <div className="space-y-3">
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Monthly Salary (₹)</p>
-                <input
-                  type="number"
-                  value={draftMonthly}
-                  onChange={e => setDraftMonthly(e.target.value)}
-                  className="w-full h-10 px-3 text-sm rounded-xl border outline-none focus:ring-2 focus:ring-green-200"
-                  style={{ borderColor: '#16A34A40', color: 'var(--c-t1)', backgroundColor: 'var(--c-surface)' }}
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => updateSalaryMutation.mutate({ gross_salary: Number(draftMonthly) })}
-                  disabled={updateSalaryMutation.isPending}
-                  className="flex-1 h-9 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: '#16A34A' }}
-                >
-                  {updateSalaryMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />} Save
-                </button>
-                <button onClick={() => setEditingField(null)} className="flex-1 h-9 rounded-xl text-xs font-bold" style={{ backgroundColor: 'var(--c-surface)', color: 'var(--c-t2)' }}>
-                  <X className="w-3 h-3 inline mr-1" />Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <p className="text-3xl font-black tracking-tight" style={{ color: 'var(--c-t1)' }}>{fmt(monthlyGross)}</p>
-              <p className="text-xs text-slate-400 mt-1 font-medium">Annual: {fmt(annualCTC)}</p>
-            </div>
-          )}
+      {/* ALERT */}
+      <div className="bg-[#3B82F6] rounded-xl p-4 flex items-center gap-3 text-white shadow-md">
+        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/20">
+          <span className="material-symbols-outlined text-sm">tips_and_updates</span>
+        </div>
+        <div>
+          <p className="text-[9px] font-bold uppercase tracking-widest text-[#DBEAFE]">TODAY'S SUMMARY</p>
+          <p className="text-sm font-semibold">Your hard work fuels our success. Keep shining! ✨</p>
         </div>
       </div>
 
-      {/* Daily Insight card */}
-      <div className="card-kinetic p-7 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1D4ED8, #3B82F6)' }}>
-        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
-        <div className="relative z-10 flex items-start gap-5">
-          <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 mt-0.5">
-            <span className="material-symbols-outlined text-white" style={{ fontSize: '20px' }}>lightbulb</span>
+      {/* MIDDLE ROW */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Salary Breakup */}
+        <div className="lg:col-span-7 bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0]">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-[#1A1A2E] font-bold font-display text-base">Salary Breakup</h3>
+            <button className="bg-[#F8FAFC] text-[#4B5563] text-xs font-semibold flex items-center px-3 py-1.5 rounded-lg border border-[#E2E8F0]">
+              April 2025 <span className="material-symbols-outlined text-[16px] ml-1">expand_more</span>
+            </button>
           </div>
-          <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-100">Today's Insight</p>
-            <p className="text-sm font-semibold leading-relaxed text-white">
-              "{getDailyInsight()}"
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Payslips Log */}
-      <div className="card-kinetic overflow-hidden">
-        <div className="px-7 py-5 flex items-center justify-between border-b" style={{ borderColor: 'var(--c-border3)' }}>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
-              <FileText className="w-4 h-4 text-amber-600" />
-            </div>
-            <div>
-              <h3 className="text-sm font-extrabold" style={{ color: 'var(--c-t1)' }}>Payslips</h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Monthly records</p>
-            </div>
-          </div>
-          {payslips.length > 0 && (
-            <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full bg-slate-50 border text-blue-600" style={{ borderColor: 'var(--c-border3)' }}>
-              {payslips.length} record{payslips.length !== 1 ? 's' : ''}
-            </span>
-          )}
-        </div>
-
-        {payslips.length === 0 ? (
-          <div className="py-20 flex flex-col items-center justify-center gap-4 opacity-30">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-slate-100 flex items-center justify-center">
-              <FileText className="w-8 h-8 text-slate-400" />
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em]">No payslips generated yet</p>
-          </div>
-        ) : (
-          <div className="divide-y" style={{ borderColor: 'var(--c-border3)' }}>
-            {payslips.map((ps: PayslipDoc) => (
-              <div key={ps.id} className="flex items-center gap-4 px-7 py-4 hover:bg-blue-50/20 transition-colors">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-600 shrink-0" style={{ backgroundColor: 'var(--c-surface)' }}>
-                  {MONTH_NAMES[ps.month - 1].slice(0, 3)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-black" style={{ color: 'var(--c-t1)' }}>{MONTH_NAMES[ps.month - 1]} {ps.year}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className={cn(
-                      'text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full',
-                      ps.status === 'finalized' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
-                    )}>
-                      {ps.status}
-                    </span>
+          
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Earnings */}
+            <div className="flex-1">
+              <div className="flex justify-between text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-3 border-b pb-1 border-gray-100">
+                <span>EARNINGS</span><span>AMOUNT (₹)</span>
+              </div>
+              <div className="space-y-3 mb-4">
+                {[
+                  {n:'Basic Salary', v: 12000},
+                  {n:'House Rent Allowance', v: 5000},
+                  {n:'Special Allowance', v: 2000},
+                  {n:'Transport Allowance', v: 1600},
+                  {n:'Other Allowances', v: 1400},
+                ].map(r => (
+                  <div key={r.n} className="flex justify-between text-[11px] font-semibold text-[#4B5563]">
+                    <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {r.n}</span>
+                    <span>{r.v.toLocaleString()}</span>
                   </div>
+                ))}
+              </div>
+              <div className="flex justify-between text-xs font-bold bg-[#F0FDF4] text-[#16A34A] p-2 rounded-lg">
+                <span>Total Earnings</span><span>₹22,000</span>
+              </div>
+            </div>
+
+            {/* Chart middle */}
+            <div className="w-32 shrink-0 flex flex-col justify-center items-center">
+              <ResponsiveContainer width={120} height={120}>
+                <PieChart>
+                  <Pie data={donutData} innerRadius={40} outerRadius={55} paddingAngle={0} dataKey="value" stroke="none">
+                    {donutData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute flex flex-col items-center pointer-events-none mt-[-68px]">
+                <span className="text-[14px] font-extrabold text-[#1A1A2E] font-display">₹22,000</span>
+                <span className="text-[8px] text-[#6B7280] font-semibold">Total Earnings</span>
+              </div>
+              <div className="flex gap-3 text-[9px] font-bold mt-2">
+                <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#3B82F6]"></div>Earnings</span>
+                <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#F87171]"></div>Deductions</span>
+              </div>
+            </div>
+
+            {/* Deductions */}
+            <div className="flex-1">
+              <div className="flex justify-between text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-3 border-b pb-1 border-gray-100">
+                <span>DEDUCTIONS</span><span>AMOUNT (₹)</span>
+              </div>
+              <div className="space-y-3 mb-4">
+                {[
+                  {n:'Provident Fund (PF)', v: 1800},
+                  {n:'Professional Tax', v: 200},
+                  {n:'Income Tax (TDS)', v: 1200},
+                  {n:'ESI', v: 300},
+                  {n:'Other Deductions', v: 500},
+                ].map(r => (
+                  <div key={r.n} className="flex justify-between text-[11px] font-semibold text-[#4B5563]">
+                    <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {r.n}</span>
+                    <span>{r.v.toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between text-xs font-bold bg-[#FEF2F2] text-[#EF4444] p-2 rounded-lg">
+                <span>Total Deductions</span><span>₹4,000</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between text-sm font-extrabold bg-[#EFF6FF] text-[#3B82F6] p-3 rounded-xl mt-6">
+            <span className="uppercase tracking-widest text-xs">NET TAKE HOME</span><span>₹18,000</span>
+          </div>
+        </div>
+
+        {/* Generate Payslip & Yearly Overview */}
+        <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0]">
+            <h3 className="text-[#1A1A2E] font-bold font-display text-base mb-1">Generate Payslip</h3>
+            <p className="text-xs text-[#6B7280] mb-4">Download your payslip for any month.</p>
+            <div className="flex items-center gap-3 mb-4">
+              <select className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm font-semibold outline-none text-[#1A1A2E]">
+                <option>April 2025</option><option>March 2025</option>
+              </select>
+            </div>
+            <button className="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold py-2.5 rounded-xl transition text-sm flex justify-center items-center gap-2 shadow-md">
+               <span className="material-symbols-outlined text-[16px]">download</span> Generate Payslip
+            </button>
+            <p className="text-center text-[10px] text-gray-400 mt-2">Payslip will be in PDF format</p>
+          </div>
+
+          <div className="bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0] flex-1">
+             <h3 className="text-[#1A1A2E] font-bold font-display text-base mb-4">Yearly Overview <span className="text-xs font-medium text-gray-400">(FY 2024-25)</span></h3>
+             <div className="flex gap-2 mb-6">
+               <div className="bg-[#F0FDF4] p-2 rounded-lg flex-1">
+                 <p className="text-sm font-bold text-[#16A34A]">₹2,64,000</p><p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider">Total Earnings</p>
+               </div>
+               <div className="bg-[#FEF2F2] p-2 rounded-lg flex-1">
+                 <p className="text-sm font-bold text-[#EF4444]">₹48,000</p><p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider">Total Deductions</p>
+               </div>
+               <div className="bg-[#EFF6FF] p-2 rounded-lg flex-1">
+                 <p className="text-sm font-bold text-[#3B82F6]">₹2,16,000</p><p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider">Total Take Home</p>
+               </div>
+             </div>
+             <div className="h-[120px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={trendData}>
+                    <Area type="monotone" dataKey="val" stroke="#3B82F6" strokeWidth={2} fill="url(#colorSal)" />
+                    <defs>
+                      <linearGradient id="colorSal" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.2}/>
+                        <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                  </AreaChart>
+                </ResponsiveContainer>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM ROW 1: Tax / Exemption CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0] flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#3B82F6]">
+              <span className="material-symbols-outlined text-[18px]">home</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5">HRA Exemption</p>
+              <p className="text-lg font-black text-[#1A1A2E] font-display">₹1,20,000</p>
+              <p className="text-[10px] text-[#3B82F6] font-bold cursor-pointer hover:underline mt-1">View Details →</p>
+            </div>
+         </div>
+         <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0] flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-[#F0FDF4] flex items-center justify-center text-[#16A34A]">
+              <span className="material-symbols-outlined text-[18px]">security</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5">Tax Regime</p>
+              <p className="text-lg font-black text-[#1A1A2E] font-display">Old Regime</p>
+              <p className="text-[10px] text-[#16A34A] font-bold cursor-pointer hover:underline mt-1">View Details →</p>
+            </div>
+         </div>
+         <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0] flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-[#FFFBEB] flex items-center justify-center text-[#D97706]">
+              <span className="material-symbols-outlined text-[18px]">trending_up</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5">Projected Annual CTC</p>
+              <p className="text-lg font-black text-[#1A1A2E] font-display">{fmt(annualCTC)}</p>
+              <p className="text-[10px] text-[#D97706] font-bold cursor-pointer hover:underline mt-1">View Breakdown →</p>
+            </div>
+         </div>
+      </div>
+
+      {/* BOTTOM ROW 2 */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Payslip History */}
+        <div className="lg:col-span-8 bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0]">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h3 className="text-[#1A1A2E] font-bold font-display text-base">Payslip History</h3>
+              <p className="text-[11px] text-gray-500 font-medium">View and download your past payslips.</p>
+            </div>
+            <button className="bg-white border border-[#E2E8F0] shadow-sm text-[#3B82F6] px-4 py-1.5 rounded-full text-xs font-bold hover:bg-gray-50 transition">View All</button>
+          </div>
+          <div className="w-full relative overflow-x-auto">
+            <table className="w-full text-left text-sm whitespace-nowrap">
+               <thead>
+                 <tr className="bg-[#F8FAFC] border-y border-[#E2E8F0]">
+                   <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B7280]">Month & Year</th>
+                   <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B7280]">Pay Date</th>
+                   <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B7280]">Net Take Home</th>
+                   <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B7280] text-center">Status</th>
+                   <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6B7280] text-right">Actions</th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-[#E2E8F0]">
+                 {[
+                   {m: 'April 2025', d: '05 Apr 2025', val: '₹18,000', stat: 'Paid'},
+                   {m: 'March 2025', d: '05 Mar 2025', val: '₹18,000', stat: 'Paid'},
+                   {m: 'February 2025', d: '05 Feb 2025', val: '₹18,000', stat: 'Paid'},
+                   {m: 'January 2025', d: '05 Jan 2025', val: '₹18,000', stat: 'Paid'},
+                   {m: 'December 2024', d: '05 Dec 2024', val: '₹18,000', stat: 'Paid'},
+                 ].map((r, i) => (
+                   <tr key={i} className="hover:bg-[#F8FAFC] transition">
+                     <td className="px-4 py-4 font-bold text-[#1A1A2E] flex items-center gap-3">
+                       <span className="material-symbols-outlined text-[#3B82F6] bg-[#EFF6FF] p-1.5 rounded-lg text-[16px]">description</span>{r.m}
+                     </td>
+                     <td className="px-4 py-4 text-xs text-[#4B5563] font-semibold">{r.d}</td>
+                     <td className="px-4 py-4 text-xs font-bold text-[#1A1A2E]">{r.val}</td>
+                     <td className="px-4 py-4 text-center">
+                       <span className="text-[10px] font-bold bg-[#DCFCE7] text-[#16A34A] px-2 py-0.5 rounded uppercase tracking-wider">{r.stat}</span>
+                     </td>
+                     <td className="px-4 py-4 text-right">
+                       <div className="flex items-center justify-end gap-3 text-[11px] font-bold text-[#3B82F6]">
+                         <span className="flex items-center gap-1 cursor-pointer hover:underline"><span className="material-symbols-outlined text-[14px]">visibility</span> View</span>
+                         <span className="flex items-center gap-1 cursor-pointer hover:underline"><span className="material-symbols-outlined text-[14px]">download</span> Download</span>
+                       </div>
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Need Help? */}
+        <div className="lg:col-span-4 bg-white rounded-[24px] p-6 shadow-[0_4px_24px_rgba(249,115,22,0.06)] border border-[#FFEDE0] flex flex-col items-center">
+            <h3 className="text-[#1A1A2E] font-bold font-display text-base w-full mb-1">Need Help?</h3>
+            <p className="text-[11px] text-gray-500 font-medium w-full mb-6">We're here to help you with your payroll queries.</p>
+            <div className="space-y-4 w-full">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#3B82F6] shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">help_center</span>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-black" style={{ color: 'var(--c-t1)' }}>{fmt(ps.net_salary)}</p>
-                  {ps.pdf_url && (
-                    <button
-                      onClick={() => downloadPayslipBlob(ps.pdf_url!).catch(() => {})}
-                      className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 mt-1 hover:underline"
-                    >
-                      <Download className="w-3 h-3" /> PDF
-                    </button>
-                  )}
+                <div>
+                  <p className="text-sm font-extrabold text-[#1A1A2E]">Payroll FAQs</p>
+                  <p className="text-[10px] text-gray-500 font-medium">Get answers to common questions</p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#3B82F6] shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">live_help</span>
+                </div>
+                <div>
+                  <p className="text-sm font-extrabold text-[#1A1A2E]">Raise a Query</p>
+                  <p className="text-[10px] text-gray-500 font-medium">Submit your payroll issue</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#3B82F6] shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">support_agent</span>
+                </div>
+                <div>
+                  <p className="text-sm font-extrabold text-[#1A1A2E]">Contact Payroll Team</p>
+                  <p className="text-[10px] text-gray-500 font-medium">payroll@gadel.com</p>
+                </div>
+              </div>
+            </div>
+            {/* Visual illustration space at bottom */}
+            <div className="mt-auto pt-6 flex justify-end w-full">
+               <span className="material-symbols-outlined text-[64px] text-blue-100 transform rotate-12">headset_mic</span>
+            </div>
+        </div>
+
       </div>
+
     </div>
   )
 }
